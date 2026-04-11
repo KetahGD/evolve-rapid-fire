@@ -298,7 +298,7 @@
 
     <!-- CONTROL BAR -->
     <div class="control-bar">
-        <button class="btn primary" id="playPauseBtn">⏸️ PAUSE</button>
+        <button class="btn primary" id="playPauseBtn">▶️ START</button>
         <button class="btn" id="nextBtn">⏩ NEXT</button>
         <button class="btn audio active" id="audioToggle" onclick="toggleAudio()">🔊 ON</button>
         <button class="btn" id="replayAudioBtn" onclick="replayCurrentWord()">🔁 REPLAY</button>
@@ -446,7 +446,7 @@
     
     // Audio player
     let audioPlayer = new Audio();
-    const AUDIO_BASE_PATH = './audios_cambridge/';    // ← CORREGIDO
+    const AUDIO_BASE_PATH = './audios_cambridge/';
 
     // DOM elements
     const wordEl = document.getElementById('currentWord');
@@ -464,7 +464,6 @@
 
     // ========== AUDIO FUNCTIONS ==========
     function getAudioFilename(word) {
-        // Limpiar el nombre igual que en la descarga
         let clean = word.replace(/[<>:"/\\|?*]/g, '');
         clean = clean.replace(/\s+/g, '_');
         return clean + '.mp3';
@@ -472,13 +471,11 @@
 
     function playWordAudio(word) {
         if (!audioEnabled) return;
-        
         let filename = getAudioFilename(word);
         let audioPath = AUDIO_BASE_PATH + filename;
-        
         audioPlayer.src = audioPath;
         audioPlayer.play().catch(err => {
-            audioStatus.textContent = '🔇 Audio no encontrado';
+            audioStatus.textContent = '🔇 Audio not found';
             setTimeout(() => audioStatus.textContent = '', 2000);
         });
     }
@@ -488,7 +485,6 @@
         let btn = document.getElementById('audioToggle');
         btn.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
         btn.classList.toggle('active', audioEnabled);
-        
         if (!audioEnabled) {
             audioPlayer.pause();
         } else if (currentWordObj) {
@@ -499,7 +495,7 @@
     function replayCurrentWord() {
         if (currentWordObj) {
             playWordAudio(currentWordObj.word);
-            audioStatus.textContent = '🔊 Reproduciendo...';
+            audioStatus.textContent = '🔊 Playing...';
             setTimeout(() => audioStatus.textContent = '', 1000);
         }
     }
@@ -560,10 +556,7 @@
         roundsInfo.textContent = `🎯 ${roundCounter} / ${roundLimit}`;
         currentDynamicSpeed = calculateDynamicSpeed();
         updateSpeedDisplay();
-        
-        // Reproducir audio automáticamente
         playWordAudio(wordObj.word);
-        
         if (isPlaying && sessionActive) {
             stopAutoPlay();
             startAutoPlay();
@@ -574,6 +567,10 @@
         if (!sessionActive) return;
         sessionActive = false;
         stopAutoPlay();
+        if (audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
         playPauseBtn.innerHTML = '🔄 RESTART';
         isPlaying = false;
         wordEl.textContent = '✔️ DONE!';
@@ -585,9 +582,8 @@
     function nextWord() {
         if (!sessionActive) return;
         roundCounter++;
+        roundsInfo.textContent = `🎯 ${roundCounter} / ${roundLimit}`;
         if (roundCounter >= roundLimit) {
-            const newWord = pickRandomWord();
-            updateDisplay(newWord);
             finishSession();
             return;
         }
@@ -601,18 +597,14 @@
         roundLimit = parseInt(roundCountInput.value, 10);
         if (isNaN(roundLimit) || roundLimit < 1) roundLimit = 10;
         roundCountInput.value = roundLimit;
-        
         if (!keepCategory) {
             currentCategory = 'all';
             categorySelect.value = 'all';
         }
-        
         baseSpeed = parseFloat(speedSlider.value);
         currentDynamicSpeed = baseSpeed;
-        
         const firstWord = pickRandomWord();
         updateDisplay(firstWord);
-        
         if (isPlaying) {
             stopAutoPlay();
             startAutoPlay();
@@ -648,7 +640,6 @@
             playPauseBtn.innerHTML = '⏸️ PAUSE';
             return;
         }
-        
         if (isPlaying) {
             stopAutoPlay();
             playPauseBtn.innerHTML = '▶️ START';
@@ -692,7 +683,6 @@
         roundLimit = parseInt(roundCountInput.value, 10);
         baseSpeed = parseFloat(speedSlider.value);
         currentDynamicSpeed = baseSpeed;
-        
         const firstWord = pickRandomWord();
         wordEl.textContent = firstWord.word;
         applyWordStyle(firstWord);
@@ -700,11 +690,9 @@
         wordCounterSpan.textContent = `📋 ${getFilteredList().length} word(s)`;
         roundsInfo.textContent = `🎯 0 / ${roundLimit}`;
         updateSpeedDisplay();
-        
         isPlaying = false;
         sessionActive = false;
         playPauseBtn.innerHTML = '▶️ START';
-        
         playPauseBtn.addEventListener('click', togglePlayPause);
         nextBtn.addEventListener('click', () => {
             if (!sessionActive) {
@@ -715,7 +703,6 @@
                 nextWord();
             }
         });
-        
         speedSlider.addEventListener('input', (e) => applyBaseSpeed(parseFloat(e.target.value)));
         categorySelect.addEventListener('change', (e) => changeCategory(e.target.value));
         roundCountInput.addEventListener('change', function() {
