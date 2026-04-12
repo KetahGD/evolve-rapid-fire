@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tema Evolve 1 por defecto */
             --theme-primary: #891752;
             --theme-bg: #1c0511;
             --theme-panel: #2d0d1e;
@@ -30,7 +29,20 @@
             font-family: 'Quicksand', sans-serif;
             padding: 16px;
             transition: background 0.4s ease;
+            overflow-x: hidden;
         }
+        
+        /* Canvas para Confeti */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
         .game-container {
             max-width: 1300px;
             width: 100%;
@@ -40,6 +52,8 @@
             padding: 28px 24px;
             border: 1px solid var(--theme-border);
             transition: all 0.4s ease;
+            position: relative;
+            z-index: 10;
         }
         
         .header-top {
@@ -60,6 +74,8 @@
             gap: 10px;
         }
         
+        .top-controls { display: flex; gap: 15px; align-items: center; }
+        
         .book-selector {
             display: flex;
             align-items: center;
@@ -69,11 +85,7 @@
             border-radius: 40px;
             border: 1px solid var(--theme-border);
         }
-        .book-selector label {
-            color: var(--theme-text);
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
+        .book-selector label { color: var(--theme-text); font-weight: 700; font-size: 1.2rem; }
         #blockSelect {
             padding: 8px 16px;
             border-radius: 30px;
@@ -86,17 +98,8 @@
             outline: none;
             transition: all 0.3s;
         }
-        #blockSelect optgroup {
-            background: #111;
-            color: var(--theme-accent);
-            font-weight: 800;
-            font-style: normal;
-        }
-        #blockSelect option {
-            background: #222;
-            color: #fff;
-            font-weight: 500;
-        }
+        #blockSelect optgroup { background: #111; color: var(--theme-accent); font-weight: 800; }
+        #blockSelect option { background: #222; color: #fff; font-weight: 500; }
         
         .mode-switch {
             display: flex;
@@ -116,176 +119,108 @@
             transition: all 0.2s;
             box-shadow: 0 4px 0 rgba(0,0,0,0.8);
         }
-        .mode-btn.active {
-            background: var(--theme-accent);
-            color: #111;
-            border-color: var(--theme-accent);
-            box-shadow: 0 4px 0 #b58a47;
-        }
+        .mode-btn.active { background: var(--theme-accent); color: #111; border-color: var(--theme-accent); box-shadow: 0 4px 0 #b58a47; }
         
         .subhead {
-            text-align: center;
-            color: #ddcdb7;
-            font-weight: 600;
-            margin-bottom: 24px;
-            font-size: 1.2rem;
-            border-bottom: 1px dashed var(--theme-border);
-            padding-bottom: 12px;
+            text-align: center; color: #ddcdb7; font-weight: 600; margin-bottom: 24px; font-size: 1.2rem;
+            border-bottom: 1px dashed var(--theme-border); padding-bottom: 12px;
         }
+        
+        /* Contenedor de la Tarjeta y Fuego */
+        .word-card-container { position: relative; }
+        .streak-fire {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4500;
+            color: white;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px #ff4500, 0 0 40px #ff8c00;
+            border: 2px solid #ffd700;
+            z-index: 20;
+            animation: pulseFire 1s infinite alternate;
+        }
+        @keyframes pulseFire { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 30px #ff4500, 0 0 50px #ffd700; } }
+        
         .word-card {
             background: rgba(0,0,0,0.4);
             border-radius: 48px;
             padding: 30px 16px;
             margin-bottom: 24px;
             box-shadow: inset 0 2px 8px #00000080, 0 16px 24px -8px black;
-            border: 1px solid var(--theme-border);
+            border: 2px solid var(--theme-border);
             text-align: center;
+            transition: all 0.3s ease;
         }
-        .main-word {
-            font-size: 6rem;
-            font-weight: 800;
-            color: #fff;
-            word-break: break-word;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        .word-card.on-fire {
+            border-color: #ff8c00;
+            box-shadow: inset 0 2px 8px #00000080, 0 16px 24px -8px black, 0 0 30px rgba(255, 69, 0, 0.4);
+            background: rgba(40, 10, 0, 0.6);
         }
-        .category-badge {
-            display: inline-block;
-            background: var(--theme-primary);
-            color: #fff;
-            padding: 8px 28px;
-            border-radius: 60px;
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin-top: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: background 0.4s;
-        }
-        .control-bar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin: 10px 0 15px;
-            background: rgba(0,0,0,0.3);
-            padding: 14px 20px;
-            border-radius: 60px;
-            border: 1px solid var(--theme-border);
-        }
-        .btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--theme-text);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border: 1px solid var(--theme-border);
-            transition: all 0.1s;
-        }
+        
+        .main-word { font-size: 6rem; font-weight: 800; color: #fff; word-break: break-word; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .category-badge { display: inline-block; background: var(--theme-primary); color: #fff; padding: 8px 28px; border-radius: 60px; font-weight: 800; font-size: 1.3rem; margin-top: 24px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 4px 0 rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); }
+        
+        .control-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin: 10px 0 15px; background: rgba(0,0,0,0.3); padding: 14px 20px; border-radius: 60px; border: 1px solid var(--theme-border); }
+        .btn { background: rgba(255,255,255,0.1); border: none; padding: 12px 20px; border-radius: 60px; font-weight: 700; font-size: 1.1rem; color: var(--theme-text); box-shadow: 0 4px 0 rgba(0,0,0,0.4); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--theme-border); transition: all 0.1s; }
         .btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.5); }
         .btn.primary { background: var(--theme-accent); color: #111; border: none; box-shadow: 0 4px 0 #b58a47;}
         .btn.success { background: var(--theme-success); color: white; }
         .btn.danger { background: var(--theme-danger); color: white; }
         .btn.audio.active { background: var(--theme-primary); border-color: var(--theme-accent); color: white; }
+        .btn.fullscreen { background: #3b5998; border-color: #2d4373; }
+        
+        /* Team Scoreboard & Floating Numbers */
+        .team-scoreboard { display: flex; justify-content: center; gap: 25px; margin: 10px 0 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 20px; border: 1px solid var(--theme-border); }
+        .team { background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--theme-border); position: relative; }
+        .team span { font-size: 1.8rem; font-weight: 800; color: #fff; min-width: 3rem; text-align: center; }
         .btn.team { padding: 8px 16px; font-size: 1rem; }
+        .btn.team.fire-btn { background: #ff4500; color: white; border-color: #ffd700; box-shadow: 0 4px 0 #b33000; }
         
-        .speed-control, .round-selector, .timer-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--theme-text);
-            font-weight: 600;
+        .floating-number {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            color: #ffd700;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 5px black;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 50;
         }
+        @keyframes floatUp { 0% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50px) scale(1.5); } }
+
+        .speed-control, .round-selector, .timer-control { display: flex; align-items: center; gap: 8px; color: var(--theme-text); font-weight: 600; }
         #speedSlider { width: 120px; accent-color: var(--theme-accent); }
-        input[type="number"] {
-            width: 70px;
-            padding: 8px;
-            border-radius: 40px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: 1px solid var(--theme-border);
-            font-weight: 700;
-            text-align: center;
-        }
-        .filter-area {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        select.category-select {
-            padding: 12px 22px;
-            border-radius: 60px;
-            background: rgba(0,0,0,0.4);
-            color: var(--theme-text);
-            font-weight: 700;
-            border: 1px solid var(--theme-border);
-            max-width: 250px;
-        }
+        input[type="number"] { width: 70px; padding: 8px; border-radius: 40px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--theme-border); font-weight: 700; text-align: center; }
         
-        .grammar-panel {
-            margin-top: 24px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 32px;
-            padding: 22px 24px;
-            border: 1px solid var(--theme-border);
-        }
-        .grammar-title {
-            font-size: 1.6rem;
-            color: var(--theme-text);
-            border-bottom: 2px solid var(--theme-primary);
-            margin-bottom: 18px;
-            padding-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .grammar-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .grammar-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-            padding: 16px;
-            border-left: 6px solid var(--theme-primary);
-            border-right: 1px solid var(--theme-border);
-            border-top: 1px solid var(--theme-border);
-            border-bottom: 1px solid var(--theme-border);
-        }
+        .filter-area { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        select.category-select { padding: 12px 22px; border-radius: 60px; background: rgba(0,0,0,0.4); color: var(--theme-text); font-weight: 700; border: 1px solid var(--theme-border); max-width: 250px; }
+        
+        .grammar-panel { margin-top: 24px; background: rgba(0,0,0,0.2); border-radius: 32px; padding: 22px 24px; border: 1px solid var(--theme-border); }
+        .grammar-title { font-size: 1.6rem; color: var(--theme-text); border-bottom: 2px solid var(--theme-primary); margin-bottom: 18px; padding-bottom: 5px; display: flex; justify-content: space-between; }
+        .grammar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .grammar-card { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 16px; border-left: 6px solid var(--theme-primary); border: 1px solid var(--theme-border); border-left-width: 6px; }
         .grammar-card h4 { color: var(--theme-accent); font-size: 1.2rem; margin-bottom: 12px; }
         .grammar-card ul { list-style: none; margin-left: 5px;}
         .grammar-card li { color: #ddd; padding: 4px 0; font-size: 1.05rem; }
         .grammar-card code { background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; color: #fff;}
         
         .hint-text { font-size: 2.2rem; color: #fff; margin: 20px 0; font-weight: 600; text-shadow: 1px 1px 5px black;}
-        .timer-display { font-size: 3rem; font-weight: 800; color: var(--theme-accent); }
+        .timer-display { font-size: 3rem; font-weight: 800; color: var(--theme-accent); transition: color 0.3s; }
+        .timer-display.danger { color: #ff4500; animation: shake 0.5s infinite; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
+        
         .timer-bar { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 20px; margin: 12px 0; overflow: hidden; }
-        .timer-bar-fill { height: 100%; width: 100%; background: var(--theme-accent); transition: width 1s linear; }
+        .timer-bar-fill { height: 100%; width: 100%; background: var(--theme-accent); transition: width 1s linear, background 0.3s; }
+        .timer-bar-fill.danger { background: #ff4500; }
+        
         .score-area { display: flex; gap: 30px; font-size: 1.5rem; color: var(--theme-text); }
-        .team-scoreboard {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin: 10px 0 20px;
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 20px;
-            border: 1px solid var(--theme-border);
-        }
-        .team { background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--theme-border); }
-        .team span { font-size: 1.8rem; font-weight: 800; color: #fff; min-width: 3rem; text-align: center; }
         .hidden { display: none !important; }
         .missing-word { font-size: 5rem; font-weight: 800; color: var(--theme-accent); letter-spacing: 15px; margin: 20px 0; min-height: 120px; }
         .answer-reveal { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); margin-top: 20px; min-height: 75px; }
@@ -293,33 +228,39 @@
     </style>
 </head>
 <body>
+
+<canvas id="confettiCanvas"></canvas>
+
 <div class="game-container">
     
     <div class="header-top">
         <h1>🧠 <span id="mainBookTitle">EVOLVE 1</span> · <span id="modeTitle">RAPID FIRE</span></h1>
         
-        <div class="book-selector">
-            <label>📚 SELECTION:</label>
-            <select id="blockSelect">
-                <optgroup label="📘 EVOLVE 1 (A1)">
-                    <option value="1_1" selected>Block 1: Units 1-3</option>
-                    <option value="1_2">Block 2: Units 4-6</option>
-                    <option value="1_3">Block 3: Units 7-9</option>
-                    <option value="1_4">Block 4: Units 10-12</option>
-                </optgroup>
-                <optgroup label="📗 EVOLVE 2 (A2)">
-                    <option value="2_1">Block 1: Units 1-3</option>
-                    <option value="2_2">Block 2: Units 4-6</option>
-                    <option value="2_3">Block 3: Units 7-9</option>
-                    <option value="2_4">Block 4: Units 10-12</option>
-                </optgroup>
-                <optgroup label="📕 EVOLVE 3 (B1)">
-                    <option value="3_1">Block 1: Units 1-3</option>
-                    <option value="3_2">Block 2: Units 4-6</option>
-                    <option value="3_3">Block 3: Units 7-9</option>
-                    <option value="3_4">Block 4: Units 10-12</option>
-                </optgroup>
-            </select>
+        <div class="top-controls">
+            <button class="btn fullscreen" id="fullscreenBtn">📺 Fullscreen</button>
+            <div class="book-selector">
+                <label>📚 SELECTION:</label>
+                <select id="blockSelect">
+                    <optgroup label="📘 EVOLVE 1 (A1)">
+                        <option value="1_1" selected>Block 1: Units 1-3</option>
+                        <option value="1_2">Block 2: Units 4-6</option>
+                        <option value="1_3">Block 3: Units 7-9</option>
+                        <option value="1_4">Block 4: Units 10-12</option>
+                    </optgroup>
+                    <optgroup label="📗 EVOLVE 2 (A2)">
+                        <option value="2_1">Block 1: Units 1-3</option>
+                        <option value="2_2">Block 2: Units 4-6</option>
+                        <option value="2_3">Block 3: Units 7-9</option>
+                        <option value="2_4">Block 4: Units 10-12</option>
+                    </optgroup>
+                    <optgroup label="📕 EVOLVE 3 (B1)">
+                        <option value="3_1">Block 1: Units 1-3</option>
+                        <option value="3_2">Block 2: Units 4-6</option>
+                        <option value="3_3">Block 3: Units 7-9</option>
+                        <option value="3_4">Block 4: Units 10-12</option>
+                    </optgroup>
+                </select>
+            </div>
         </div>
     </div>
     
@@ -330,17 +271,20 @@
     </div>
 
     <div class="team-scoreboard">
-        <div class="team"><span style="color:#ff6b6b;">🔴</span> <span id="teamRedScore">0</span> <button class="btn team" data-team="red">+1</button></div>
-        <div class="team"><span style="color:#6ba6ff;">🔵</span> <span id="teamBlueScore">0</span> <button class="btn team" data-team="blue">+1</button></div>
-        <div class="team"><span style="color:#6fcf97;">🟢</span> <span id="teamGreenScore">0</span> <button class="btn team" data-team="green">+1</button></div>
+        <div class="team" id="teamRedBox"><span style="color:#ff6b6b;">🔴</span> <span id="teamRedScore">0</span> <button class="btn team" data-team="red">+1</button></div>
+        <div class="team" id="teamBlueBox"><span style="color:#6ba6ff;">🔵</span> <span id="teamBlueScore">0</span> <button class="btn team" data-team="blue">+1</button></div>
+        <div class="team" id="teamGreenBox"><span style="color:#6fcf97;">🟢</span> <span id="teamGreenScore">0</span> <button class="btn team" data-team="green">+1</button></div>
         <button class="btn" id="resetTeamsBtn">🔄 Reset</button>
     </div>
 
     <div id="rapidMode">
         <div class="subhead">⚡ FORM A SENTENCE! · <span style="color:var(--theme-accent);">🔊 with audio</span></div>
-        <div class="word-card">
-            <div class="main-word" id="currentWord">Brazil</div>
-            <div class="category-badge" id="categoryTag">UNIT 1</div>
+        <div class="word-card-container">
+            <div id="rapidFireStreak" class="streak-fire hidden">🔥 STREAK x3!</div>
+            <div class="word-card" id="rapidWordCard">
+                <div class="main-word" id="currentWord">Brazil</div>
+                <div class="category-badge" id="categoryTag">UNIT 1</div>
+            </div>
         </div>
         <div class="control-bar">
             <button class="btn primary" id="playPauseBtn">▶️ START</button>
@@ -368,12 +312,15 @@
 
     <div id="spellingMode" class="hidden">
         <div class="subhead">🔤 SPELLING CHALLENGE · Say the word aloud</div>
-        <div class="word-card">
-            <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
-            <div class="timer-display" id="timerDisplay">10</div>
-            <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
-            <div class="category-badge" id="spellingCategory">UNIT 1</div>
-            <div id="spellingAnswerReveal" class="answer-reveal"></div>
+        <div class="word-card-container">
+            <div id="spellingStreakFire" class="streak-fire hidden">🔥 STREAK x3!</div>
+            <div class="word-card" id="spellingWordCard">
+                <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
+                <div class="timer-display" id="timerDisplay">10</div>
+                <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
+                <div class="category-badge" id="spellingCategory">UNIT 1</div>
+                <div id="spellingAnswerReveal" class="answer-reveal"></div>
+            </div>
         </div>
         <div class="control-bar">
             <button class="btn primary" id="spellingStartBtn">▶️ START</button>
@@ -405,13 +352,16 @@
 
     <div id="missingMode" class="hidden">
         <div class="subhead">🔘 MISSING LETTERS · Complete the word aloud</div>
-        <div class="word-card">
-            <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
-            <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
-            <div class="timer-display" id="missingTimerDisplay">15</div>
-            <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
-            <div class="category-badge" id="missingCategory">UNIT 1</div>
-            <div id="missingAnswerReveal" class="answer-reveal"></div>
+        <div class="word-card-container">
+            <div id="missingStreakFire" class="streak-fire hidden">🔥 STREAK x3!</div>
+            <div class="word-card" id="missingWordCard">
+                <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
+                <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
+                <div class="timer-display" id="missingTimerDisplay">15</div>
+                <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
+                <div class="category-badge" id="missingCategory">UNIT 1</div>
+                <div id="missingAnswerReveal" class="answer-reveal"></div>
+            </div>
         </div>
         <div class="control-bar">
             <button class="btn primary" id="missingStartBtn">▶️ START</button>
@@ -453,9 +403,7 @@
 (function(){
     "use strict";
 
-    // ========== BASE DE DATOS MASIVA (Basada en wordlist.txt) ==========
-    
-    // EVOLVE 1
+    // ========== BASE DE DATOS MASIVA ==========
     const evolve1Raw = [
         { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" },
         { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "hungry", category: "Unit 2", es: "hambriento" },
@@ -471,7 +419,6 @@
         { word: "one", category: "Unit 12", es: "uno" }, { word: "two", category: "Unit 12", es: "dos" }, { word: "three", category: "Unit 12", es: "tres" }, { word: "ten", category: "Unit 12", es: "diez" }, { word: "twenty", category: "Unit 12", es: "veinte" }, { word: "thirty", category: "Unit 12", es: "treinta" }, { word: "fifteen", category: "Unit 12", es: "quince" }, { word: "first", category: "Unit 12", es: "primero" }, { word: "March", category: "Unit 12", es: "marzo" }, { word: "January", category: "Unit 12", es: "enero" }
     ];
 
-    // EVOLVE 2
     const evolve2Raw = [
         { word: "boss", category: "Unit 1", es: "jefe/a" }, { word: "classmate", category: "Unit 1", es: "compañero/a de clase" }, { word: "close friend", category: "Unit 1", es: "amigo/a íntimo/a" }, { word: "coworker", category: "Unit 1", es: "compañero/a de trabajo" }, { word: "couple", category: "Unit 1", es: "pareja" }, { word: "fiancé", category: "Unit 1", es: "prometido/a" }, { word: "girlfriend", category: "Unit 1", es: "novia" }, { word: "grandchild", category: "Unit 1", es: "nieto/a" }, { word: "neighbor", category: "Unit 1", es: "vecino/a" }, { word: "roommate", category: "Unit 1", es: "compañero/a de piso" }, { word: "candy bar", category: "Unit 1", es: "barra de chocolate" }, { word: "cash", category: "Unit 1", es: "efectivo" }, { word: "driver's license", category: "Unit 1", es: "licencia de conducir" }, { word: "hairbrush", category: "Unit 1", es: "cepillo para el pelo" }, { word: "hand lotion", category: "Unit 1", es: "loción de manos" }, { word: "keychain", category: "Unit 1", es: "llavero" }, { word: "mirror", category: "Unit 1", es: "espejo" }, { word: "pack of gum", category: "Unit 1", es: "paquete de chicles" }, { word: "receipt", category: "Unit 1", es: "recibo" }, { word: "sunglasses", category: "Unit 1", es: "gafas de sol" }, { word: "tissues", category: "Unit 1", es: "pañuelos de papel" }, { word: "umbrella", category: "Unit 1", es: "paraguas" }, { word: "water bottle", category: "Unit 1", es: "botella de agua" },
         { word: "do housework", category: "Unit 2", es: "hacer tareas domésticas" }, { word: "do the cooking", category: "Unit 2", es: "cocinar" }, { word: "do the dishes", category: "Unit 2", es: "lavar los platos" }, { word: "do the laundry", category: "Unit 2", es: "lavar la ropa" }, { word: "have free time", category: "Unit 2", es: "tener tiempo libre" }, { word: "have a party", category: "Unit 2", es: "hacer una fiesta" }, { word: "have a snack", category: "Unit 2", es: "tomar un tentempié" }, { word: "have something to drink", category: "Unit 2", es: "tomar algo" }, { word: "make the bed", category: "Unit 2", es: "hacer la cama" }, { word: "make a plan", category: "Unit 2", es: "hacer un plan" }, { word: "make a mess", category: "Unit 2", es: "hacer un desastre" }, { word: "calendar", category: "Unit 2", es: "calendario" }, { word: "document", category: "Unit 2", es: "documento" }, { word: "electrical outlet", category: "Unit 2", es: "enchufe" }, { word: "files", category: "Unit 2", es: "archivos" }, { word: "headphones", category: "Unit 2", es: "auriculares" }, { word: "keyboard", category: "Unit 2", es: "teclado" }, { word: "laptop screen", category: "Unit 2", es: "pantalla del portátil" }, { word: "mouse", category: "Unit 2", es: "ratón" }, { word: "notes", category: "Unit 2", es: "notas" }, { word: "page", category: "Unit 2", es: "página" }, { word: "power cord", category: "Unit 2", es: "cable de corriente" }, { word: "textbook", category: "Unit 2", es: "libro de texto" }, { word: "Wi-Fi", category: "Unit 2", es: "wifi" },
@@ -487,7 +434,6 @@
         { word: "blizzard", category: "Unit 12", es: "ventisca" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "cloudy", category: "Unit 12", es: "nublado" }, { word: "drought", category: "Unit 12", es: "sequía" }, { word: "flood", category: "Unit 12", es: "inundación" }, { word: "foggy", category: "Unit 12", es: "neblinoso" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "humid", category: "Unit 12", es: "húmedo" }, { word: "hurricane", category: "Unit 12", es: "huracán" }, { word: "rainy", category: "Unit 12", es: "lluvioso" }, { word: "snowstorm", category: "Unit 12", es: "tormenta de nieve" }, { word: "snowy", category: "Unit 12", es: "nevado" }, { word: "sunny", category: "Unit 12", es: "soleado" }, { word: "thunder and lightning", category: "Unit 12", es: "truenos y relámpagos" }, { word: "windy", category: "Unit 12", es: "ventoso" }, { word: "cave", category: "Unit 12", es: "cueva" }, { word: "cliff", category: "Unit 12", es: "acantilado" }, { word: "coast", category: "Unit 12", es: "costa" }, { word: "fountain", category: "Unit 12", es: "fuente" }, { word: "glacier", category: "Unit 12", es: "glaciar" }, { word: "hill", category: "Unit 12", es: "colina" }, { word: "rainforest", category: "Unit 12", es: "selva tropical" }, { word: "rocks", category: "Unit 12", es: "rocas" }, { word: "skyscraper", category: "Unit 12", es: "rascacielos" }, { word: "statue", category: "Unit 12", es: "estatua" }, { word: "tower", category: "Unit 12", es: "torre" }, { word: "valley", category: "Unit 12", es: "valle" }, { word: "waterfall", category: "Unit 12", es: "cascada" }, { word: "woods", category: "Unit 12", es: "bosque" }
     ];
 
-    // EVOLVE 3
     const evolve3Raw = [
         { word: "brave", category: "Unit 1", es: "valiente" }, { word: "cheerful", category: "Unit 1", es: "alegre" }, { word: "easygoing", category: "Unit 1", es: "tranquilo/a" }, { word: "generous", category: "Unit 1", es: "generoso/a" }, { word: "helpful", category: "Unit 1", es: "servicial" }, { word: "honest", category: "Unit 1", es: "honesto/a" }, { word: "intelligent", category: "Unit 1", es: "inteligente" }, { word: "nervous", category: "Unit 1", es: "nervioso/a" }, { word: "reliable", category: "Unit 1", es: "fiable" }, { word: "selfish", category: "Unit 1", es: "egoísta" }, { word: "serious", category: "Unit 1", es: "serio/a" }, { word: "sociable", category: "Unit 1", es: "sociable" }, { word: "be born", category: "Unit 1", es: "nacer" }, { word: "be into", category: "Unit 1", es: "gustar mucho" }, { word: "be married", category: "Unit 1", es: "estar casado/a" }, { word: "be raised", category: "Unit 1", es: "ser criado/a" }, { word: "be single", category: "Unit 1", es: "estar soltero/a" }, { word: "celebrate", category: "Unit 1", es: "celebrar" }, { word: "live alone", category: "Unit 1", es: "vivir solo/a" }, { word: "live with my family", category: "Unit 1", es: "vivir con mi familia" }, { word: "retire", category: "Unit 1", es: "jubilarse" },
         { word: "brand new", category: "Unit 2", es: "completamente nuevo" }, { word: "common", category: "Unit 2", es: "común" }, { word: "damaged", category: "Unit 2", es: "dañado" }, { word: "fancy", category: "Unit 2", es: "elegante" }, { word: "in good condition", category: "Unit 2", es: "en buen estado" }, { word: "modern", category: "Unit 2", es: "moderno" }, { word: "plain", category: "Unit 2", es: "sencillo" }, { word: "outdated", category: "Unit 2", es: "anticuado" }, { word: "special", category: "Unit 2", es: "especial" }, { word: "used", category: "Unit 2", es: "usado" }, { word: "useful", category: "Unit 2", es: "útil" }, { word: "useless", category: "Unit 2", es: "inútil" }, { word: "delete", category: "Unit 2", es: "eliminar" }, { word: "device", category: "Unit 2", es: "dispositivo" }, { word: "folder", category: "Unit 2", es: "carpeta" }, { word: "home screen", category: "Unit 2", es: "pantalla de inicio" }, { word: "model", category: "Unit 2", es: "modelo" }, { word: "set up", category: "Unit 2", es: "configurar" }, { word: "storage", category: "Unit 2", es: "almacenamiento" }, { word: "sync", category: "Unit 2", es: "sincronizar" }, { word: "try out", category: "Unit 2", es: "probar" }, { word: "work", category: "Unit 2", es: "funcionar" },
@@ -503,168 +449,52 @@
         { word: "be mad at", category: "Unit 12", es: "estar enfadado con" }, { word: "blame", category: "Unit 12", es: "culpar" }, { word: "damage", category: "Unit 12", es: "dañar" }, { word: "destroy", category: "Unit 12", es: "destruir" }, { word: "fall out", category: "Unit 12", es: "caerse" }, { word: "feel bad", category: "Unit 12", es: "sentirse mal" }, { word: "knock off", category: "Unit 12", es: "tirar" }, { word: "leave on", category: "Unit 12", es: "dejar encendido" }, { word: "leave open", category: "Unit 12", es: "dejar abierto" }, { word: "pick up", category: "Unit 12", es: "recoger" }, { word: "pull out", category: "Unit 12", es: "sacar" }, { word: "shake", category: "Unit 12", es: "agitar" }, { word: "slip", category: "Unit 12", es: "resbalar" }, { word: "spill", category: "Unit 12", es: "derramar" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "enormous", category: "Unit 12", es: "enorme" }, { word: "exhausted", category: "Unit 12", es: "agotado" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "huge", category: "Unit 12", es: "enorme" }, { word: "magnificent", category: "Unit 12", es: "magnífico" }, { word: "miserable", category: "Unit 12", es: "miserable" }, { word: "starving", category: "Unit 12", es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", es: "estupendo" }, { word: "thrilled", category: "Unit 12", es: "emocionado" }, { word: "tiny", category: "Unit 12", es: "diminuto" }
     ];
 
-    // Asignación de Bloques Dinámica
-    // blockValue = "1_1" (Evolve 1, Block 1), "2_3" (Evolve 2, Block 3)
     function assignBlocks(wordsArray, bookId) {
         return wordsArray.map(w => {
             let unitMatch = w.category.match(/Unit (\d+)/);
             let blockNum = 1;
-            if (unitMatch) {
-                let unitNum = parseInt(unitMatch[1]);
-                blockNum = Math.ceil(unitNum / 3); // Unidades 1-3 = bloque 1; 4-6 = bloque 2; etc.
-            }
-            w.book = bookId;
-            w.blockId = `${bookId}_${blockNum}`; // Ej: "1_1"
+            if (unitMatch) blockNum = Math.ceil(parseInt(unitMatch[1]) / 3); 
+            w.book = bookId; w.blockId = `${bookId}_${blockNum}`;
             return w;
         });
     }
 
-    const fullDB = [
-        ...assignBlocks(evolve1Raw, 1), 
-        ...assignBlocks(evolve2Raw, 2), 
-        ...assignBlocks(evolve3Raw, 3)
-    ];
+    const fullDB = [...assignBlocks(evolve1Raw, 1), ...assignBlocks(evolve2Raw, 2), ...assignBlocks(evolve3Raw, 3)];
 
-    // ========== ESTADO GLOBAL ==========
-    let currentBlockId = "1_1"; // ID del selector
+    // ========== ESTADO GLOBAL Y AUDIO API (SFX) ==========
+    let currentBlockId = "1_1"; 
     let currentMode = "rapid";
     let audioPlayer = new Audio();
     const AUDIO_BASE_PATH = './audios_cambridge/';
     let audioEnabled = true;
+    let audioCtx;
+    
+    let currentStreak = 0;
+    const STREAK_THRESHOLD = 3;
 
-    // Puntuaciones
-    let teamScores = { red: 0, blue: 0, green: 0 };
-    function updateTeamUI() {
-        document.getElementById('teamRedScore').textContent = teamScores.red;
-        document.getElementById('teamBlueScore').textContent = teamScores.blue;
-        document.getElementById('teamGreenScore').textContent = teamScores.green;
+    function initAudioAPI() {
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function getWordsByBlock() { 
-        return fullDB.filter(w => w.blockId === currentBlockId); 
+    function playTone(freq, type, duration, vol=0.1) {
+        if (!audioEnabled) return;
+        initAudioAPI();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
-    // ========== CAMBIO DE TEMA Y SELECTORES ==========
-    function updateThemeAndCategories() {
-        const root = document.documentElement;
-        const mainTitle = document.getElementById('mainBookTitle');
-        const bookId = parseInt(currentBlockId.split('_')[0]); // 1, 2 o 3
+    function playDing() { playTone(600, 'sine', 0.2, 0.2); setTimeout(()=>playTone(800, 'sine', 0.4, 0.2), 100); }
+    function playBuzzer() { playTone(150, 'sawtooth', 0.5, 0.2); }
+    function playTick() { playTone(1200, 'square', 0.05, 0.05); }
 
-        if (bookId === 1) {
-            root.style.setProperty('--theme-primary', '#891752');
-            root.style.setProperty('--theme-bg', '#1c0511');
-            root.style.setProperty('--theme-panel', '#2d0d1e');
-            root.style.setProperty('--theme-border', '#4a1530');
-            mainTitle.textContent = 'EVOLVE 1';
-        } else if (bookId === 2) {
-            root.style.setProperty('--theme-primary', '#64b54c');
-            root.style.setProperty('--theme-bg', '#11220c');
-            root.style.setProperty('--theme-panel', '#1b3613');
-            root.style.setProperty('--theme-border', '#2a541d');
-            mainTitle.textContent = 'EVOLVE 2';
-        } else if (bookId === 3) {
-            root.style.setProperty('--theme-primary', '#eb515b');
-            root.style.setProperty('--theme-bg', '#2e0a0c');
-            root.style.setProperty('--theme-panel', '#4d1014');
-            root.style.setProperty('--theme-border', '#7a1a20');
-            mainTitle.textContent = 'EVOLVE 3';
-        }
-
-        const words = getWordsByBlock();
-        // Extraemos solo las "Units" únicas
-        const categories = [...new Set(words.map(w => w.category))].sort((a,b) => {
-            return parseInt(a.replace('Unit ','')) - parseInt(b.replace('Unit ',''));
-        });
-        
-        let optionsHtml = `<option value="all">📚 ALL UNITS IN BLOCK</option>`;
-        categories.forEach(cat => { optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`; });
-        document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
-        rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all';
-    }
-
-    // ========== GRAMMAR PANEL ==========
-    function updateGrammarPanel() {
-        const grid = document.getElementById('grammarGrid');
-        const label = document.getElementById('grammarCourseLabel');
-        const sel = document.getElementById('blockSelect');
-        label.textContent = sel.options[sel.selectedIndex].text;
-        let html = '';
-        
-        switch(currentBlockId) {
-            // EVOLVE 1
-            case "1_1": html = `
-                <div class="grammar-card"><h4>🔹 Unit 1: be (aff, neg, q)</h4><ul><li><code>I'm from Brazil.</code></li><li><code>Are you American?</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 2: Possessives</h4><ul><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 3: Simple present</h4><ul><li><code>I like coffee.</code></li><li><code>Do you play games?</code></li></ul></div>`; break;
-            case "1_2": html = `
-                <div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li><code>I'm going to the mall.</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 5: Object pronouns</h4><ul><li><code>me, you, him, her, it, us, them</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li><code>He worked</code> / <code>She didn't play</code></li></ul></div>`; break;
-            case "1_3": html = `
-                <div class="grammar-card"><h4>🔹 Unit 7: Quantifiers</h4><ul><li><code>a lot of, some, a few, too much</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 8: Verb patterns</h4><ul><li><code>want to try</code> / <code>can't stand waiting</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 9: if and when</h4><ul><li>Giving reasons: <code>to + verb, for + noun</code></li></ul></div>`; break;
-            case "1_4": html = `
-                <div class="grammar-card"><h4>🔹 Unit 10: Comparatives & Superlatives</h4><ul><li><code>taller than</code> / <code>the best</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 11: have to & Predictions</h4><ul><li><code>have to</code> / <code>will, might, may</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 12: Present perfect</h4><ul><li>For experience vs. Simple past</li></ul></div>`; break;
-            
-            // EVOLVE 2
-            case "2_1": html = `
-                <div class="grammar-card"><h4>🔹 Unit 1: be & Possessives</h4><ul><li>Review: affirmative, negative, questions</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 3: Demonstratives</h4><ul><li><code>This / that one; these / those ones</code></li></ul></div>`; break;
-            case "2_2": html = `
-                <div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li>Simple present vs. present continuous</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 5: Future plans</h4><ul><li>Present continuous for future</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li>Affirmative, negative and questions</li></ul></div>`; break;
-            case "2_3": html = `
-                <div class="grammar-card"><h4>🔹 Unit 7: be going to</h4><ul><li><code>all, most, many, some, no, none</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 8: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 9: Verb patterns</h4><ul><li><code>verb + to + verb</code> / <code>verb + -ing</code></li></ul></div>`; break;
-            case "2_4": html = `
-                <div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li>have to, will, might</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect vs simple past</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 12: Relative Pronouns</h4><ul><li><code>who, which, that</code></li></ul></div>`; break;
-            
-            // EVOLVE 3
-            case "3_1": html = `
-                <div class="grammar-card"><h4>🔹 Unit 1: Info questions</h4><ul><li><code>What, Which, Whose, How...</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 2: Indirect questions</h4><ul><li><code>Do you know where…?</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 3: Present perfect</h4><ul><li>with <code>ever, never, for, since</code></li></ul></div>`; break;
-            case "3_2": html = `
-                <div class="grammar-card"><h4>🔹 Unit 4: Articles & Modals</h4><ul><li><code>a, an, the</code> / <code>should, could</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 5: be going to vs will</h4><ul><li>will for sudden decisions</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 6: Past tenses</h4><ul><li>Past continuous vs. simple past</li></ul></div>`; break;
-            case "3_3": html = `
-                <div class="grammar-card"><h4>🔹 Unit 7: Conditionals</h4><ul><li><code>almost all, several</code> / Real conditionals</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 8: used to & Comparisons</h4><ul><li>Comparisons with <code>(not) as… as</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 9: Pres. perfect continuous</h4><ul><li>vs. Present perfect</li></ul></div>`; break;
-            case "3_4": html = `
-                <div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li><code>have to, must, can't</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 11: Passive Voice</h4><ul><li>Simple present & Simple past passive</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li>Unreal conditionals: <code>If I had…</code></li></ul></div>`; break;
-        }
-        grid.innerHTML = html;
-    }
-
-    document.getElementById('blockSelect').addEventListener('change', (e) => {
-        currentBlockId = e.target.value;
-        updateThemeAndCategories();
-        updateGrammarPanel();
-        if (currentMode === 'rapid') rapidRefreshWordList();
-        else if (currentMode === 'spelling') spellingRefreshWordList();
-        else if (currentMode === 'missing') missingRefreshWordList();
-    });
-
-    // ========== AUDIO Y AUDIO FILENAMES ==========
-    function formatCategory(cat) { return cat.toUpperCase(); }
-
-    function getAudioFilename(word) {
-        // Convierte todo espacio o apóstrofe en guiones bajos según lo proveído en wordlist
-        return word.replace(/[<>:"/\\|?*']/g, '').replace(/\s+/g, '_') + '.mp3';
-    }
-
+    function getAudioFilename(word) { return word.replace(/[<>:"/\\|?*']/g, '').replace(/\s+/g, '_') + '.mp3'; }
     function playWordAudio(word) {
         if (!audioEnabled || !word) return;
         audioPlayer.src = AUDIO_BASE_PATH + getAudioFilename(word);
@@ -673,44 +503,163 @@
 
     window.toggleAudio = function() {
         audioEnabled = !audioEnabled;
-        document.querySelectorAll('.audio').forEach(b => {
-            b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
-            b.classList.toggle('active', audioEnabled);
-        });
+        document.querySelectorAll('.audio').forEach(b => { b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF'; b.classList.toggle('active', audioEnabled); });
     };
-
     window.replayCurrentWord = function() {
         if (currentMode === 'rapid' && rapidCurrentWord) playWordAudio(rapidCurrentWord.word);
         else if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
         else if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
     };
 
-    // ========== TEAM SCORES ==========
-    document.querySelectorAll('[data-team]').forEach(btn => {
+    // ========== CONFETTI ENGINE (Vanilla JS) ==========
+    const confCanvas = document.getElementById('confettiCanvas');
+    const confCtx = confCanvas.getContext('2d');
+    let confettiParticles = [];
+
+    function resizeCanvas() { confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+    function shootConfetti() {
+        confettiParticles = [];
+        for(let i=0; i<120; i++) {
+            confettiParticles.push({
+                x: confCanvas.width / 2, y: confCanvas.height / 2,
+                r: Math.random() * 6 + 4,
+                dx: Math.random() * 20 - 10, dy: Math.random() * -15 - 5,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                tilt: Math.floor(Math.random() * 10) - 10,
+                tiltAngleIncrement: (Math.random() * 0.07) + 0.05, tiltAngle: 0
+            });
+        }
+        requestAnimationFrame(renderConfetti);
+    }
+
+    function renderConfetti() {
+        if(confettiParticles.length === 0) return;
+        confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+        confettiParticles.forEach((p, index) => {
+            p.tiltAngle += p.tiltAngleIncrement;
+            p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
+            p.x += Math.sin(p.tiltAngle) * 2 + p.dx;
+            p.dy += 0.1; p.y += p.dy; // gravity
+
+            confCtx.beginPath();
+            confCtx.lineWidth = p.r;
+            confCtx.strokeStyle = p.color;
+            confCtx.moveTo(p.x + p.tilt + p.r, p.y);
+            confCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+            confCtx.stroke();
+
+            if (p.y > confCanvas.height) confettiParticles.splice(index, 1);
+        });
+        requestAnimationFrame(renderConfetti);
+    }
+
+    // ========== GAMIFICATION & STREAKS ==========
+    function updateStreak(isCorrect) {
+        if (isCorrect) currentStreak++; else currentStreak = 0;
+        
+        const isFire = currentStreak >= STREAK_THRESHOLD;
+        document.querySelectorAll('.word-card').forEach(card => isFire ? card.classList.add('on-fire') : card.classList.remove('on-fire'));
+        document.querySelectorAll('.streak-fire').forEach(f => {
+            if(isFire) { f.classList.remove('hidden'); f.textContent = `🔥 STREAK x${currentStreak}!`; }
+            else { f.classList.add('hidden'); }
+        });
+        document.querySelectorAll('.btn.team').forEach(btn => {
+            btn.textContent = isFire ? '+2' : '+1';
+            isFire ? btn.classList.add('fire-btn') : btn.classList.remove('fire-btn');
+        });
+    }
+
+    function showFloatingNumber(element, amount) {
+        const floater = document.createElement('div');
+        floater.classList.add('floating-number');
+        floater.textContent = `+${amount}`;
+        element.appendChild(floater);
+        setTimeout(() => floater.remove(), 1000);
+    }
+
+    let teamScores = { red: 0, blue: 0, green: 0 };
+    function updateTeamUI() {
+        document.getElementById('teamRedScore').textContent = teamScores.red;
+        document.getElementById('teamBlueScore').textContent = teamScores.blue;
+        document.getElementById('teamGreenScore').textContent = teamScores.green;
+    }
+
+    document.querySelectorAll('.btn.team').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const team = e.target.dataset.team;
-            if (team === 'red') teamScores.red++; else if (team === 'blue') teamScores.blue++; else if (team === 'green') teamScores.green++;
+            const points = currentStreak >= STREAK_THRESHOLD ? 2 : 1;
+            if (team === 'red') teamScores.red += points; 
+            else if (team === 'blue') teamScores.blue += points; 
+            else if (team === 'green') teamScores.green += points;
             updateTeamUI();
+            showFloatingNumber(e.target.parentElement, points);
         });
     });
     document.getElementById('resetTeamsBtn').addEventListener('click', () => { teamScores = { red: 0, blue: 0, green: 0 }; updateTeamUI(); });
+
+    // ========== FULLSCREEN ==========
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+        if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } 
+        else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+    });
+
+    // ========== LOGICA DE LIBROS Y CATEGORIAS ==========
+    function getWordsByBlock() { return fullDB.filter(w => w.blockId === currentBlockId); }
+
+    function updateThemeAndCategories() {
+        const root = document.documentElement;
+        const mainTitle = document.getElementById('mainBookTitle');
+        const bookId = parseInt(currentBlockId.split('_')[0]);
+
+        if (bookId === 1) { root.style.setProperty('--theme-primary', '#891752'); root.style.setProperty('--theme-bg', '#1c0511'); root.style.setProperty('--theme-panel', '#2d0d1e'); root.style.setProperty('--theme-border', '#4a1530'); mainTitle.textContent = 'EVOLVE 1'; } 
+        else if (bookId === 2) { root.style.setProperty('--theme-primary', '#64b54c'); root.style.setProperty('--theme-bg', '#11220c'); root.style.setProperty('--theme-panel', '#1b3613'); root.style.setProperty('--theme-border', '#2a541d'); mainTitle.textContent = 'EVOLVE 2'; } 
+        else if (bookId === 3) { root.style.setProperty('--theme-primary', '#eb515b'); root.style.setProperty('--theme-bg', '#2e0a0c'); root.style.setProperty('--theme-panel', '#4d1014'); root.style.setProperty('--theme-border', '#7a1a20'); mainTitle.textContent = 'EVOLVE 3'; }
+
+        const words = getWordsByBlock();
+        const categories = [...new Set(words.map(w => w.category))].sort((a,b) => parseInt(a.replace('Unit ','')) - parseInt(b.replace('Unit ','')));
+        
+        let optionsHtml = `<option value="all">📚 ALL UNITS IN BLOCK</option>`;
+        categories.forEach(cat => { optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`; });
+        document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
+        rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all';
+    }
+
+    function updateGrammarPanel() {
+        const grid = document.getElementById('grammarGrid');
+        const sel = document.getElementById('blockSelect');
+        document.getElementById('grammarCourseLabel').textContent = sel.options[sel.selectedIndex].text;
+        let html = '';
+        switch(currentBlockId) {
+            case "1_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: be (aff, neg, q)</h4><ul><li><code>I'm from Brazil.</code></li><li><code>Are you American?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Possessives</h4><ul><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Simple present</h4><ul><li><code>I like coffee.</code></li><li><code>Do you play games?</code></li></ul></div>`; break;
+            case "1_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li><code>I'm going to the mall.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Object pronouns</h4><ul><li><code>me, you, him, her, it, us, them</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li><code>He worked</code> / <code>She didn't play</code></li></ul></div>`; break;
+            case "1_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Quantifiers</h4><ul><li><code>a lot of, some, a few, too much</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Verb patterns</h4><ul><li><code>want to try</code> / <code>can't stand waiting</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: if and when</h4><ul><li>Giving reasons: <code>to + verb, for + noun</code></li></ul></div>`; break;
+            case "1_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Comparatives & Superlatives</h4><ul><li><code>taller than</code> / <code>the best</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: have to & Predictions</h4><ul><li><code>have to</code> / <code>will, might, may</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Present perfect</h4><ul><li>For experience vs. Simple past</li></ul></div>`; break;
+            case "2_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: be & Possessives</h4><ul><li>Review: affirmative, negative, questions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Demonstratives</h4><ul><li><code>This / that one; these / those ones</code></li></ul></div>`; break;
+            case "2_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li>Simple present vs. present continuous</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Future plans</h4><ul><li>Present continuous for future</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li>Affirmative, negative and questions</li></ul></div>`; break;
+            case "2_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: be going to</h4><ul><li><code>all, most, many, some, no, none</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Verb patterns</h4><ul><li><code>verb + to + verb</code> / <code>verb + -ing</code></li></ul></div>`; break;
+            case "2_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li>have to, will, might</li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect vs simple past</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Relative Pronouns</h4><ul><li><code>who, which, that</code></li></ul></div>`; break;
+            case "3_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: Info questions</h4><ul><li><code>What, Which, Whose, How...</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Indirect questions</h4><ul><li><code>Do you know where…?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Present perfect</h4><ul><li>with <code>ever, never, for, since</code></li></ul></div>`; break;
+            case "3_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Articles & Modals</h4><ul><li><code>a, an, the</code> / <code>should, could</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: be going to vs will</h4><ul><li>will for sudden decisions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Past tenses</h4><ul><li>Past continuous vs. simple past</li></ul></div>`; break;
+            case "3_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Conditionals</h4><ul><li><code>almost all, several</code> / Real conditionals</li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: used to & Comparisons</h4><ul><li>Comparisons with <code>(not) as… as</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Pres. perfect continuous</h4><ul><li>vs. Present perfect</li></ul></div>`; break;
+            case "3_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li><code>have to, must, can't</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Passive Voice</h4><ul><li>Simple present & Simple past passive</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li>Unreal conditionals: <code>If I had…</code></li></ul></div>`; break;
+        }
+        grid.innerHTML = html;
+    }
+
+    document.getElementById('blockSelect').addEventListener('change', (e) => {
+        currentBlockId = e.target.value; updateThemeAndCategories(); updateGrammarPanel(); currentStreak=0; updateStreak(false);
+        if (currentMode === 'rapid') rapidRefreshWordList(); else if (currentMode === 'spelling') spellingRefreshWordList(); else if (currentMode === 'missing') missingRefreshWordList();
+    });
 
     // ========== MODO RAPID ==========
     let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
     let rapidCategory='all', rapidRoundLimit=10, rapidRoundCounter=0, rapidSessionActive=false;
     const MIN_SPEED=0.5;
 
-    function rapidGetFilteredList() {
-        let list = getWordsByBlock();
-        if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory);
-        return list;
-    }
-
-    function rapidPickWord() {
-        const list = rapidGetFilteredList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A"};
-    }
-
+    function rapidGetFilteredList() { let list = getWordsByBlock(); if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory); return list; }
+    function rapidPickWord() { const list = rapidGetFilteredList(); return list.length ? list[Math.floor(Math.random()*list.length)] : {word: "N/A", category: "N/A"}; }
     function rapidUpdateDisplay(word) {
         rapidCurrentWord = word;
         document.getElementById('currentWord').textContent = word.word;
@@ -722,378 +671,206 @@
         document.getElementById('currentSpeedDisplay').textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
         playWordAudio(word.word);
     }
-
     function rapidNext() {
         if (!rapidSessionActive) return;
         if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
-        rapidRoundCounter++;
-        rapidUpdateDisplay(rapidPickWord());
+        rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
         if (rapidIsPlaying) rapidStartInterval();
     }
-
     function rapidStartInterval() {
         if (rapidInterval) clearInterval(rapidInterval);
         rapidInterval = setInterval(() => {
             if (!rapidSessionActive) return;
             if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
-            rapidRoundCounter++;
-            rapidUpdateDisplay(rapidPickWord());
+            rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
         }, rapidDynamicSpeed*1000);
     }
-
     function rapidFinish() {
-        rapidSessionActive = false;
-        if (rapidInterval) clearInterval(rapidInterval);
-        rapidInterval = null;
-        document.getElementById('playPauseBtn').innerHTML = '🔄 RESTART';
-        rapidIsPlaying = false;
-        document.getElementById('currentWord').textContent = '✔️ DONE!';
-        document.getElementById('categoryTag').textContent = 'SESSION COMPLETE';
+        rapidSessionActive = false; if (rapidInterval) clearInterval(rapidInterval); rapidInterval = null;
+        document.getElementById('playPauseBtn').innerHTML = '🔄 RESTART'; rapidIsPlaying = false;
+        document.getElementById('currentWord').textContent = '✔️ DONE!'; document.getElementById('categoryTag').textContent = 'SESSION COMPLETE';
+        shootConfetti(); playDing();
     }
-
     function rapidReset() {
-        rapidRoundCounter = 0;
-        rapidSessionActive = true;
-        rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
-        rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value);
-        rapidDynamicSpeed = rapidBaseSpeed;
-        rapidUpdateDisplay(rapidPickWord());
+        rapidRoundCounter = 0; rapidSessionActive = true; rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
+        rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value); rapidDynamicSpeed = rapidBaseSpeed;
+        initAudioAPI(); rapidUpdateDisplay(rapidPickWord());
     }
-
     function rapidTogglePlay() {
+        initAudioAPI();
         if (!rapidSessionActive) { rapidReset(); rapidIsPlaying = true; rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; } 
-        else {
-            if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } 
-            else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; }
-        }
+        else { if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; } }
     }
-
     function rapidRefreshWordList() {
         rapidCurrentWord = rapidPickWord();
-        if (!rapidSessionActive) {
-            document.getElementById('currentWord').textContent = rapidCurrentWord.word;
-            document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category);
-            document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
-        } else { rapidUpdateDisplay(rapidCurrentWord); }
+        if (!rapidSessionActive) { document.getElementById('currentWord').textContent = rapidCurrentWord.word; document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category); document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`; } 
+        else { rapidUpdateDisplay(rapidCurrentWord); }
     }
 
     document.getElementById('playPauseBtn').addEventListener('click', rapidTogglePlay);
     document.getElementById('nextBtn').addEventListener('click', ()=>{
-        if (!rapidSessionActive) { rapidReset(); rapidNext(); rapidIsPlaying=false; document.getElementById('playPauseBtn').innerHTML='▶️ START'; }
-        else rapidNext();
+        if (!rapidSessionActive) { rapidReset(); rapidNext(); rapidIsPlaying=false; document.getElementById('playPauseBtn').innerHTML='▶️ START'; } else rapidNext();
     });
-    document.getElementById('speedSlider').addEventListener('input', e => {
-        rapidBaseSpeed = parseFloat(e.target.value);
-        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
-        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
-        if (rapidIsPlaying) rapidStartInterval();
-    });
+    document.getElementById('speedSlider').addEventListener('input', e => { rapidBaseSpeed = parseFloat(e.target.value); rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed; document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s'; if (rapidIsPlaying) rapidStartInterval(); });
     document.getElementById('categorySelect').addEventListener('change', e => { rapidCategory = e.target.value; rapidRefreshWordList(); });
-    document.getElementById('rapidRandomCat').addEventListener('click', ()=>{
-        const opts = document.querySelectorAll('#categorySelect option');
-        if(opts.length > 1) {
-            const randomIndex = Math.floor(Math.random() * (opts.length-1)) + 1;
-            rapidCategory = opts[randomIndex].value;
-            document.getElementById('categorySelect').value = rapidCategory;
-            rapidRefreshWordList();
-        }
-    });
+    document.getElementById('rapidRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#categorySelect option'); if(opts.length > 1) { rapidCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('categorySelect').value = rapidCategory; rapidRefreshWordList(); }});
 
     // ========== MODO SPELLING ==========
     let spellingCurrentWord, spellingSessionActive=false, spellingRound=0, spellingRoundLimit=10;
-    let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10;
-    let spellingTotalTime = 10, spellingWaiting = false, spellingCategory = 'all';
+    let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10, spellingTotalTime=10, spellingWaiting=false, spellingCategory='all';
 
-    function spellingGetList() {
-        let list = getWordsByBlock();
-        if (spellingCategory !== 'all') list = list.filter(w => w.category === spellingCategory);
-        return list;
-    }
-
-    function spellingPickWord() {
-        const list = spellingGetList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A", es: "N/A"};
-    }
-
+    function spellingGetList() { let list = getWordsByBlock(); if (spellingCategory !== 'all') list = list.filter(w => w.category === spellingCategory); return list; }
+    function spellingPickWord() { const list = spellingGetList(); return list.length ? list[Math.floor(Math.random()*list.length)] : {word: "N/A", category: "N/A", es: "N/A"}; }
     function spellingUpdateUI() {
-        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es}`;
-        document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
-        document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`;
-        document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
-        document.getElementById('correctCount').textContent = spellingCorrect;
-        document.getElementById('wrongCount').textContent = spellingWrong;
-        document.getElementById('spellingAnswerReveal').innerHTML = ''; 
+        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es}`; document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
+        document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`; document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
+        document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = ''; document.getElementById('timerDisplay').classList.remove('danger'); document.getElementById('spellingTimerBar').classList.remove('danger');
     }
-
-    function spellingUpdateTimerBar() {
-        const percent = (spellingTimeLeft / spellingTotalTime) * 100;
-        document.getElementById('spellingTimerBar').style.width = percent + '%';
-    }
-
+    function spellingUpdateTimerBar() { document.getElementById('spellingTimerBar').style.width = (spellingTimeLeft / spellingTotalTime) * 100 + '%'; }
+    
     function spellingNext() {
-        if (!spellingSessionActive) return;
-        spellingWaiting = false;
+        if (!spellingSessionActive) return; spellingWaiting = false;
         if (spellingRound >= spellingRoundLimit) { spellingFinish(); return; }
-        spellingRound++;
-        spellingCurrentWord = spellingPickWord();
-        spellingUpdateUI();
-        spellingStartTimer();
+        spellingRound++; spellingCurrentWord = spellingPickWord(); spellingUpdateUI(); spellingStartTimer();
     }
-
     function spellingStartTimer() {
         if (spellingTimerInterval) clearInterval(spellingTimerInterval);
-        spellingTotalTime = parseInt(document.getElementById('timerSeconds').value,10);
-        spellingTimeLeft = spellingTotalTime;
-        document.getElementById('timerDisplay').textContent = spellingTimeLeft;
-        spellingUpdateTimerBar();
+        spellingTotalTime = parseInt(document.getElementById('timerSeconds').value,10); spellingTimeLeft = spellingTotalTime;
+        document.getElementById('timerDisplay').textContent = spellingTimeLeft; spellingUpdateTimerBar();
         spellingTimerInterval = setInterval(() => {
-            spellingTimeLeft--;
-            document.getElementById('timerDisplay').textContent = spellingTimeLeft;
-            spellingUpdateTimerBar();
-            
+            spellingTimeLeft--; document.getElementById('timerDisplay').textContent = spellingTimeLeft; spellingUpdateTimerBar();
+            if(spellingTimeLeft <= 3 && spellingTimeLeft > 0) { playTick(); document.getElementById('timerDisplay').classList.add('danger'); document.getElementById('spellingTimerBar').classList.add('danger'); }
             if (spellingTimeLeft <= 0) {
-                clearInterval(spellingTimerInterval);
-                if (spellingWaiting) return;
-                spellingWaiting = true;
+                clearInterval(spellingTimerInterval); if (spellingWaiting) return; spellingWaiting = true;
+                document.getElementById('timerDisplay').classList.remove('danger'); document.getElementById('spellingTimerBar').classList.remove('danger');
                 document.getElementById('spellingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
                 spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong;
-                playWordAudio(spellingCurrentWord.word);
+                updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word);
                 setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
         }, 1000);
     }
-
     function spellingFinish() {
-        spellingSessionActive = false; spellingWaiting = false;
-        clearInterval(spellingTimerInterval);
-        document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART';
-        document.getElementById('spellingHint').textContent = '🏁 Session finished!';
-        document.getElementById('spellingTimerBar').style.width = '0%';
+        spellingSessionActive = false; spellingWaiting = false; clearInterval(spellingTimerInterval);
+        document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART'; document.getElementById('spellingHint').textContent = '🏁 Session finished!'; document.getElementById('spellingTimerBar').style.width = '0%';
+        document.getElementById('timerDisplay').classList.remove('danger'); document.getElementById('spellingTimerBar').classList.remove('danger'); updateStreak(false); shootConfetti(); playDing();
     }
-
     function spellingReset() {
-        clearInterval(spellingTimerInterval);
-        spellingSessionActive = true; spellingWaiting = false;
-        spellingRound = 0; spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10;
-        spellingCorrect = 0; spellingWrong = 0;
-        document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE';
-        spellingNext();
+        clearInterval(spellingTimerInterval); initAudioAPI(); spellingSessionActive = true; spellingWaiting = false; currentStreak=0; updateStreak(false);
+        spellingRound = 0; spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10; spellingCorrect = 0; spellingWrong = 0;
+        document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE'; spellingNext();
     }
-
     function spellingRefreshWordList() { spellingCurrentWord = spellingPickWord(); spellingUpdateUI(); }
 
     function spellingMarkCorrect() {
-        if (!spellingSessionActive || spellingWaiting) return;
-        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingCorrect++;
-        document.getElementById('correctCount').textContent = spellingCorrect;
-        document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
-        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingCorrect++;
+        document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
+        updateStreak(true); playDing(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
-
     function spellingMarkIncorrect() {
-        if (!spellingSessionActive || spellingWaiting) return;
-        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
-        document.getElementById('wrongCount').textContent = spellingWrong;
-        document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
-        playWordAudio(spellingCurrentWord.word);
-        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
+        document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
-
     function spellingReveal() {
-        if (!spellingSessionActive || spellingWaiting) return;
-        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
-        document.getElementById('wrongCount').textContent = spellingWrong;
-        document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
-        playWordAudio(spellingCurrentWord.word);
-        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
+        document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
-    document.getElementById('spellingStartBtn').addEventListener('click', ()=>{
-        if (!spellingSessionActive) spellingReset();
-        else {
-            if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; }
-            else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; }
-        }
-    });
-    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{
-        if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; }
-        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; 
-        document.getElementById('wrongCount').textContent = spellingWrong;
-        document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; 
-        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000);
-    });
+    document.getElementById('spellingStartBtn').addEventListener('click', ()=>{ if (!spellingSessionActive) spellingReset(); else { if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; } else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; } } });
+    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{ if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; } clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); });
     document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
     document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
     document.getElementById('spellingIncorrectBtn').addEventListener('click', spellingMarkIncorrect);
     document.getElementById('spellingRevealBtn').addEventListener('click', spellingReveal);
     document.getElementById('spellingCategorySelect').addEventListener('change', (e)=> { spellingCategory = e.target.value; if(!spellingSessionActive) spellingRefreshWordList(); });
-    document.getElementById('spellingRandomCat').addEventListener('click', ()=>{
-        const opts = document.querySelectorAll('#spellingCategorySelect option');
-        if(opts.length > 1) {
-            spellingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value;
-            document.getElementById('spellingCategorySelect').value = spellingCategory;
-            spellingRefreshWordList();
-        }
-    });
+    document.getElementById('spellingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#spellingCategorySelect option'); if(opts.length > 1) { spellingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('spellingCategorySelect').value = spellingCategory; spellingRefreshWordList(); } });
 
     // ========== MODO MISSING LETTERS ==========
     let missingCurrentWord, missingSessionActive=false, missingRound=0, missingRoundLimit=10;
-    let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15;
-    let missingTotalTime = 15, missingWaiting = false, missingCategory = 'all';
+    let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15, missingTotalTime=15, missingWaiting=false, missingCategory='all';
 
-    function missingGetList() {
-        let list = getWordsByBlock();
-        if (missingCategory !== 'all') list = list.filter(w => w.category === missingCategory);
-        return list;
-    }
-
-    function missingPickWord() {
-        const list = missingGetList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A", es: "N/A"};
-    }
-
+    function missingGetList() { let list = getWordsByBlock(); if (missingCategory !== 'all') list = list.filter(w => w.category === missingCategory); return list; }
+    function missingPickWord() { const list = missingGetList(); return list.length ? list[Math.floor(Math.random()*list.length)] : {word: "N/A", category: "N/A", es: "N/A"}; }
     function generateMissingWord(word) {
         if (word.length <= 2) return word;
-        const chars = word.split('');
-        const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1);
-        const indices = [];
+        const chars = word.split(''); const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1); const indices = [];
         for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ' && chars[i] !== "'") indices.push(i);
-        for (let i = indices.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [indices[i], indices[j]] = [indices[j], indices[i]];
-        }
+        for (let i = indices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [indices[i], indices[j]] = [indices[j], indices[i]]; }
         const toHide = indices.slice(0, Math.min(numToHide, indices.length));
         return chars.map((c, i) => (i === 0 || c === ' ' || c === "'") ? c : (toHide.includes(i) ? '_' : c)).join('');
     }
-
     function missingUpdateUI() {
-        document.getElementById('missingHint').textContent = `🇪🇸 ${missingCurrentWord.es}`;
-        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
-        document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category);
-        document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
-        document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
-        document.getElementById('missingCorrect').textContent = missingCorrect;
-        document.getElementById('missingWrong').textContent = missingWrong;
-        document.getElementById('missingAnswerReveal').innerHTML = '';
+        document.getElementById('missingHint').textContent = `🇪🇸 ${missingCurrentWord.es}`; document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
+        document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category); document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
+        document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`; document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWrong').textContent = missingWrong;
+        document.getElementById('missingAnswerReveal').innerHTML = ''; document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger');
     }
-
-    function missingUpdateTimerBar() {
-        const percent = (missingTimeLeft / missingTotalTime) * 100;
-        document.getElementById('missingTimerBar').style.width = percent + '%';
-    }
-
-    function missingStopTimer() {
-        if (missingTimerInterval) clearInterval(missingTimerInterval);
-        missingTimerInterval = null;
-    }
-
+    function missingUpdateTimerBar() { document.getElementById('missingTimerBar').style.width = (missingTimeLeft / missingTotalTime) * 100 + '%'; }
+    function missingStopTimer() { if (missingTimerInterval) clearInterval(missingTimerInterval); missingTimerInterval = null; }
+    
     function missingStartTimer() {
-        missingStopTimer();
-        missingTotalTime = parseInt(document.getElementById('missingTimer').value,10);
-        missingTimeLeft = missingTotalTime;
-        document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
-        missingUpdateTimerBar();
+        missingStopTimer(); missingTotalTime = parseInt(document.getElementById('missingTimer').value,10); missingTimeLeft = missingTotalTime;
+        document.getElementById('missingTimerDisplay').textContent = missingTimeLeft; missingUpdateTimerBar();
         missingTimerInterval = setInterval(() => {
-            missingTimeLeft--;
-            document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
-            missingUpdateTimerBar();
-            
+            missingTimeLeft--; document.getElementById('missingTimerDisplay').textContent = missingTimeLeft; missingUpdateTimerBar();
+            if(missingTimeLeft <= 3 && missingTimeLeft > 0) { playTick(); document.getElementById('missingTimerDisplay').classList.add('danger'); document.getElementById('missingTimerBar').classList.add('danger'); }
             if (missingTimeLeft <= 0) {
-                missingStopTimer();
-                if(missingWaiting) return;
-                missingWaiting = true;
+                missingStopTimer(); if(missingWaiting) return; missingWaiting = true;
+                document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger');
                 document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
                 document.getElementById('missingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
                 missingWrong++; document.getElementById('missingWrong').textContent = missingWrong;
-                playWordAudio(missingCurrentWord.word);
+                updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word);
                 setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
             }
         }, 1000);
     }
-
     function missingNext() {
-        if (!missingSessionActive) return;
-        missingWaiting = false;
+        if (!missingSessionActive) return; missingWaiting = false;
         if (missingRound >= missingRoundLimit) { missingFinish(); return; }
-        missingRound++;
-        missingCurrentWord = missingPickWord();
-        missingUpdateUI();
-        missingStartTimer();
+        missingRound++; missingCurrentWord = missingPickWord(); missingUpdateUI(); missingStartTimer();
     }
-
     function missingFinish() {
         missingSessionActive = false; missingWaiting = false; missingStopTimer();
-        document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART';
-        document.getElementById('missingHint').textContent = '🏁 Session finished!';
-        document.getElementById('missingTimerBar').style.width = '0%';
+        document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART'; document.getElementById('missingHint').textContent = '🏁 Session finished!'; document.getElementById('missingTimerBar').style.width = '0%';
+        document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger'); updateStreak(false); shootConfetti(); playDing();
     }
-
     function missingReset() {
-        missingStopTimer(); missingSessionActive = true; missingWaiting = false;
-        missingRound = 0; missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10;
-        missingCorrect = 0; missingWrong = 0;
-        document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE';
-        missingNext();
+        missingStopTimer(); initAudioAPI(); missingSessionActive = true; missingWaiting = false; currentStreak=0; updateStreak(false);
+        missingRound = 0; missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10; missingCorrect = 0; missingWrong = 0;
+        document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE'; missingNext();
     }
-
     function missingRefreshWordList() { missingCurrentWord = missingPickWord(); missingUpdateUI(); }
 
     function missingMarkCorrect() {
-        if (!missingSessionActive || missingWaiting) return;
-        missingStopTimer(); missingWaiting = true; missingCorrect++;
-        document.getElementById('missingCorrect').textContent = missingCorrect;
-        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingCorrect++;
+        document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `✅ Correct! <strong>${missingCurrentWord.word}</strong>`;
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+        updateStreak(true); playDing(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
     }
-
     function missingMarkIncorrect() {
-        if (!missingSessionActive || missingWaiting) return;
-        missingStopTimer(); missingWaiting = true; missingWrong++;
-        document.getElementById('missingWrong').textContent = missingWrong;
-        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
+        document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${missingCurrentWord.word}</strong>`;
-        playWordAudio(missingCurrentWord.word);
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
-
     function missingReveal() {
-        if (!missingSessionActive || missingWaiting) return;
-        missingStopTimer(); missingWaiting = true; missingWrong++;
-        document.getElementById('missingWrong').textContent = missingWrong;
-        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
+        document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
         document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
-        playWordAudio(missingCurrentWord.word);
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
 
-    document.getElementById('missingStartBtn').addEventListener('click', ()=>{
-        if (!missingSessionActive) missingReset();
-        else {
-            if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; }
-            else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; }
-        }
-    });
-    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{
-        if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; }
-        missingStopTimer(); missingWaiting = true; missingWrong++; 
-        document.getElementById('missingWrong').textContent = missingWrong;
-        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
-        document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; 
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000);
-    });
+    document.getElementById('missingStartBtn').addEventListener('click', ()=>{ if (!missingSessionActive) missingReset(); else { if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; } else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; } } });
+    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{ if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; } missingStopTimer(); missingWaiting = true; missingWrong++; document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); });
     document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
     document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
     document.getElementById('missingIncorrectBtn').addEventListener('click', missingMarkIncorrect);
     document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; if(!missingSessionActive) missingRefreshWordList(); });
-    document.getElementById('missingRandomCat').addEventListener('click', ()=>{
-        const opts = document.querySelectorAll('#missingCategorySelect option');
-        if(opts.length > 1) {
-            missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value;
-            document.getElementById('missingCategorySelect').value = missingCategory;
-            missingRefreshWordList();
-        }
-    });
+    document.getElementById('missingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#missingCategorySelect option'); if(opts.length > 1) { missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('missingCategorySelect').value = missingCategory; missingRefreshWordList(); }});
 
     // ========== CAMBIO DE MODO ==========
     function switchMode(mode) {
@@ -1102,15 +879,11 @@
         document.getElementById('spellingMode').classList.toggle('hidden', mode!=='spelling');
         document.getElementById('missingMode').classList.toggle('hidden', mode!=='missing');
         document.getElementById('modeTitle').textContent = mode==='rapid'?'RAPID FIRE':(mode==='spelling'?'SPELLING':'MISSING LETTERS');
-        if (mode==='rapid') rapidRefreshWordList();
-        else if (mode==='spelling') spellingRefreshWordList();
-        else if (mode==='missing') missingRefreshWordList();
+        if (mode==='rapid') rapidRefreshWordList(); else if (mode==='spelling') spellingRefreshWordList(); else if (mode==='missing') missingRefreshWordList();
     }
 
     document.querySelectorAll('.mode-btn').forEach(btn => btn.addEventListener('click', e => {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        switchMode(e.target.dataset.mode);
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); switchMode(e.target.dataset.mode);
     }));
 
     // ========== INICIALIZACIÓN ==========
