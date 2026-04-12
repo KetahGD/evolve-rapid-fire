@@ -19,7 +19,7 @@
             padding: 16px;
         }
         .game-container {
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
             background: #13222e;
             border-radius: 40px;
@@ -43,7 +43,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .mode-btn {
             background: #1f2e3c;
@@ -62,6 +62,28 @@
             color: #17242e;
             border-color: #e5b567;
             box-shadow: 0 4px 0 #b58a47;
+        }
+        .course-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        .course-selector label {
+            color: #ddcdb7;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        #courseSelect {
+            padding: 10px 24px;
+            border-radius: 40px;
+            background: #1e2e3b;
+            color: #f2e2ce;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 1px solid #6c7e8b;
+            cursor: pointer;
         }
         .subhead {
             text-align: center;
@@ -205,7 +227,6 @@
         }
         .grammar-card h4 { color: #fad6a0; }
         .grammar-card li { color: #cdc1b2; }
-        .spelling-area, .missing-area { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .hint-text { font-size: 2.5rem; color: #f2e0ca; margin: 20px 0; }
         .spelling-input, .missing-input {
             padding: 16px 24px;
@@ -242,9 +263,19 @@
         <button class="mode-btn" data-mode="missing">🔘 MISSING LETTERS</button>
     </div>
 
-    <!-- ========== RAPID FIRE MODE ========== -->
+    <div class="course-selector">
+        <label>📚 COURSE:</label>
+        <select id="courseSelect">
+            <option value="all">All Units (1–9)</option>
+            <option value="1" selected>Course 1 (Units 1–3)</option>
+            <option value="2">Course 2 (Units 4–6)</option>
+            <option value="3">Course 3 (Units 7–9)</option>
+        </select>
+    </div>
+
+    <!-- RAPID FIRE MODE -->
     <div id="rapidMode">
-        <div class="subhead">⚡ UNITS 1–3 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span></div>
+        <div class="subhead">⚡ UNITS 1–9 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span></div>
         <div class="word-card">
             <div class="main-word" id="currentWord">Brazil</div>
             <div class="category-badge" id="categoryTag">🌍 COUNTRY</div>
@@ -275,16 +306,23 @@
                 <option value="room">🚪 Rooms</option>
                 <option value="job">💼 Jobs</option>
                 <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers / Dates</option>
+                <option value="number">🔢 Numbers/Dates</option>
+                <option value="technology">📱 Technology</option>
+                <option value="activities">🎯 Activities</option>
+                <option value="cityPlace">🏙️ City Places</option>
+                <option value="nature">🌿 Nature</option>
+                <option value="transport">🚗 Transport</option>
+                <option value="skill">🎨 Skills</option>
+                <option value="travel">✈️ Travel</option>
             </select>
-            <span class="counter" id="wordCounter">📋 120 words</span>
+            <span class="counter" id="wordCounter">📋 0 words</span>
             <span class="progress-badge" id="roundsInfo">🎯 0 / 10</span>
             <span class="speed-indicator" id="currentSpeedDisplay">⚡ 1.8s</span>
             <span id="audioStatus"></span>
         </div>
     </div>
 
-    <!-- ========== SPELLING CHALLENGE MODE ========== -->
+    <!-- SPELLING CHALLENGE MODE -->
     <div id="spellingMode" class="hidden">
         <div class="subhead">🔤 SPELLING CHALLENGE · Write the correct word</div>
         <div class="word-card">
@@ -317,9 +355,16 @@
                 <option value="room">🚪 Rooms</option>
                 <option value="job">💼 Jobs</option>
                 <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers / Dates</option>
+                <option value="number">🔢 Numbers/Dates</option>
+                <option value="technology">📱 Technology</option>
+                <option value="activities">🎯 Activities</option>
+                <option value="cityPlace">🏙️ City Places</option>
+                <option value="nature">🌿 Nature</option>
+                <option value="transport">🚗 Transport</option>
+                <option value="skill">🎨 Skills</option>
+                <option value="travel">✈️ Travel</option>
             </select>
-            <span class="counter" id="spellingWordCounter">📋 120 words</span>
+            <span class="counter" id="spellingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="spellingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
                 <span>✅ <span id="correctCount">0</span></span>
@@ -329,7 +374,7 @@
         <div id="spellingFeedback" class="feedback"></div>
     </div>
 
-    <!-- ========== MISSING LETTERS MODE ========== -->
+    <!-- MISSING LETTERS MODE -->
     <div id="missingMode" class="hidden">
         <div class="subhead">🔘 MISSING LETTERS · Complete the word</div>
         <div class="word-card">
@@ -364,9 +409,16 @@
                 <option value="room">🚪 Rooms</option>
                 <option value="job">💼 Jobs</option>
                 <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers / Dates</option>
+                <option value="number">🔢 Numbers/Dates</option>
+                <option value="technology">📱 Technology</option>
+                <option value="activities">🎯 Activities</option>
+                <option value="cityPlace">🏙️ City Places</option>
+                <option value="nature">🌿 Nature</option>
+                <option value="transport">🚗 Transport</option>
+                <option value="skill">🎨 Skills</option>
+                <option value="travel">✈️ Travel</option>
             </select>
-            <span class="counter" id="missingWordCounter">📋 120 words</span>
+            <span class="counter" id="missingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="missingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
                 <span>✅ <span id="missingCorrect">0</span></span>
@@ -376,17 +428,10 @@
         <div id="missingFeedback" class="feedback"></div>
     </div>
 
-    <!-- ========== GRAMMAR PANEL ========== -->
+    <!-- GRAMMAR PANEL -->
     <div class="grammar-panel">
-        <div class="grammar-title">📘 GRAMMAR FORMULAS · UNITS 1–3</div>
-        <div class="grammar-grid">
-            <div class="grammar-card"><h4>🔹 be: I / You</h4><ul><li><code>I'm + nationality/name/job</code></li><li><code>You're + adjective/nationality</code></li><li><code>Are you + ... ?</code> → Yes, I am. / No, I'm not.</li></ul></div>
-            <div class="grammar-card"><h4>🔹 be: he/she/they</h4><ul><li><code>He's / She's + (age/job/adjective)</code></li><li><code>They're + my/your/his ...</code></li><li><code>Is he/she + ... ?</code> → Yes, he is. / No, she isn't.</li></ul></div>
-            <div class="grammar-card"><h4>🔹 Possessives</h4><ul><li><code>my/your/his/her/its/our/their + noun</code></li><li><code>name's + noun</code> (Maria's book)</li></ul></div>
-            <div class="grammar-card"><h4>🔹 There is / There are</h4><ul><li><code>There's + a/an + singular noun</code></li><li><code>There are + (number) + plural noun</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 It is / This / These</h4><ul><li><code>It's + a/an + noun</code></li><li><code>This + singular</code> / <code>These + plural</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like + noun / I don't like</code></li><li><code>Do you + verb?</code> → Yes, I do. / No, I don't.</li></ul></div>
-        </div>
+        <div class="grammar-title">📘 GRAMMAR · <span id="grammarCourseLabel">Course 1 (Units 1–3)</span></div>
+        <div class="grammar-grid" id="grammarGrid"></div>
     </div>
 </div>
 
@@ -394,151 +439,319 @@
 (function(){
     "use strict";
 
-    // ========== COMPLETE DATABASE (120 words with Spanish translations) ==========
-    const vocabularyDB = [
-        // Countries (14)
-        { word: "Brazil", category: "country", isNew: false, es: "Brasil" },
-        { word: "Spain", category: "country", isNew: false, es: "España" },
-        { word: "China", category: "country", isNew: false, es: "China" },
-        { word: "Mexico", category: "country", isNew: false, es: "México" },
-        { word: "the United States", category: "country", isNew: false, es: "Estados Unidos" },
-        { word: "Japan", category: "country", isNew: false, es: "Japón" },
-        { word: "Colombia", category: "country", isNew: false, es: "Colombia" },
-        { word: "Peru", category: "country", isNew: false, es: "Perú" },
-        { word: "Russia", category: "country", isNew: false, es: "Rusia" },
-        { word: "South Korea", category: "country", isNew: false, es: "Corea del Sur" },
-        { word: "Italy", category: "country", isNew: true, es: "Italia" },
-        { word: "Germany", category: "country", isNew: true, es: "Alemania" },
-        { word: "France", category: "country", isNew: true, es: "Francia" },
-        { word: "Canada", category: "country", isNew: true, es: "Canadá" },
-        // Nationalities (14)
-        { word: "Brazilian", category: "nationality", isNew: false, es: "brasileño/a" },
-        { word: "Spanish", category: "nationality", isNew: false, es: "español/a" },
-        { word: "Chinese", category: "nationality", isNew: false, es: "chino/a" },
-        { word: "Mexican", category: "nationality", isNew: false, es: "mexicano/a" },
-        { word: "American", category: "nationality", isNew: false, es: "estadounidense" },
-        { word: "Japanese", category: "nationality", isNew: false, es: "japonés/a" },
-        { word: "Colombian", category: "nationality", isNew: false, es: "colombiano/a" },
-        { word: "Peruvian", category: "nationality", isNew: false, es: "peruano/a" },
-        { word: "Russian", category: "nationality", isNew: false, es: "ruso/a" },
-        { word: "South Korean", category: "nationality", isNew: false, es: "surcoreano/a" },
-        { word: "Italian", category: "nationality", isNew: true, es: "italiano/a" },
-        { word: "German", category: "nationality", isNew: true, es: "alemán/a" },
-        { word: "French", category: "nationality", isNew: true, es: "francés/a" },
-        { word: "Canadian", category: "nationality", isNew: true, es: "canadiense" },
-        // Family (17)
-        { word: "mother", category: "family", isNew: false, es: "madre" },
-        { word: "father", category: "family", isNew: false, es: "padre" },
-        { word: "brother", category: "family", isNew: false, es: "hermano" },
-        { word: "sister", category: "family", isNew: false, es: "hermana" },
-        { word: "grandmother", category: "family", isNew: false, es: "abuela" },
-        { word: "grandfather", category: "family", isNew: false, es: "abuelo" },
-        { word: "aunt", category: "family", isNew: false, es: "tía" },
-        { word: "uncle", category: "family", isNew: false, es: "tío" },
-        { word: "cousin", category: "family", isNew: false, es: "primo/a" },
-        { word: "parents", category: "family", isNew: false, es: "padres" },
-        { word: "children", category: "family", isNew: false, es: "hijos/niños" },
-        { word: "husband", category: "family", isNew: false, es: "esposo" },
-        { word: "wife", category: "family", isNew: false, es: "esposa" },
-        { word: "son", category: "family", isNew: false, es: "hijo" },
-        { word: "daughter", category: "family", isNew: false, es: "hija" },
-        { word: "baby", category: "family", isNew: true, es: "bebé" },
-        { word: "teenager", category: "family", isNew: true, es: "adolescente" },
-        // Adjectives (19)
-        { word: "old", category: "adjective", isNew: false, es: "viejo/mayor" },
-        { word: "young", category: "adjective", isNew: false, es: "joven" },
-        { word: "short", category: "adjective", isNew: false, es: "bajo/corto" },
-        { word: "tall", category: "adjective", isNew: false, es: "alto" },
-        { word: "boring", category: "adjective", isNew: false, es: "aburrido" },
-        { word: "funny", category: "adjective", isNew: false, es: "divertido" },
-        { word: "friendly", category: "adjective", isNew: false, es: "amigable" },
-        { word: "interesting", category: "adjective", isNew: false, es: "interesante" },
-        { word: "shy", category: "adjective", isNew: false, es: "tímido" },
-        { word: "smart", category: "adjective", isNew: false, es: "inteligente" },
-        { word: "beautiful", category: "adjective", isNew: false, es: "hermoso" },
-        { word: "noisy", category: "adjective", isNew: false, es: "ruidoso" },
-        { word: "quiet", category: "adjective", isNew: false, es: "tranquilo" },
-        { word: "awful", category: "adjective", isNew: false, es: "horrible" },
-        { word: "cute", category: "adjective", isNew: false, es: "lindo" },
-        { word: "happy", category: "adjective", isNew: true, es: "feliz" },
-        { word: "sad", category: "adjective", isNew: true, es: "triste" },
-        { word: "tired", category: "adjective", isNew: true, es: "cansado" },
-        { word: "hungry", category: "adjective", isNew: true, es: "hambriento" },
-        // Furniture (15)
-        { word: "bed", category: "furniture", isNew: false, es: "cama" },
-        { word: "chair", category: "furniture", isNew: false, es: "silla" },
-        { word: "table", category: "furniture", isNew: false, es: "mesa" },
-        { word: "desk", category: "furniture", isNew: false, es: "escritorio" },
-        { word: "lamp", category: "furniture", isNew: false, es: "lámpara" },
-        { word: "sofa", category: "furniture", isNew: false, es: "sofá" },
-        { word: "bookcase", category: "furniture", isNew: false, es: "estantería" },
-        { word: "rug", category: "furniture", isNew: false, es: "alfombra" },
-        { word: "refrigerator", category: "furniture", isNew: false, es: "nevera" },
-        { word: "TV", category: "furniture", isNew: false, es: "televisor" },
-        { word: "shower", category: "furniture", isNew: false, es: "ducha" },
-        { word: "mirror", category: "furniture", isNew: true, es: "espejo" },
-        { word: "closet", category: "furniture", isNew: true, es: "armario" },
-        { word: "shelf", category: "furniture", isNew: true, es: "estante" },
-        { word: "curtains", category: "furniture", isNew: true, es: "cortinas" },
-        // Rooms (7)
-        { word: "living room", category: "room", isNew: false, es: "sala de estar" },
-        { word: "kitchen", category: "room", isNew: false, es: "cocina" },
-        { word: "bedroom", category: "room", isNew: false, es: "dormitorio" },
-        { word: "bathroom", category: "room", isNew: false, es: "baño" },
-        { word: "dining area", category: "room", isNew: false, es: "comedor" },
-        { word: "garage", category: "room", isNew: true, es: "garaje" },
-        { word: "yard", category: "room", isNew: true, es: "jardín/patio" },
-        // Jobs (12)
-        { word: "teacher", category: "job", isNew: false, es: "profesor/a" },
-        { word: "student", category: "job", isNew: false, es: "estudiante" },
-        { word: "artist", category: "job", isNew: false, es: "artista" },
-        { word: "chef", category: "job", isNew: false, es: "chef" },
-        { word: "server", category: "job", isNew: false, es: "mesero/a" },
-        { word: "hotel clerk", category: "job", isNew: false, es: "recepcionista de hotel" },
-        { word: "doctor", category: "job", isNew: false, es: "médico/a" },
-        { word: "salesperson", category: "job", isNew: false, es: "vendedor/a" },
-        { word: "engineer", category: "job", isNew: true, es: "ingeniero/a" },
-        { word: "nurse", category: "job", isNew: true, es: "enfermero/a" },
-        { word: "police officer", category: "job", isNew: true, es: "policía" },
-        { word: "manager", category: "job", isNew: true, es: "gerente" },
-        // Drinks & Snacks (12)
-        { word: "coffee", category: "drinkSnack", isNew: false, es: "café" },
-        { word: "tea", category: "drinkSnack", isNew: false, es: "té" },
-        { word: "milk", category: "drinkSnack", isNew: false, es: "leche" },
-        { word: "juice", category: "drinkSnack", isNew: false, es: "jugo" },
-        { word: "water", category: "drinkSnack", isNew: false, es: "agua" },
-        { word: "cookie", category: "drinkSnack", isNew: false, es: "galleta" },
-        { word: "sandwich", category: "drinkSnack", isNew: false, es: "sándwich" },
-        { word: "cracker", category: "drinkSnack", isNew: false, es: "galleta salada" },
-        { word: "soda", category: "drinkSnack", isNew: true, es: "refresco" },
-        { word: "chocolate", category: "drinkSnack", isNew: true, es: "chocolate" },
-        { word: "ice cream", category: "drinkSnack", isNew: true, es: "helado" },
-        { word: "cake", category: "drinkSnack", isNew: true, es: "pastel" },
-        // Numbers/Dates (10)
-        { word: "one", category: "number", isNew: false, es: "uno" },
-        { word: "two", category: "number", isNew: false, es: "dos" },
-        { word: "three", category: "number", isNew: false, es: "tres" },
-        { word: "ten", category: "number", isNew: false, es: "diez" },
-        { word: "twenty", category: "number", isNew: false, es: "veinte" },
-        { word: "March", category: "number", isNew: false, es: "marzo" },
-        { word: "January", category: "number", isNew: false, es: "enero" },
-        { word: "first", category: "number", isNew: false, es: "primero" },
-        { word: "fifteen", category: "number", isNew: true, es: "quince" },
-        { word: "thirty", category: "number", isNew: true, es: "treinta" }
+    // ========== BASE DE DATOS COMPLETA ==========
+    // Course 1 (Units 1-3) - 120 palabras originales
+    const course1Words = [
+        { word: "Brazil", category: "country", course: 1, es: "Brasil" },
+        { word: "Spain", category: "country", course: 1, es: "España" },
+        { word: "China", category: "country", course: 1, es: "China" },
+        { word: "Mexico", category: "country", course: 1, es: "México" },
+        { word: "the United States", category: "country", course: 1, es: "Estados Unidos" },
+        { word: "Japan", category: "country", course: 1, es: "Japón" },
+        { word: "Colombia", category: "country", course: 1, es: "Colombia" },
+        { word: "Peru", category: "country", course: 1, es: "Perú" },
+        { word: "Russia", category: "country", course: 1, es: "Rusia" },
+        { word: "South Korea", category: "country", course: 1, es: "Corea del Sur" },
+        { word: "Italy", category: "country", course: 1, es: "Italia" },
+        { word: "Germany", category: "country", course: 1, es: "Alemania" },
+        { word: "France", category: "country", course: 1, es: "Francia" },
+        { word: "Canada", category: "country", course: 1, es: "Canadá" },
+        { word: "Brazilian", category: "nationality", course: 1, es: "brasileño/a" },
+        { word: "Spanish", category: "nationality", course: 1, es: "español/a" },
+        { word: "Chinese", category: "nationality", course: 1, es: "chino/a" },
+        { word: "Mexican", category: "nationality", course: 1, es: "mexicano/a" },
+        { word: "American", category: "nationality", course: 1, es: "estadounidense" },
+        { word: "Japanese", category: "nationality", course: 1, es: "japonés/a" },
+        { word: "Colombian", category: "nationality", course: 1, es: "colombiano/a" },
+        { word: "Peruvian", category: "nationality", course: 1, es: "peruano/a" },
+        { word: "Russian", category: "nationality", course: 1, es: "ruso/a" },
+        { word: "South Korean", category: "nationality", course: 1, es: "surcoreano/a" },
+        { word: "Italian", category: "nationality", course: 1, es: "italiano/a" },
+        { word: "German", category: "nationality", course: 1, es: "alemán/a" },
+        { word: "French", category: "nationality", course: 1, es: "francés/a" },
+        { word: "Canadian", category: "nationality", course: 1, es: "canadiense" },
+        { word: "mother", category: "family", course: 1, es: "madre" },
+        { word: "father", category: "family", course: 1, es: "padre" },
+        { word: "brother", category: "family", course: 1, es: "hermano" },
+        { word: "sister", category: "family", course: 1, es: "hermana" },
+        { word: "grandmother", category: "family", course: 1, es: "abuela" },
+        { word: "grandfather", category: "family", course: 1, es: "abuelo" },
+        { word: "aunt", category: "family", course: 1, es: "tía" },
+        { word: "uncle", category: "family", course: 1, es: "tío" },
+        { word: "cousin", category: "family", course: 1, es: "primo/a" },
+        { word: "parents", category: "family", course: 1, es: "padres" },
+        { word: "children", category: "family", course: 1, es: "hijos/niños" },
+        { word: "husband", category: "family", course: 1, es: "esposo" },
+        { word: "wife", category: "family", course: 1, es: "esposa" },
+        { word: "son", category: "family", course: 1, es: "hijo" },
+        { word: "daughter", category: "family", course: 1, es: "hija" },
+        { word: "baby", category: "family", course: 1, es: "bebé" },
+        { word: "teenager", category: "family", course: 1, es: "adolescente" },
+        { word: "old", category: "adjective", course: 1, es: "viejo/mayor" },
+        { word: "young", category: "adjective", course: 1, es: "joven" },
+        { word: "short", category: "adjective", course: 1, es: "bajo/corto" },
+        { word: "tall", category: "adjective", course: 1, es: "alto" },
+        { word: "boring", category: "adjective", course: 1, es: "aburrido" },
+        { word: "funny", category: "adjective", course: 1, es: "divertido" },
+        { word: "friendly", category: "adjective", course: 1, es: "amigable" },
+        { word: "interesting", category: "adjective", course: 1, es: "interesante" },
+        { word: "shy", category: "adjective", course: 1, es: "tímido" },
+        { word: "smart", category: "adjective", course: 1, es: "inteligente" },
+        { word: "beautiful", category: "adjective", course: 1, es: "hermoso" },
+        { word: "noisy", category: "adjective", course: 1, es: "ruidoso" },
+        { word: "quiet", category: "adjective", course: 1, es: "tranquilo" },
+        { word: "awful", category: "adjective", course: 1, es: "horrible" },
+        { word: "cute", category: "adjective", course: 1, es: "lindo" },
+        { word: "happy", category: "adjective", course: 1, es: "feliz" },
+        { word: "sad", category: "adjective", course: 1, es: "triste" },
+        { word: "tired", category: "adjective", course: 1, es: "cansado" },
+        { word: "hungry", category: "adjective", course: 1, es: "hambriento" },
+        { word: "bed", category: "furniture", course: 1, es: "cama" },
+        { word: "chair", category: "furniture", course: 1, es: "silla" },
+        { word: "table", category: "furniture", course: 1, es: "mesa" },
+        { word: "desk", category: "furniture", course: 1, es: "escritorio" },
+        { word: "lamp", category: "furniture", course: 1, es: "lámpara" },
+        { word: "sofa", category: "furniture", course: 1, es: "sofá" },
+        { word: "bookcase", category: "furniture", course: 1, es: "estantería" },
+        { word: "rug", category: "furniture", course: 1, es: "alfombra" },
+        { word: "refrigerator", category: "furniture", course: 1, es: "nevera" },
+        { word: "TV", category: "furniture", course: 1, es: "televisor" },
+        { word: "shower", category: "furniture", course: 1, es: "ducha" },
+        { word: "mirror", category: "furniture", course: 1, es: "espejo" },
+        { word: "closet", category: "furniture", course: 1, es: "armario" },
+        { word: "shelf", category: "furniture", course: 1, es: "estante" },
+        { word: "curtains", category: "furniture", course: 1, es: "cortinas" },
+        { word: "living room", category: "room", course: 1, es: "sala de estar" },
+        { word: "kitchen", category: "room", course: 1, es: "cocina" },
+        { word: "bedroom", category: "room", course: 1, es: "dormitorio" },
+        { word: "bathroom", category: "room", course: 1, es: "baño" },
+        { word: "dining area", category: "room", course: 1, es: "comedor" },
+        { word: "garage", category: "room", course: 1, es: "garaje" },
+        { word: "yard", category: "room", course: 1, es: "jardín/patio" },
+        { word: "teacher", category: "job", course: 1, es: "profesor/a" },
+        { word: "student", category: "job", course: 1, es: "estudiante" },
+        { word: "artist", category: "job", course: 1, es: "artista" },
+        { word: "chef", category: "job", course: 1, es: "chef" },
+        { word: "server", category: "job", course: 1, es: "mesero/a" },
+        { word: "hotel clerk", category: "job", course: 1, es: "recepcionista de hotel" },
+        { word: "doctor", category: "job", course: 1, es: "médico/a" },
+        { word: "salesperson", category: "job", course: 1, es: "vendedor/a" },
+        { word: "engineer", category: "job", course: 1, es: "ingeniero/a" },
+        { word: "nurse", category: "job", course: 1, es: "enfermero/a" },
+        { word: "police officer", category: "job", course: 1, es: "policía" },
+        { word: "manager", category: "job", course: 1, es: "gerente" },
+        { word: "coffee", category: "drinkSnack", course: 1, es: "café" },
+        { word: "tea", category: "drinkSnack", course: 1, es: "té" },
+        { word: "milk", category: "drinkSnack", course: 1, es: "leche" },
+        { word: "juice", category: "drinkSnack", course: 1, es: "jugo" },
+        { word: "water", category: "drinkSnack", course: 1, es: "agua" },
+        { word: "cookie", category: "drinkSnack", course: 1, es: "galleta" },
+        { word: "sandwich", category: "drinkSnack", course: 1, es: "sándwich" },
+        { word: "cracker", category: "drinkSnack", course: 1, es: "galleta salada" },
+        { word: "soda", category: "drinkSnack", course: 1, es: "refresco" },
+        { word: "chocolate", category: "drinkSnack", course: 1, es: "chocolate" },
+        { word: "ice cream", category: "drinkSnack", course: 1, es: "helado" },
+        { word: "cake", category: "drinkSnack", course: 1, es: "pastel" },
+        { word: "one", category: "number", course: 1, es: "uno" },
+        { word: "two", category: "number", course: 1, es: "dos" },
+        { word: "three", category: "number", course: 1, es: "tres" },
+        { word: "ten", category: "number", course: 1, es: "diez" },
+        { word: "twenty", category: "number", course: 1, es: "veinte" },
+        { word: "March", category: "number", course: 1, es: "marzo" },
+        { word: "January", category: "number", course: 1, es: "enero" },
+        { word: "first", category: "number", course: 1, es: "primero" },
+        { word: "fifteen", category: "number", course: 1, es: "quince" },
+        { word: "thirty", category: "number", course: 1, es: "treinta" }
     ];
 
-    // ========== GLOBAL STATE ==========
+    // Course 2 (Units 4-6) y Course 3 (Units 7-9) - nuevas palabras
+    const newWords = [
+        // UNIT 4
+        { word: "app", category: "technology", course: 2, es: "aplicación" },
+        { word: "camera", category: "technology", course: 2, es: "cámara" },
+        { word: "cell phone", category: "technology", course: 2, es: "teléfono celular" },
+        { word: "earphones", category: "technology", course: 2, es: "auriculares" },
+        { word: "games", category: "technology", course: 2, es: "juegos" },
+        { word: "laptop", category: "technology", course: 2, es: "portátil" },
+        { word: "smartwatch", category: "technology", course: 2, es: "reloj inteligente" },
+        { word: "tablet", category: "technology", course: 2, es: "tableta" },
+        { word: "buy", category: "activities", course: 2, es: "comprar" },
+        { word: "play games", category: "activities", course: 2, es: "jugar juegos" },
+        { word: "call", category: "activities", course: 2, es: "llamar" },
+        { word: "post photos", category: "activities", course: 2, es: "publicar fotos" },
+        { word: "chat with friends", category: "activities", course: 2, es: "chatear con amigos" },
+        { word: "read emails", category: "activities", course: 2, es: "leer correos" },
+        { word: "watch videos", category: "activities", course: 2, es: "ver videos" },
+        { word: "listen to music", category: "activities", course: 2, es: "escuchar música" },
+        { word: "send messages", category: "activities", course: 2, es: "enviar mensajes" },
+        // UNIT 5
+        { word: "Monday", category: "number", course: 2, es: "lunes" },
+        { word: "Tuesday", category: "number", course: 2, es: "martes" },
+        { word: "Wednesday", category: "number", course: 2, es: "miércoles" },
+        { word: "Thursday", category: "number", course: 2, es: "jueves" },
+        { word: "Friday", category: "number", course: 2, es: "viernes" },
+        { word: "Saturday", category: "number", course: 2, es: "sábado" },
+        { word: "Sunday", category: "number", course: 2, es: "domingo" },
+        { word: "get up", category: "activities", course: 2, es: "levantarse" },
+        { word: "have breakfast", category: "activities", course: 2, es: "desayunar" },
+        { word: "go to work", category: "activities", course: 2, es: "ir al trabajo" },
+        { word: "have lunch", category: "activities", course: 2, es: "almorzar" },
+        { word: "go home", category: "activities", course: 2, es: "ir a casa" },
+        { word: "have dinner", category: "activities", course: 2, es: "cenar" },
+        { word: "watch TV", category: "activities", course: 2, es: "ver televisión" },
+        { word: "go to bed", category: "activities", course: 2, es: "acostarse" },
+        // UNIT 6
+        { word: "cafe", category: "cityPlace", course: 2, es: "cafetería" },
+        { word: "college", category: "cityPlace", course: 2, es: "universidad" },
+        { word: "hospital", category: "cityPlace", course: 2, es: "hospital" },
+        { word: "hotel", category: "cityPlace", course: 2, es: "hotel" },
+        { word: "mall", category: "cityPlace", course: 2, es: "centro comercial" },
+        { word: "movie theater", category: "cityPlace", course: 2, es: "cine" },
+        { word: "museum", category: "cityPlace", course: 2, es: "museo" },
+        { word: "park", category: "cityPlace", course: 2, es: "parque" },
+        { word: "restaurant", category: "cityPlace", course: 2, es: "restaurante" },
+        { word: "school", category: "cityPlace", course: 2, es: "escuela" },
+        { word: "supermarket", category: "cityPlace", course: 2, es: "supermercado" },
+        { word: "zoo", category: "cityPlace", course: 2, es: "zoológico" },
+        { word: "beach", category: "nature", course: 2, es: "playa" },
+        { word: "desert", category: "nature", course: 2, es: "desierto" },
+        { word: "flower", category: "nature", course: 2, es: "flor" },
+        { word: "forest", category: "nature", course: 2, es: "bosque" },
+        { word: "grass", category: "nature", course: 2, es: "césped" },
+        { word: "hill", category: "nature", course: 2, es: "colina" },
+        { word: "island", category: "nature", course: 2, es: "isla" },
+        { word: "lake", category: "nature", course: 2, es: "lago" },
+        { word: "mountain", category: "nature", course: 2, es: "montaña" },
+        { word: "ocean", category: "nature", course: 2, es: "océano" },
+        { word: "plant", category: "nature", course: 2, es: "planta" },
+        { word: "river", category: "nature", course: 2, es: "río" },
+        { word: "snow", category: "nature", course: 2, es: "nieve" },
+        { word: "tree", category: "nature", course: 2, es: "árbol" },
+        // UNIT 7
+        { word: "clean my room", category: "activities", course: 3, es: "limpiar mi habitación" },
+        { word: "cook dinner", category: "activities", course: 3, es: "cocinar la cena" },
+        { word: "do homework", category: "activities", course: 3, es: "hacer tarea" },
+        { word: "do the dishes", category: "activities", course: 3, es: "lavar los platos" },
+        { word: "drive the car", category: "activities", course: 3, es: "conducir el coche" },
+        { word: "help my grandmother", category: "activities", course: 3, es: "ayudar a mi abuela" },
+        { word: "take a bath", category: "activities", course: 3, es: "bañarse" },
+        { word: "take a shower", category: "activities", course: 3, es: "ducharse" },
+        { word: "wash the car", category: "activities", course: 3, es: "lavar el coche" },
+        { word: "wash my hair", category: "activities", course: 3, es: "lavarse el cabello" },
+        { word: "brush my hair", category: "activities", course: 3, es: "cepillarse el cabello" },
+        { word: "brush my teeth", category: "activities", course: 3, es: "cepillarse los dientes" },
+        { word: "bike", category: "transport", course: 3, es: "bicicleta" },
+        { word: "bus", category: "transport", course: 3, es: "autobús" },
+        { word: "car", category: "transport", course: 3, es: "coche" },
+        { word: "subway", category: "transport", course: 3, es: "metro" },
+        { word: "taxi", category: "transport", course: 3, es: "taxi" },
+        { word: "train", category: "transport", course: 3, es: "tren" },
+        { word: "walk", category: "transport", course: 3, es: "caminar" },
+        // UNIT 8
+        { word: "dance", category: "skill", course: 3, es: "bailar" },
+        { word: "draw", category: "skill", course: 3, es: "dibujar" },
+        { word: "fix things", category: "skill", course: 3, es: "arreglar cosas" },
+        { word: "paint", category: "skill", course: 3, es: "pintar" },
+        { word: "play the guitar", category: "skill", course: 3, es: "tocar la guitarra" },
+        { word: "read music", category: "skill", course: 3, es: "leer música" },
+        { word: "sing", category: "skill", course: 3, es: "cantar" },
+        { word: "skateboard", category: "skill", course: 3, es: "patinar" },
+        { word: "snowboard", category: "skill", course: 3, es: "hacer snowboard" },
+        { word: "speak English", category: "skill", course: 3, es: "hablar inglés" },
+        { word: "surf", category: "skill", course: 3, es: "surfear" },
+        { word: "swim", category: "skill", course: 3, es: "nadar" },
+        { word: "company", category: "job", course: 3, es: "empresa" },
+        { word: "coworker", category: "job", course: 3, es: "compañero de trabajo" },
+        { word: "office", category: "room", course: 3, es: "oficina" },
+        { word: "worker", category: "job", course: 3, es: "trabajador" },
+        { word: "work hard", category: "activities", course: 3, es: "trabajar duro" },
+        { word: "have a meeting", category: "activities", course: 3, es: "tener una reunión" },
+        { word: "think", category: "activities", course: 3, es: "pensar" },
+        { word: "take a break", category: "activities", course: 3, es: "tomar un descanso" },
+        // UNIT 9
+        { word: "boat", category: "travel", course: 3, es: "barco" },
+        { word: "country", category: "travel", course: 3, es: "país / campo" },
+        { word: "farm", category: "travel", course: 3, es: "granja" },
+        { word: "plane", category: "travel", course: 3, es: "avión" },
+        { word: "ranch", category: "travel", course: 3, es: "rancho" },
+        { word: "ticket", category: "travel", course: 3, es: "boleto" },
+        { word: "tour", category: "travel", course: 3, es: "tour" },
+        { word: "town", category: "travel", course: 3, es: "pueblo" },
+        { word: "vacation", category: "travel", course: 3, es: "vacaciones" },
+        { word: "arrive at", category: "travel", course: 3, es: "llegar a" },
+        { word: "buy tickets online", category: "travel", course: 3, es: "comprar boletos en línea" },
+        { word: "check in", category: "travel", course: 3, es: "registrarse" },
+        { word: "fly to", category: "travel", course: 3, es: "volar a" },
+        { word: "have a great trip", category: "travel", course: 3, es: "tener un buen viaje" },
+        { word: "leave your house", category: "travel", course: 3, es: "salir de casa" },
+        { word: "stay in a hotel", category: "travel", course: 3, es: "hospedarse en un hotel" }
+    ];
+
+    const fullDB = [...course1Words, ...newWords];
+
+    // ========== ESTADO GLOBAL ==========
+    let currentCourse = "1";
+    let currentMode = "rapid";
     let audioPlayer = new Audio();
     const AUDIO_BASE_PATH = './audios_cambridge/';
     let audioEnabled = true;
-    let currentMode = 'rapid';
 
-    // ========== COMMON FUNCTIONS ==========
+    function filterByCourse(words, course) {
+        if (course === 'all') return words;
+        return words.filter(w => w.course === parseInt(course));
+    }
+
+    // ========== GRAMMAR PANEL ==========
+    function updateGrammarPanel(course) {
+        const grid = document.getElementById('grammarGrid');
+        const label = document.getElementById('grammarCourseLabel');
+        const courseNum = course === 'all' ? 1 : parseInt(course);
+        let html = '';
+        if (courseNum === 1) {
+            label.textContent = 'Course 1 (Units 1–3)';
+            html = `<div class="grammar-card"><h4>be: I/You</h4><ul><li><code>I'm / You're</code></li><li><code>Are you...?</code></li></ul></div>
+                    <div class="grammar-card"><h4>be: he/she/they</h4><ul><li><code>He's / She's / They're</code></li><li><code>Is he...? / Are they...?</code></li></ul></div>
+                    <div class="grammar-card"><h4>Possessives</h4><ul><li><code>my, your, his, her...</code></li><li><code>name's / parents'</code></li></ul></div>
+                    <div class="grammar-card"><h4>There is/are</h4><ul><li><code>There's a... / There are some...</code></li></ul></div>
+                    <div class="grammar-card"><h4>This/These</h4><ul><li><code>This + singular / These + plural</code></li></ul></div>
+                    <div class="grammar-card"><h4>Simple present</h4><ul><li><code>I like... / I don't like...</code></li></ul></div>`;
+        } else if (courseNum === 2) {
+            label.textContent = 'Course 2 (Units 4–6)';
+            html = `<div class="grammar-card"><h4>Simple present (I/you/we)</h4><ul><li><code>I like... / Do you...?</code></li></ul></div>
+                    <div class="grammar-card"><h4>Simple present (he/she/they)</h4><ul><li><code>He works... / She doesn't...</code></li><li>Adverbs: always, usually...</li></ul></div>
+                    <div class="grammar-card"><h4>a/an; adjectives</h4><ul><li><code>a camera / an app</code></li><li><code>a new phone</code></li></ul></div>
+                    <div class="grammar-card"><h4>There is/are; some/any/no</h4><ul><li><code>There's a park. / There are some cafes.</code></li></ul></div>
+                    <div class="grammar-card"><h4>Count/non-count nouns</h4><ul><li><code>a tree / some grass</code></li></ul></div>
+                    <div class="grammar-card"><h4>Questions (simple present)</h4><ul><li><code>What time do you...? Does she...?</code></li></ul></div>`;
+        } else {
+            label.textContent = 'Course 3 (Units 7–9)';
+            html = `<div class="grammar-card"><h4>Present continuous</h4><ul><li><code>I'm cooking. / She isn't eating.</code></li><li><code>Are you waiting?</code></li></ul></div>
+                    <div class="grammar-card"><h4>can / can't</h4><ul><li><code>I can swim. / He can't dance.</code></li><li>possibility: <code>You can work hard.</code></li></ul></div>
+                    <div class="grammar-card"><h4>This / These</h4><ul><li><code>This ticket / These birds</code></li></ul></div>
+                    <div class="grammar-card"><h4>like to / want to / need to / have to</h4><ul><li><code>I like to fly. / You need to check in.</code></li></ul></div>
+                    <div class="grammar-card"><h4>be going to</h4><ul><li><code>I'm going to meet you. / Are you going to...?</code></li></ul></div>
+                    <div class="grammar-card"><h4>Well / really / so</h4><ul><li><code>She can sing well. / It's so good!</code></li></ul></div>`;
+        }
+        grid.innerHTML = html;
+    }
+
+    const courseSelect = document.getElementById('courseSelect');
+    courseSelect.addEventListener('change', (e) => {
+        currentCourse = e.target.value;
+        updateGrammarPanel(currentCourse);
+        if (currentMode === 'rapid') rapidRefreshWordList();
+        else if (currentMode === 'spelling') spellingRefreshWordList();
+        else if (currentMode === 'missing') missingRefreshWordList();
+    });
+
+    // ========== FUNCIONES COMUNES ==========
     function formatCategory(cat) {
         const map = {
-            'country': '🌍 COUNTRY', 'nationality': '🧑‍🤝‍🧑 NATIONALITY', 'family': '👪 FAMILY',
-            'adjective': '✨ ADJECTIVE', 'furniture': '🪑 FURNITURE', 'room': '🚪 ROOM',
-            'job': '💼 JOB', 'drinkSnack': '☕ DRINK / SNACK', 'number': '🔢 NUMBER / DATE'
+            'country':'🌍 COUNTRY','nationality':'🧑‍🤝‍🧑 NATIONALITY','family':'👪 FAMILY',
+            'adjective':'✨ ADJECTIVE','furniture':'🪑 FURNITURE','room':'🚪 ROOM',
+            'job':'💼 JOB','drinkSnack':'☕ DRINK/SNACK','number':'🔢 NUMBER/DATE',
+            'technology':'📱 TECHNOLOGY','activities':'🎯 ACTIVITIES','cityPlace':'🏙️ CITY PLACE',
+            'nature':'🌿 NATURE','transport':'🚗 TRANSPORT','skill':'🎨 SKILL','travel':'✈️ TRAVEL'
         };
         return map[cat] || cat.toUpperCase();
     }
@@ -550,406 +763,257 @@
     function playWordAudio(word) {
         if (!audioEnabled) return;
         audioPlayer.src = AUDIO_BASE_PATH + getAudioFilename(word);
-        audioPlayer.play().catch(e => {});
+        audioPlayer.play().catch(()=>{});
     }
 
     window.toggleAudio = function() {
         audioEnabled = !audioEnabled;
-        const btns = document.querySelectorAll('.audio');
-        btns.forEach(btn => {
-            btn.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
-            btn.classList.toggle('active', audioEnabled);
+        document.querySelectorAll('.audio').forEach(b => {
+            b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
+            b.classList.toggle('active', audioEnabled);
         });
-        if (!audioEnabled) audioPlayer.pause();
     };
 
     window.replayCurrentWord = function() {
         if (currentMode === 'rapid' && rapidCurrentWord) playWordAudio(rapidCurrentWord.word);
-        if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
-        if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
+        else if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
+        else if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
     };
 
-    // ========== MODE SWITCHING ==========
-    const rapidModeDiv = document.getElementById('rapidMode');
-    const spellingModeDiv = document.getElementById('spellingMode');
-    const missingModeDiv = document.getElementById('missingMode');
-    const modeTitle = document.getElementById('modeTitle');
-    const modeBtns = document.querySelectorAll('.mode-btn');
-
-    function switchMode(mode) {
-        currentMode = mode;
-        rapidModeDiv.classList.add('hidden');
-        spellingModeDiv.classList.add('hidden');
-        missingModeDiv.classList.add('hidden');
-        if (mode === 'rapid') {
-            rapidModeDiv.classList.remove('hidden');
-            modeTitle.textContent = 'RAPID FIRE';
-        } else if (mode === 'spelling') {
-            spellingModeDiv.classList.remove('hidden');
-            modeTitle.textContent = 'SPELLING CHALLENGE';
-        } else {
-            missingModeDiv.classList.remove('hidden');
-            modeTitle.textContent = 'MISSING LETTERS';
-        }
-        modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-    }
-    modeBtns.forEach(btn => btn.addEventListener('click', () => switchMode(btn.dataset.mode)));
-
-    // ========== RAPID FIRE MODE ==========
-    let rapidCurrentWord = vocabularyDB[0];
-    let rapidInterval = null;
-    let rapidIsPlaying = false;
-    let rapidBaseSpeed = 1.8;
-    let rapidDynamicSpeed = 1.8;
-    let rapidCategory = "all";
-    let rapidRoundLimit = 10;
-    let rapidRoundCounter = 0;
-    let rapidSessionActive = false;
-    const MIN_SPEED = 0.5;
-
-    const rapidWordEl = document.getElementById('currentWord');
-    const rapidCategoryTag = document.getElementById('categoryTag');
-    const rapidPlayPauseBtn = document.getElementById('playPauseBtn');
-    const rapidNextBtn = document.getElementById('nextBtn');
-    const rapidSpeedSlider = document.getElementById('speedSlider');
-    const rapidSpeedValue = document.getElementById('speedValue');
-    const rapidCategorySelect = document.getElementById('categorySelect');
-    const rapidWordCounter = document.getElementById('wordCounter');
-    const rapidRoundsInfo = document.getElementById('roundsInfo');
-    const rapidRoundInput = document.getElementById('roundCount');
-    const rapidSpeedDisplay = document.getElementById('currentSpeedDisplay');
+    // ========== MODO RAPID ==========
+    let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
+    let rapidCategory='all', rapidRoundLimit=10, rapidRoundCounter=0, rapidSessionActive=false;
+    const MIN_SPEED=0.5;
 
     function rapidGetFilteredList() {
-        return rapidCategory === 'all' ? vocabularyDB : vocabularyDB.filter(w => w.category === rapidCategory);
+        let list = filterByCourse(fullDB, currentCourse);
+        if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory);
+        return list;
     }
 
     function rapidPickWord() {
         const list = rapidGetFilteredList();
-        return list.length ? list[Math.floor(Math.random() * list.length)] : vocabularyDB[0];
+        return list.length ? list[Math.floor(Math.random()*list.length)] : fullDB[0];
     }
 
     function rapidUpdateDisplay(word) {
         rapidCurrentWord = word;
-        rapidWordEl.textContent = word.word;
-        rapidWordEl.classList.toggle('new-word', word.isNew);
-        rapidCategoryTag.textContent = formatCategory(word.category);
-        rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
-        rapidRoundsInfo.textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
-        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter / 10) * 0.2) : rapidBaseSpeed;
-        rapidSpeedValue.textContent = rapidDynamicSpeed.toFixed(1) + 's';
-        rapidSpeedDisplay.textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        document.getElementById('currentWord').textContent = word.word;
+        document.getElementById('currentWord').classList.toggle('new-word', word.course > 1);
+        document.getElementById('categoryTag').textContent = formatCategory(word.category);
+        document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
+        document.getElementById('roundsInfo').textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
+        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
+        document.getElementById('currentSpeedDisplay').textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
         playWordAudio(word.word);
-    }
-
-    function rapidStopInterval() {
-        if (rapidInterval) clearInterval(rapidInterval);
-        rapidInterval = null;
-    }
-
-    function rapidStartInterval() {
-        if (!rapidSessionActive) return;
-        rapidStopInterval();
-        rapidInterval = setInterval(() => {
-            if (!rapidSessionActive) return;
-            if (rapidRoundCounter >= rapidRoundLimit) {
-                rapidFinishSession();
-                return;
-            }
-            rapidRoundCounter++;
-            const newWord = rapidPickWord();
-            rapidUpdateDisplay(newWord);
-        }, rapidDynamicSpeed * 1000);
-    }
-
-    function rapidFinishSession() {
-        rapidSessionActive = false;
-        rapidStopInterval();
-        audioPlayer.pause();
-        rapidPlayPauseBtn.innerHTML = '🔄 RESTART';
-        rapidIsPlaying = false;
-        rapidWordEl.textContent = '✔️ DONE!';
-        rapidWordEl.classList.remove('new-word');
-        rapidCategoryTag.textContent = 'SESSION COMPLETE';
-        rapidSpeedDisplay.textContent = '⚡ finished';
-    }
-
-    function rapidResetSession(keepCategory = true) {
-        rapidRoundCounter = 0;
-        rapidSessionActive = true;
-        rapidRoundLimit = parseInt(rapidRoundInput.value, 10) || 10;
-        if (!keepCategory) { rapidCategory = 'all'; rapidCategorySelect.value = 'all'; }
-        rapidBaseSpeed = parseFloat(rapidSpeedSlider.value);
-        rapidDynamicSpeed = rapidBaseSpeed;
-        rapidRoundsInfo.textContent = `🎯 0 / ${rapidRoundLimit}`;
-        rapidSpeedValue.textContent = rapidBaseSpeed.toFixed(1) + 's';
-        rapidSpeedDisplay.textContent = `⚡ ${rapidBaseSpeed.toFixed(1)}s`;
     }
 
     function rapidNext() {
         if (!rapidSessionActive) return;
-        if (rapidRoundCounter >= rapidRoundLimit) {
-            rapidFinishSession();
-            return;
-        }
+        if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
         rapidRoundCounter++;
         rapidUpdateDisplay(rapidPickWord());
         if (rapidIsPlaying) rapidStartInterval();
     }
 
+    function rapidStartInterval() {
+        if (rapidInterval) clearInterval(rapidInterval);
+        rapidInterval = setInterval(() => {
+            if (!rapidSessionActive) return;
+            if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
+            rapidRoundCounter++;
+            rapidUpdateDisplay(rapidPickWord());
+        }, rapidDynamicSpeed*1000);
+    }
+
+    function rapidFinish() {
+        rapidSessionActive = false;
+        if (rapidInterval) clearInterval(rapidInterval);
+        rapidInterval = null;
+        document.getElementById('playPauseBtn').innerHTML = '🔄 RESTART';
+        rapidIsPlaying = false;
+        document.getElementById('currentWord').textContent = '✔️ DONE!';
+        document.getElementById('categoryTag').textContent = 'SESSION COMPLETE';
+    }
+
+    function rapidReset() {
+        rapidRoundCounter = 0;
+        rapidSessionActive = true;
+        rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
+        rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value);
+        rapidDynamicSpeed = rapidBaseSpeed;
+        rapidUpdateDisplay(rapidPickWord());
+    }
+
     function rapidTogglePlay() {
         if (!rapidSessionActive) {
-            rapidResetSession(false);
+            rapidReset();
             rapidIsPlaying = true;
-            rapidNext();
             rapidStartInterval();
-            rapidPlayPauseBtn.innerHTML = '⏸️ PAUSE';
-            return;
-        }
-        if (rapidIsPlaying) {
-            rapidStopInterval();
-            rapidPlayPauseBtn.innerHTML = '▶️ START';
-            rapidIsPlaying = false;
+            document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE';
         } else {
-            rapidStartInterval();
-            rapidPlayPauseBtn.innerHTML = '⏸️ PAUSE';
-            rapidIsPlaying = true;
+            if (rapidIsPlaying) {
+                clearInterval(rapidInterval);
+                document.getElementById('playPauseBtn').innerHTML = '▶️ START';
+                rapidIsPlaying = false;
+            } else {
+                rapidStartInterval();
+                document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE';
+                rapidIsPlaying = true;
+            }
         }
     }
 
-    rapidPlayPauseBtn.addEventListener('click', rapidTogglePlay);
-    rapidNextBtn.addEventListener('click', () => {
+    function rapidRefreshWordList() {
+        const newWord = rapidPickWord();
+        rapidCurrentWord = newWord;
         if (!rapidSessionActive) {
-            rapidResetSession(false);
-            rapidNext();
-            rapidIsPlaying = false;
-            rapidPlayPauseBtn.innerHTML = '▶️ START';
-        } else rapidNext();
+            document.getElementById('currentWord').textContent = newWord.word;
+            document.getElementById('categoryTag').textContent = formatCategory(newWord.category);
+            document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
+        } else {
+            rapidUpdateDisplay(newWord);
+        }
+    }
+
+    document.getElementById('playPauseBtn').addEventListener('click', rapidTogglePlay);
+    document.getElementById('nextBtn').addEventListener('click', ()=>{
+        if (!rapidSessionActive) { rapidReset(); rapidNext(); rapidIsPlaying=false; document.getElementById('playPauseBtn').innerHTML='▶️ START'; }
+        else rapidNext();
     });
-    rapidSpeedSlider.addEventListener('input', e => {
+    document.getElementById('speedSlider').addEventListener('input', e => {
         rapidBaseSpeed = parseFloat(e.target.value);
-        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter / 10) * 0.2) : rapidBaseSpeed;
-        rapidSpeedValue.textContent = rapidDynamicSpeed.toFixed(1) + 's';
-        rapidSpeedDisplay.textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
+        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
         if (rapidIsPlaying) rapidStartInterval();
     });
-    rapidCategorySelect.addEventListener('change', e => {
-        rapidCategory = e.target.value;
-        if (!rapidSessionActive) {
-            rapidCurrentWord = rapidPickWord();
-            rapidWordEl.textContent = rapidCurrentWord.word;
-            rapidWordEl.classList.toggle('new-word', rapidCurrentWord.isNew);
-            rapidCategoryTag.textContent = formatCategory(rapidCurrentWord.category);
-            rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
-        }
-    });
-    rapidRoundInput.addEventListener('change', () => {
-        rapidRoundLimit = parseInt(rapidRoundInput.value) || 10;
-        if (!rapidSessionActive) rapidRoundsInfo.textContent = `🎯 0 / ${rapidRoundLimit}`;
-        else rapidRoundsInfo.textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
-    });
+    document.getElementById('categorySelect').addEventListener('change', e => { rapidCategory = e.target.value; rapidRefreshWordList(); });
+    document.getElementById('roundCount').addEventListener('change', e => { rapidRoundLimit = parseInt(e.target.value)||10; });
 
-    // Rapid init
-    rapidCurrentWord = rapidPickWord();
-    rapidWordEl.textContent = rapidCurrentWord.word;
-    rapidWordEl.classList.toggle('new-word', rapidCurrentWord.isNew);
-    rapidCategoryTag.textContent = formatCategory(rapidCurrentWord.category);
-    rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
-
-    // ========== SPELLING CHALLENGE MODE ==========
-    let spellingSessionActive = false;
-    let spellingRound = 0, spellingRoundLimit = 10;
-    let spellingCorrect = 0, spellingWrong = 0;
-    let spellingCurrentWord = vocabularyDB[0];
-    let spellingTimerInterval = null;
-    let spellingTimeLeft = 10;
-
-    const spellingHint = document.getElementById('spellingHint');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const spellingInput = document.getElementById('spellingInput');
-    const spellingCategoryTag = document.getElementById('spellingCategory');
-    const spellingStartBtn = document.getElementById('spellingStartBtn');
-    const spellingNextBtn = document.getElementById('spellingNextBtn');
-    const spellingAudioBtn = document.getElementById('spellingAudioBtn');
-    const spellingCategorySelect = document.getElementById('spellingCategorySelect');
-    const spellingRoundsInput = document.getElementById('spellingRounds');
-    const timerSecondsInput = document.getElementById('timerSeconds');
-    const spellingCorrectSpan = document.getElementById('correctCount');
-    const spellingWrongSpan = document.getElementById('wrongCount');
-    const spellingRoundsInfo = document.getElementById('spellingRoundsInfo');
-    const spellingWordCounter = document.getElementById('spellingWordCounter');
-    const spellingFeedback = document.getElementById('spellingFeedback');
+    // ========== MODO SPELLING ==========
+    let spellingCurrentWord, spellingSessionActive=false, spellingRound=0, spellingRoundLimit=10;
+    let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10;
 
     function spellingGetList() {
-        const cat = spellingCategorySelect.value;
-        return cat === 'all' ? vocabularyDB : vocabularyDB.filter(w => w.category === cat);
+        let list = filterByCourse(fullDB, currentCourse);
+        const cat = document.getElementById('spellingCategorySelect').value;
+        if (cat !== 'all') list = list.filter(w => w.category === cat);
+        return list;
     }
 
     function spellingPickWord() {
         const list = spellingGetList();
-        return list.length ? list[Math.floor(Math.random() * list.length)] : vocabularyDB[0];
+        return list.length ? list[Math.floor(Math.random()*list.length)] : fullDB[0];
     }
 
     function spellingUpdateUI() {
-        spellingHint.textContent = `🇪🇸 ${spellingCurrentWord.es}`;
-        spellingCategoryTag.textContent = formatCategory(spellingCurrentWord.category);
-        spellingWordCounter.textContent = `📋 ${spellingGetList().length} words`;
-        spellingRoundsInfo.textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
-        spellingCorrectSpan.textContent = spellingCorrect;
-        spellingWrongSpan.textContent = spellingWrong;
-    }
-
-    function spellingStopTimer() {
-        if (spellingTimerInterval) clearInterval(spellingTimerInterval);
-        spellingTimerInterval = null;
-    }
-
-    function spellingStartTimer() {
-        spellingStopTimer();
-        spellingTimeLeft = parseInt(timerSecondsInput.value, 10);
-        timerDisplay.textContent = spellingTimeLeft;
-        spellingTimerInterval = setInterval(() => {
-            spellingTimeLeft--;
-            timerDisplay.textContent = spellingTimeLeft;
-            if (spellingTimeLeft <= 0) {
-                spellingStopTimer();
-                spellingFeedback.innerHTML = `⏰ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
-                spellingWrong++;
-                spellingUpdateUI();
-                setTimeout(() => spellingNext(), 1500);
-            }
-        }, 1000);
+        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es}`;
+        document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
+        document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`;
+        document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
+        document.getElementById('correctCount').textContent = spellingCorrect;
+        document.getElementById('wrongCount').textContent = spellingWrong;
     }
 
     function spellingNext() {
         if (!spellingSessionActive) return;
-        if (spellingRound >= spellingRoundLimit) {
-            spellingFinish();
-            return;
-        }
+        if (spellingRound >= spellingRoundLimit) { spellingFinish(); return; }
         spellingRound++;
         spellingCurrentWord = spellingPickWord();
         spellingUpdateUI();
-        spellingInput.value = '';
-        spellingInput.focus();
-        spellingFeedback.innerHTML = '';
+        document.getElementById('spellingInput').value = '';
+        document.getElementById('spellingFeedback').innerHTML = '';
         spellingStartTimer();
+    }
+
+    function spellingStartTimer() {
+        if (spellingTimerInterval) clearInterval(spellingTimerInterval);
+        spellingTimeLeft = parseInt(document.getElementById('timerSeconds').value,10);
+        document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+        spellingTimerInterval = setInterval(() => {
+            spellingTimeLeft--;
+            document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+            if (spellingTimeLeft <= 0) {
+                clearInterval(spellingTimerInterval);
+                spellingWrong++;
+                document.getElementById('spellingFeedback').innerHTML = `⏰ Answer: ${spellingCurrentWord.word}`;
+                spellingUpdateUI();
+                setTimeout(spellingNext, 1500);
+            }
+        }, 1000);
+    }
+
+    function spellingCheck() {
+        if (!spellingSessionActive) return;
+        const ans = document.getElementById('spellingInput').value.trim();
+        if (ans.toLowerCase() === spellingCurrentWord.word.toLowerCase()) {
+            spellingCorrect++;
+            document.getElementById('spellingFeedback').innerHTML = '✅ Correct!';
+            spellingUpdateUI();
+            clearInterval(spellingTimerInterval);
+            setTimeout(spellingNext, 800);
+        } else {
+            spellingWrong++;
+            document.getElementById('spellingFeedback').innerHTML = '❌ Try again!';
+            spellingUpdateUI();
+            document.getElementById('spellingInput').value = '';
+        }
     }
 
     function spellingFinish() {
         spellingSessionActive = false;
-        spellingStopTimer();
-        spellingStartBtn.innerHTML = '🔄 RESTART';
-        spellingHint.textContent = '🏁 Session finished!';
-        spellingInput.disabled = true;
-        spellingFeedback.innerHTML = `Final score: ✅ ${spellingCorrect}  ❌ ${spellingWrong}`;
+        clearInterval(spellingTimerInterval);
+        document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART';
+        document.getElementById('spellingHint').textContent = '🏁 Session finished!';
+        document.getElementById('spellingInput').disabled = true;
     }
 
     function spellingReset() {
-        spellingStopTimer();
+        clearInterval(spellingTimerInterval);
         spellingSessionActive = true;
         spellingRound = 0;
-        spellingRoundLimit = parseInt(spellingRoundsInput.value, 10) || 10;
+        spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10;
         spellingCorrect = 0; spellingWrong = 0;
-        spellingInput.disabled = false;
-        spellingStartBtn.innerHTML = '⏸️ PAUSE';
+        document.getElementById('spellingInput').disabled = false;
+        document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE';
         spellingNext();
     }
 
-    function spellingCheckAnswer() {
-        if (!spellingSessionActive) return;
-        const ans = spellingInput.value.trim();
-        if (ans.toLowerCase() === spellingCurrentWord.word.toLowerCase()) {
-            spellingCorrect++;
-            spellingFeedback.innerHTML = '✅ Correct!';
-            spellingUpdateUI();
-            spellingStopTimer();
-            setTimeout(() => spellingNext(), 800);
-        } else {
-            spellingWrong++;
-            spellingFeedback.innerHTML = '❌ Try again!';
-            spellingUpdateUI();
-            spellingInput.value = '';
-            spellingInput.focus();
-        }
+    function spellingRefreshWordList() {
+        spellingCurrentWord = spellingPickWord();
+        spellingUpdateUI();
     }
 
-    spellingInput.addEventListener('keypress', e => { if (e.key === 'Enter') spellingCheckAnswer(); });
-    spellingStartBtn.addEventListener('click', () => {
+    document.getElementById('spellingStartBtn').addEventListener('click', ()=>{
         if (!spellingSessionActive) spellingReset();
         else {
-            if (spellingTimerInterval) {
-                spellingStopTimer();
-                spellingStartBtn.innerHTML = '▶️ RESUME';
-                spellingInput.disabled = true;
-            } else {
-                spellingStartTimer();
-                spellingStartBtn.innerHTML = '⏸️ PAUSE';
-                spellingInput.disabled = false;
-                spellingInput.focus();
-            }
+            if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; document.getElementById('spellingInput').disabled=true; }
+            else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; document.getElementById('spellingInput').disabled=false; }
         }
     });
-    spellingNextBtn.addEventListener('click', () => {
+    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{
         if (!spellingSessionActive) spellingReset();
-        else {
-            spellingStopTimer();
-            spellingWrong++;
-            spellingUpdateUI();
-            spellingFeedback.innerHTML = `⏭️ Skipped. Answer: ${spellingCurrentWord.word}`;
-            setTimeout(() => spellingNext(), 1000);
-        }
+        else { clearInterval(spellingTimerInterval); spellingWrong++; spellingUpdateUI(); document.getElementById('spellingFeedback').innerHTML = `⏭️ Answer: ${spellingCurrentWord.word}`; setTimeout(spellingNext,1000); }
     });
-    spellingAudioBtn.addEventListener('click', () => playWordAudio(spellingCurrentWord.word));
-    spellingCategorySelect.addEventListener('change', () => {
-        if (!spellingSessionActive) {
-            spellingCurrentWord = spellingPickWord();
-            spellingUpdateUI();
-        }
-    });
-    spellingRoundsInput.addEventListener('change', () => {
-        spellingRoundLimit = parseInt(spellingRoundsInput.value) || 10;
-        if (!spellingSessionActive) spellingRoundsInfo.textContent = `🎯 0 / ${spellingRoundLimit}`;
-        else spellingRoundsInfo.textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
-    });
+    document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
+    document.getElementById('spellingInput').addEventListener('keypress', e=> { if(e.key==='Enter') spellingCheck(); });
+    document.getElementById('spellingCategorySelect').addEventListener('change', ()=> { if(!spellingSessionActive) spellingRefreshWordList(); });
 
-    spellingCurrentWord = spellingPickWord();
-    spellingUpdateUI();
-    spellingInput.disabled = true;
-
-    // ========== MISSING LETTERS MODE ==========
-    let missingSessionActive = false;
-    let missingRound = 0, missingRoundLimit = 10;
-    let missingCorrect = 0, missingWrong = 0;
-    let missingCurrentWord = vocabularyDB[0];
-    let missingTimerInterval = null;
-    let missingTimeLeft = 15;
-
-    const missingHint = document.getElementById('missingHint');
-    const missingWordDisplay = document.getElementById('missingWordDisplay');
-    const missingTimerDisplay = document.getElementById('missingTimerDisplay');
-    const missingInput = document.getElementById('missingInput');
-    const missingCategory = document.getElementById('missingCategory');
-    const missingStartBtn = document.getElementById('missingStartBtn');
-    const missingSkipBtn = document.getElementById('missingSkipBtn');
-    const missingRevealBtn = document.getElementById('missingRevealBtn');
-    const missingCheckBtn = document.getElementById('missingCheckBtn');
-    const missingCategorySelect = document.getElementById('missingCategorySelect');
-    const missingRoundsInput = document.getElementById('missingRounds');
-    const missingTimerInput = document.getElementById('missingTimer');
-    const missingCorrectSpan = document.getElementById('missingCorrect');
-    const missingWrongSpan = document.getElementById('missingWrong');
-    const missingRoundsInfo = document.getElementById('missingRoundsInfo');
-    const missingWordCounter = document.getElementById('missingWordCounter');
-    const missingFeedback = document.getElementById('missingFeedback');
+    // ========== MODO MISSING LETTERS ==========
+    let missingCurrentWord, missingSessionActive=false, missingRound=0, missingRoundLimit=10;
+    let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15;
 
     function missingGetList() {
-        const cat = missingCategorySelect.value;
-        return cat === 'all' ? vocabularyDB : vocabularyDB.filter(w => w.category === cat);
+        let list = filterByCourse(fullDB, currentCourse);
+        const cat = document.getElementById('missingCategorySelect').value;
+        if (cat !== 'all') list = list.filter(w => w.category === cat);
+        return list;
     }
 
     function missingPickWord() {
         const list = missingGetList();
-        return list.length ? list[Math.floor(Math.random() * list.length)] : vocabularyDB[0];
+        return list.length ? list[Math.floor(Math.random()*list.length)] : fullDB[0];
     }
 
     function generateMissingWord(word) {
@@ -957,9 +1021,7 @@
         const chars = word.split('');
         const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1);
         const indices = [];
-        for (let i = 1; i < chars.length; i++) {
-            if (chars[i] !== ' ') indices.push(i);
-        }
+        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ') indices.push(i);
         for (let i = indices.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -974,13 +1036,13 @@
     }
 
     function missingUpdateUI() {
-        missingHint.textContent = `🇪🇸 ${missingCurrentWord.es}`;
-        missingWordDisplay.textContent = generateMissingWord(missingCurrentWord.word);
-        missingCategory.textContent = formatCategory(missingCurrentWord.category);
-        missingWordCounter.textContent = `📋 ${missingGetList().length} words`;
-        missingRoundsInfo.textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
-        missingCorrectSpan.textContent = missingCorrect;
-        missingWrongSpan.textContent = missingWrong;
+        document.getElementById('missingHint').textContent = `🇪🇸 ${missingCurrentWord.es}`;
+        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
+        document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category);
+        document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
+        document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
+        document.getElementById('missingCorrect').textContent = missingCorrect;
+        document.getElementById('missingWrong').textContent = missingWrong;
     }
 
     function missingStopTimer() {
@@ -990,130 +1052,124 @@
 
     function missingStartTimer() {
         missingStopTimer();
-        missingTimeLeft = parseInt(missingTimerInput.value, 10);
-        missingTimerDisplay.textContent = missingTimeLeft;
+        missingTimeLeft = parseInt(document.getElementById('missingTimer').value,10);
+        document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
         missingTimerInterval = setInterval(() => {
             missingTimeLeft--;
-            missingTimerDisplay.textContent = missingTimeLeft;
+            document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
             if (missingTimeLeft <= 0) {
                 missingStopTimer();
-                missingFeedback.innerHTML = `⏰ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
                 missingWrong++;
+                document.getElementById('missingFeedback').innerHTML = `⏰ Answer: ${missingCurrentWord.word}`;
                 missingUpdateUI();
-                setTimeout(() => missingNext(), 1500);
+                setTimeout(missingNext, 1500);
             }
         }, 1000);
     }
 
     function missingNext() {
         if (!missingSessionActive) return;
-        if (missingRound >= missingRoundLimit) {
-            missingFinish();
-            return;
-        }
+        if (missingRound >= missingRoundLimit) { missingFinish(); return; }
         missingRound++;
         missingCurrentWord = missingPickWord();
         missingUpdateUI();
-        missingInput.value = '';
-        missingInput.focus();
-        missingFeedback.innerHTML = '';
+        document.getElementById('missingInput').value = '';
+        document.getElementById('missingFeedback').innerHTML = '';
         missingStartTimer();
     }
 
     function missingFinish() {
         missingSessionActive = false;
         missingStopTimer();
-        missingStartBtn.innerHTML = '🔄 RESTART';
-        missingHint.textContent = '🏁 Session finished!';
-        missingInput.disabled = true;
-        missingFeedback.innerHTML = `Final score: ✅ ${missingCorrect}  ❌ ${missingWrong}`;
+        document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART';
+        document.getElementById('missingHint').textContent = '🏁 Session finished!';
+        document.getElementById('missingInput').disabled = true;
     }
 
     function missingReset() {
         missingStopTimer();
         missingSessionActive = true;
         missingRound = 0;
-        missingRoundLimit = parseInt(missingRoundsInput.value, 10) || 10;
+        missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10;
         missingCorrect = 0; missingWrong = 0;
-        missingInput.disabled = false;
-        missingStartBtn.innerHTML = '⏸️ PAUSE';
+        document.getElementById('missingInput').disabled = false;
+        document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE';
         missingNext();
     }
 
-    function missingCheckAnswer() {
+    function missingCheck() {
         if (!missingSessionActive) return;
-        const ans = missingInput.value.trim();
+        const ans = document.getElementById('missingInput').value.trim();
         if (ans.toLowerCase() === missingCurrentWord.word.toLowerCase()) {
             missingCorrect++;
-            missingFeedback.innerHTML = '✅ Correct!';
+            document.getElementById('missingFeedback').innerHTML = '✅ Correct!';
             missingUpdateUI();
             missingStopTimer();
-            setTimeout(() => missingNext(), 800);
+            setTimeout(missingNext, 800);
         } else {
             missingWrong++;
-            missingFeedback.innerHTML = '❌ Try again!';
+            document.getElementById('missingFeedback').innerHTML = '❌ Try again!';
             missingUpdateUI();
-            missingInput.value = '';
-            missingInput.focus();
+            document.getElementById('missingInput').value = '';
         }
     }
 
     function missingReveal() {
         if (!missingSessionActive) return;
         missingStopTimer();
-        missingFeedback.innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
         missingWrong++;
+        document.getElementById('missingFeedback').innerHTML = `🔎 Answer: ${missingCurrentWord.word}`;
         missingUpdateUI();
-        setTimeout(() => missingNext(), 1500);
+        setTimeout(missingNext, 1500);
     }
 
-    missingInput.addEventListener('keypress', e => { if (e.key === 'Enter') missingCheckAnswer(); });
-    missingStartBtn.addEventListener('click', () => {
+    function missingRefreshWordList() {
+        missingCurrentWord = missingPickWord();
+        missingUpdateUI();
+    }
+
+    document.getElementById('missingStartBtn').addEventListener('click', ()=>{
         if (!missingSessionActive) missingReset();
         else {
-            if (missingTimerInterval) {
-                missingStopTimer();
-                missingStartBtn.innerHTML = '▶️ RESUME';
-                missingInput.disabled = true;
-            } else {
-                missingStartTimer();
-                missingStartBtn.innerHTML = '⏸️ PAUSE';
-                missingInput.disabled = false;
-                missingInput.focus();
-            }
+            if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; document.getElementById('missingInput').disabled=true; }
+            else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; document.getElementById('missingInput').disabled=false; }
         }
     });
-    missingSkipBtn.addEventListener('click', () => {
+    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{
         if (!missingSessionActive) missingReset();
-        else {
-            missingStopTimer();
-            missingWrong++;
-            missingUpdateUI();
-            missingFeedback.innerHTML = `⏭️ Skipped. Answer: ${missingCurrentWord.word}`;
-            setTimeout(() => missingNext(), 1000);
-        }
+        else { missingStopTimer(); missingWrong++; missingUpdateUI(); document.getElementById('missingFeedback').innerHTML = `⏭️ Answer: ${missingCurrentWord.word}`; setTimeout(missingNext,1000); }
     });
-    missingRevealBtn.addEventListener('click', missingReveal);
-    missingCheckBtn.addEventListener('click', missingCheckAnswer);
-    missingCategorySelect.addEventListener('change', () => {
-        if (!missingSessionActive) {
-            missingCurrentWord = missingPickWord();
-            missingUpdateUI();
-        }
-    });
-    missingRoundsInput.addEventListener('change', () => {
-        missingRoundLimit = parseInt(missingRoundsInput.value) || 10;
-        if (!missingSessionActive) missingRoundsInfo.textContent = `🎯 0 / ${missingRoundLimit}`;
-        else missingRoundsInfo.textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
-    });
+    document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
+    document.getElementById('missingCheckBtn').addEventListener('click', missingCheck);
+    document.getElementById('missingInput').addEventListener('keypress', e=> { if(e.key==='Enter') missingCheck(); });
+    document.getElementById('missingCategorySelect').addEventListener('change', ()=> { if(!missingSessionActive) missingRefreshWordList(); });
 
-    missingCurrentWord = missingPickWord();
-    missingUpdateUI();
-    missingInput.disabled = true;
-    missingStartBtn.innerHTML = '▶️ START';
+    // ========== CAMBIO DE MODO ==========
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('rapidMode').classList.toggle('hidden', mode!=='rapid');
+        document.getElementById('spellingMode').classList.toggle('hidden', mode!=='spelling');
+        document.getElementById('missingMode').classList.toggle('hidden', mode!=='missing');
+        document.getElementById('modeTitle').textContent = mode==='rapid'?'RAPID FIRE':(mode==='spelling'?'SPELLING':'MISSING LETTERS');
+        if (mode==='spelling') spellingRefreshWordList();
+        else if (mode==='missing') missingRefreshWordList();
+    }
 
-    // Start in Rapid mode
-    switchMode('rapid');
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.addEventListener('click', e => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        switchMode(e.target.dataset.mode);
+    }));
+
+    // ========== INICIALIZACIÓN ==========
+    function init() {
+        rapidCurrentWord = rapidPickWord();
+        document.getElementById('currentWord').textContent = rapidCurrentWord.word;
+        document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category);
+        updateGrammarPanel('1');
+        switchMode('rapid');
+    }
+    init();
 })();
 </script>
 </body>
