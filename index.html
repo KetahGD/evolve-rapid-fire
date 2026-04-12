@@ -278,6 +278,7 @@
             color: #fad36c;
             letter-spacing: 15px;
             margin: 20px 0;
+            min-height: 120px;
         }
         .feedback { text-align:center; margin-top:16px; font-size:1.5rem; min-height:3rem; }
         .answer-reveal {
@@ -285,6 +286,7 @@
             font-weight: 800;
             color: #e5b567;
             margin-top: 20px;
+            min-height: 75px;
         }
         .random-btn {
             background: #5f4a3a;
@@ -304,7 +306,6 @@
         <button class="mode-btn" data-mode="missing">🔘 MISSING LETTERS</button>
     </div>
 
-    <!-- Pizarra de equipos (TV friendly) -->
     <div class="team-scoreboard">
         <div class="team"><span style="color:#ff6b6b;">🔴</span> <span id="teamRedScore">0</span> <button class="btn team" data-team="red">+1</button></div>
         <div class="team"><span style="color:#6ba6ff;">🔵</span> <span id="teamBlueScore">0</span> <button class="btn team" data-team="blue">+1</button></div>
@@ -322,7 +323,6 @@
         </select>
     </div>
 
-    <!-- RAPID FIRE MODE -->
     <div id="rapidMode">
         <div class="subhead">⚡ UNITS 1–9 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span></div>
         <div class="word-card">
@@ -356,7 +356,6 @@
         </div>
     </div>
 
-    <!-- SPELLING MODE (con barra de progreso y reveal) -->
     <div id="spellingMode" class="hidden">
         <div class="subhead">🔤 SPELLING CHALLENGE · Say the word aloud</div>
         <div class="word-card">
@@ -398,7 +397,6 @@
         <div id="spellingFeedback" class="feedback"></div>
     </div>
 
-    <!-- MISSING LETTERS MODE (con barra de progreso) -->
     <div id="missingMode" class="hidden">
         <div class="subhead">🔘 MISSING LETTERS · Complete the word aloud</div>
         <div class="word-card">
@@ -440,7 +438,6 @@
         <div id="missingFeedback" class="feedback"></div>
     </div>
 
-    <!-- GRAMMAR PANEL -->
     <div class="grammar-panel">
         <div class="grammar-title">📘 GRAMMAR & VOCABULARY · <span id="grammarCourseLabel">Course 1 (Units 1–3)</span></div>
         <div class="grammar-grid" id="grammarGrid"></div>
@@ -945,6 +942,7 @@
     let spellingCurrentWord, spellingSessionActive=false, spellingRound=0, spellingRoundLimit=10;
     let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10;
     let spellingTotalTime = 10;
+    let spellingWaiting = false; // Bloqueador anti-spam
 
     function spellingGetList() {
         let list = filterByCourse(fullDB, currentCourse);
@@ -965,8 +963,7 @@
         document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
         document.getElementById('correctCount').textContent = spellingCorrect;
         document.getElementById('wrongCount').textContent = spellingWrong;
-        document.getElementById('spellingAnswerReveal').innerHTML = '';
-        document.getElementById('spellingFeedback').innerHTML = '';
+        document.getElementById('spellingAnswerReveal').innerHTML = ''; // Limpia mensaje
     }
 
     function spellingUpdateTimerBar() {
@@ -976,6 +973,7 @@
 
     function spellingNext() {
         if (!spellingSessionActive) return;
+        spellingWaiting = false; // Libera el bloqueo
         if (spellingRound >= spellingRoundLimit) { spellingFinish(); return; }
         spellingRound++;
         spellingCurrentWord = spellingPickWord();
@@ -993,11 +991,17 @@
             spellingTimeLeft--;
             document.getElementById('timerDisplay').textContent = spellingTimeLeft;
             spellingUpdateTimerBar();
+            
             if (spellingTimeLeft <= 0) {
                 clearInterval(spellingTimerInterval);
-                document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
+                if (spellingWaiting) return;
+                spellingWaiting = true;
+                
+                document.getElementById('spellingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
                 spellingWrong++;
-                spellingUpdateUI();
+                document.getElementById('wrongCount').textContent = spellingWrong;
+                playWordAudio(spellingCurrentWord.word);
+                
                 setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
         }, 1000);
@@ -1005,6 +1009,7 @@
 
     function spellingFinish() {
         spellingSessionActive = false;
+        spellingWaiting = false;
         clearInterval(spellingTimerInterval);
         document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART';
         document.getElementById('spellingHint').textContent = '🏁 Session finished!';
@@ -1014,6 +1019,7 @@
     function spellingReset() {
         clearInterval(spellingTimerInterval);
         spellingSessionActive = true;
+        spellingWaiting = false;
         spellingRound = 0;
         spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10;
         spellingCorrect = 0; spellingWrong = 0;
@@ -1027,29 +1033,34 @@
     }
 
     function spellingMarkCorrect() {
-        if (!spellingSessionActive) return;
+        if (!spellingSessionActive || spellingWaiting) return;
         clearInterval(spellingTimerInterval);
+        spellingWaiting = true;
         spellingCorrect++;
+        document.getElementById('correctCount').textContent = spellingCorrect;
         document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
-        spellingUpdateUI();
         setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
     function spellingMarkIncorrect() {
-        if (!spellingSessionActive) return;
+        if (!spellingSessionActive || spellingWaiting) return;
         clearInterval(spellingTimerInterval);
+        spellingWaiting = true;
         spellingWrong++;
-        document.getElementById('spellingAnswerReveal').innerHTML = `❌ Answer: <strong>${spellingCurrentWord.word}</strong>`;
-        spellingUpdateUI();
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
+        playWordAudio(spellingCurrentWord.word);
         setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
     function spellingReveal() {
-        if (!spellingSessionActive) return;
+        if (!spellingSessionActive || spellingWaiting) return;
         clearInterval(spellingTimerInterval);
+        spellingWaiting = true;
         spellingWrong++;
+        document.getElementById('wrongCount').textContent = spellingWrong;
         document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
-        spellingUpdateUI();
+        playWordAudio(spellingCurrentWord.word);
         setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
@@ -1061,8 +1072,16 @@
         }
     });
     document.getElementById('spellingNextBtn').addEventListener('click', ()=>{
-        if (!spellingSessionActive) spellingReset();
-        else { clearInterval(spellingTimerInterval); spellingWrong++; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Answer: ${spellingCurrentWord.word}`; spellingUpdateUI(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); }
+        if (!spellingSessionActive || spellingWaiting) {
+            if(!spellingSessionActive) spellingReset(); 
+            return;
+        }
+        clearInterval(spellingTimerInterval); 
+        spellingWaiting = true;
+        spellingWrong++; 
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; 
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000);
     });
     document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
     document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
@@ -1080,6 +1099,7 @@
     let missingCurrentWord, missingSessionActive=false, missingRound=0, missingRoundLimit=10;
     let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15;
     let missingTotalTime = 15;
+    let missingWaiting = false; // Bloqueador anti-spam
 
     function missingGetList() {
         let list = filterByCourse(fullDB, currentCourse);
@@ -1121,7 +1141,6 @@
         document.getElementById('missingCorrect').textContent = missingCorrect;
         document.getElementById('missingWrong').textContent = missingWrong;
         document.getElementById('missingAnswerReveal').innerHTML = '';
-        document.getElementById('missingFeedback').innerHTML = '';
     }
 
     function missingUpdateTimerBar() {
@@ -1144,18 +1163,28 @@
             missingTimeLeft--;
             document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
             missingUpdateTimerBar();
+            
             if (missingTimeLeft <= 0) {
                 missingStopTimer();
-                document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
+                if(missingWaiting) return;
+                missingWaiting = true;
+                
+                // Muestra la palabra completa y descifrada
+                document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+                document.getElementById('missingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
+                
                 missingWrong++;
-                missingUpdateUI();
-                setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+                document.getElementById('missingWrong').textContent = missingWrong;
+                playWordAudio(missingCurrentWord.word);
+                
+                setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
             }
         }, 1000);
     }
 
     function missingNext() {
         if (!missingSessionActive) return;
+        missingWaiting = false; // Libera el bloqueo
         if (missingRound >= missingRoundLimit) { missingFinish(); return; }
         missingRound++;
         missingCurrentWord = missingPickWord();
@@ -1165,6 +1194,7 @@
 
     function missingFinish() {
         missingSessionActive = false;
+        missingWaiting = false;
         missingStopTimer();
         document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART';
         document.getElementById('missingHint').textContent = '🏁 Session finished!';
@@ -1174,6 +1204,7 @@
     function missingReset() {
         missingStopTimer();
         missingSessionActive = true;
+        missingWaiting = false;
         missingRound = 0;
         missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10;
         missingCorrect = 0; missingWrong = 0;
@@ -1187,30 +1218,44 @@
     }
 
     function missingMarkCorrect() {
-        if (!missingSessionActive) return;
+        if (!missingSessionActive || missingWaiting) return;
         missingStopTimer();
+        missingWaiting = true;
         missingCorrect++;
+        document.getElementById('missingCorrect').textContent = missingCorrect;
+        
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; // Descifra la palabra
         document.getElementById('missingAnswerReveal').innerHTML = `✅ Correct! <strong>${missingCurrentWord.word}</strong>`;
-        missingUpdateUI();
+        
         setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
     }
 
     function missingMarkIncorrect() {
-        if (!missingSessionActive) return;
+        if (!missingSessionActive || missingWaiting) return;
         missingStopTimer();
+        missingWaiting = true;
         missingWrong++;
-        document.getElementById('missingAnswerReveal').innerHTML = `❌ Answer: <strong>${missingCurrentWord.word}</strong>`;
-        missingUpdateUI();
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+        document.getElementById('missingWrong').textContent = missingWrong;
+        
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; // Descifra la palabra
+        document.getElementById('missingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${missingCurrentWord.word}</strong>`;
+        playWordAudio(missingCurrentWord.word);
+
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
 
     function missingReveal() {
-        if (!missingSessionActive) return;
+        if (!missingSessionActive || missingWaiting) return;
         missingStopTimer();
+        missingWaiting = true;
         missingWrong++;
+        document.getElementById('missingWrong').textContent = missingWrong;
+        
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; // Descifra la palabra
         document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
-        missingUpdateUI();
-        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+        playWordAudio(missingCurrentWord.word);
+
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
 
     document.getElementById('missingStartBtn').addEventListener('click', ()=>{
@@ -1221,8 +1266,19 @@
         }
     });
     document.getElementById('missingSkipBtn').addEventListener('click', ()=>{
-        if (!missingSessionActive) missingReset();
-        else { missingStopTimer(); missingWrong++; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Answer: ${missingCurrentWord.word}`; missingUpdateUI(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); }
+        if (!missingSessionActive || missingWaiting) {
+            if(!missingSessionActive) missingReset();
+            return;
+        }
+        missingStopTimer(); 
+        missingWaiting = true;
+        missingWrong++; 
+        document.getElementById('missingWrong').textContent = missingWrong;
+        
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; // Descifra la palabra
+        document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; 
+        
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000);
     });
     document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
     document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
