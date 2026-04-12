@@ -242,7 +242,7 @@
         <button class="mode-btn" data-mode="missing">🔘 MISSING LETTERS</button>
     </div>
 
-    <!-- MODO RAPID FIRE -->
+    <!-- ========== RAPID FIRE MODE ========== -->
     <div id="rapidMode">
         <div class="subhead">⚡ UNITS 1–3 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span></div>
         <div class="word-card">
@@ -284,7 +284,7 @@
         </div>
     </div>
 
-    <!-- MODO SPELLING CHALLENGE -->
+    <!-- ========== SPELLING CHALLENGE MODE ========== -->
     <div id="spellingMode" class="hidden">
         <div class="subhead">🔤 SPELLING CHALLENGE · Write the correct word</div>
         <div class="word-card">
@@ -329,13 +329,13 @@
         <div id="spellingFeedback" class="feedback"></div>
     </div>
 
-    <!-- MODO MISSING LETTERS -->
+    <!-- ========== MISSING LETTERS MODE ========== -->
     <div id="missingMode" class="hidden">
         <div class="subhead">🔘 MISSING LETTERS · Complete the word</div>
         <div class="word-card">
             <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
             <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
-            <div class="timer-display" id="missingTimerDisplay">10</div>
+            <div class="timer-display" id="missingTimerDisplay">15</div>
             <input type="text" id="missingInput" class="missing-input" placeholder="Type the full word..." autocomplete="off">
             <div class="category-badge" id="missingCategory">🌍 COUNTRY</div>
         </div>
@@ -376,16 +376,16 @@
         <div id="missingFeedback" class="feedback"></div>
     </div>
 
-    <!-- GRAMMAR PANEL -->
+    <!-- ========== GRAMMAR PANEL ========== -->
     <div class="grammar-panel">
         <div class="grammar-title">📘 GRAMMAR FORMULAS · UNITS 1–3</div>
         <div class="grammar-grid">
-            <div class="grammar-card"><h4>🔹 be: I / You</h4><ul><li><code>I'm + nationality/name/job</code></li><li><code>You're + adjective/nationality</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 be: he/she/they</h4><ul><li><code>He's / She's + ...</code></li><li><code>Is he/she ...?</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 Possessives</h4><ul><li><code>my/your/his/her...</code></li><li><code>name's + noun</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 There is/are</h4><ul><li><code>There's a/an...</code></li><li><code>There are some...</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 This/These</h4><ul><li><code>This + singular</code></li><li><code>These + plural</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like... / I don't like...</code></li><li><code>Do you...?</code></li></ul></div>
+            <div class="grammar-card"><h4>🔹 be: I / You</h4><ul><li><code>I'm + nationality/name/job</code></li><li><code>You're + adjective/nationality</code></li><li><code>Are you + ... ?</code> → Yes, I am. / No, I'm not.</li></ul></div>
+            <div class="grammar-card"><h4>🔹 be: he/she/they</h4><ul><li><code>He's / She's + (age/job/adjective)</code></li><li><code>They're + my/your/his ...</code></li><li><code>Is he/she + ... ?</code> → Yes, he is. / No, she isn't.</li></ul></div>
+            <div class="grammar-card"><h4>🔹 Possessives</h4><ul><li><code>my/your/his/her/its/our/their + noun</code></li><li><code>name's + noun</code> (Maria's book)</li></ul></div>
+            <div class="grammar-card"><h4>🔹 There is / There are</h4><ul><li><code>There's + a/an + singular noun</code></li><li><code>There are + (number) + plural noun</code></li></ul></div>
+            <div class="grammar-card"><h4>🔹 It is / This / These</h4><ul><li><code>It's + a/an + noun</code></li><li><code>This + singular</code> / <code>These + plural</code></li></ul></div>
+            <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like + noun / I don't like</code></li><li><code>Do you + verb?</code> → Yes, I do. / No, I don't.</li></ul></div>
         </div>
     </div>
 </div>
@@ -394,7 +394,7 @@
 (function(){
     "use strict";
 
-    // ========== BASE DE DATOS COMPLETA (120 palabras con traducción) ==========
+    // ========== COMPLETE DATABASE (120 words with Spanish translations) ==========
     const vocabularyDB = [
         // Countries (14)
         { word: "Brazil", category: "country", isNew: false, es: "Brasil" },
@@ -527,13 +527,13 @@
         { word: "thirty", category: "number", isNew: true, es: "treinta" }
     ];
 
-    // ========== ESTADO GLOBAL ==========
+    // ========== GLOBAL STATE ==========
     let audioPlayer = new Audio();
     const AUDIO_BASE_PATH = './audios_cambridge/';
     let audioEnabled = true;
     let currentMode = 'rapid';
 
-    // ========== FUNCIONES COMUNES ==========
+    // ========== COMMON FUNCTIONS ==========
     function formatCategory(cat) {
         const map = {
             'country': '🌍 COUNTRY', 'nationality': '🧑‍🤝‍🧑 NATIONALITY', 'family': '👪 FAMILY',
@@ -566,9 +566,10 @@
     window.replayCurrentWord = function() {
         if (currentMode === 'rapid' && rapidCurrentWord) playWordAudio(rapidCurrentWord.word);
         if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
+        if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
     };
 
-    // ========== CAMBIO DE MODO ==========
+    // ========== MODE SWITCHING ==========
     const rapidModeDiv = document.getElementById('rapidMode');
     const spellingModeDiv = document.getElementById('spellingMode');
     const missingModeDiv = document.getElementById('missingMode');
@@ -594,15 +595,328 @@
     }
     modeBtns.forEach(btn => btn.addEventListener('click', () => switchMode(btn.dataset.mode)));
 
-    // ========== MODO RAPID FIRE (código resumido, igual que antes) ==========
-    // ... (Todo el código de Rapid Fire, sin cambios)
-    // Por brevedad en la respuesta, se asume que está implementado exactamente igual que en la versión anterior.
-    // Si necesitas el código completo de Rapid Fire, házmelo saber.
+    // ========== RAPID FIRE MODE ==========
+    let rapidCurrentWord = vocabularyDB[0];
+    let rapidInterval = null;
+    let rapidIsPlaying = false;
+    let rapidBaseSpeed = 1.8;
+    let rapidDynamicSpeed = 1.8;
+    let rapidCategory = "all";
+    let rapidRoundLimit = 10;
+    let rapidRoundCounter = 0;
+    let rapidSessionActive = false;
+    const MIN_SPEED = 0.5;
 
-    // ========== MODO SPELLING (código resumido) ==========
-    // ... (Todo el código de Spelling Challenge, sin cambios)
+    const rapidWordEl = document.getElementById('currentWord');
+    const rapidCategoryTag = document.getElementById('categoryTag');
+    const rapidPlayPauseBtn = document.getElementById('playPauseBtn');
+    const rapidNextBtn = document.getElementById('nextBtn');
+    const rapidSpeedSlider = document.getElementById('speedSlider');
+    const rapidSpeedValue = document.getElementById('speedValue');
+    const rapidCategorySelect = document.getElementById('categorySelect');
+    const rapidWordCounter = document.getElementById('wordCounter');
+    const rapidRoundsInfo = document.getElementById('roundsInfo');
+    const rapidRoundInput = document.getElementById('roundCount');
+    const rapidSpeedDisplay = document.getElementById('currentSpeedDisplay');
 
-    // ========== NUEVO MODO: MISSING LETTERS ==========
+    function rapidGetFilteredList() {
+        return rapidCategory === 'all' ? vocabularyDB : vocabularyDB.filter(w => w.category === rapidCategory);
+    }
+
+    function rapidPickWord() {
+        const list = rapidGetFilteredList();
+        return list.length ? list[Math.floor(Math.random() * list.length)] : vocabularyDB[0];
+    }
+
+    function rapidUpdateDisplay(word) {
+        rapidCurrentWord = word;
+        rapidWordEl.textContent = word.word;
+        rapidWordEl.classList.toggle('new-word', word.isNew);
+        rapidCategoryTag.textContent = formatCategory(word.category);
+        rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
+        rapidRoundsInfo.textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter / 10) * 0.2) : rapidBaseSpeed;
+        rapidSpeedValue.textContent = rapidDynamicSpeed.toFixed(1) + 's';
+        rapidSpeedDisplay.textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        playWordAudio(word.word);
+    }
+
+    function rapidStopInterval() {
+        if (rapidInterval) clearInterval(rapidInterval);
+        rapidInterval = null;
+    }
+
+    function rapidStartInterval() {
+        if (!rapidSessionActive) return;
+        rapidStopInterval();
+        rapidInterval = setInterval(() => {
+            if (!rapidSessionActive) return;
+            if (rapidRoundCounter >= rapidRoundLimit) {
+                rapidFinishSession();
+                return;
+            }
+            rapidRoundCounter++;
+            const newWord = rapidPickWord();
+            rapidUpdateDisplay(newWord);
+        }, rapidDynamicSpeed * 1000);
+    }
+
+    function rapidFinishSession() {
+        rapidSessionActive = false;
+        rapidStopInterval();
+        audioPlayer.pause();
+        rapidPlayPauseBtn.innerHTML = '🔄 RESTART';
+        rapidIsPlaying = false;
+        rapidWordEl.textContent = '✔️ DONE!';
+        rapidWordEl.classList.remove('new-word');
+        rapidCategoryTag.textContent = 'SESSION COMPLETE';
+        rapidSpeedDisplay.textContent = '⚡ finished';
+    }
+
+    function rapidResetSession(keepCategory = true) {
+        rapidRoundCounter = 0;
+        rapidSessionActive = true;
+        rapidRoundLimit = parseInt(rapidRoundInput.value, 10) || 10;
+        if (!keepCategory) { rapidCategory = 'all'; rapidCategorySelect.value = 'all'; }
+        rapidBaseSpeed = parseFloat(rapidSpeedSlider.value);
+        rapidDynamicSpeed = rapidBaseSpeed;
+        rapidRoundsInfo.textContent = `🎯 0 / ${rapidRoundLimit}`;
+        rapidSpeedValue.textContent = rapidBaseSpeed.toFixed(1) + 's';
+        rapidSpeedDisplay.textContent = `⚡ ${rapidBaseSpeed.toFixed(1)}s`;
+    }
+
+    function rapidNext() {
+        if (!rapidSessionActive) return;
+        if (rapidRoundCounter >= rapidRoundLimit) {
+            rapidFinishSession();
+            return;
+        }
+        rapidRoundCounter++;
+        rapidUpdateDisplay(rapidPickWord());
+        if (rapidIsPlaying) rapidStartInterval();
+    }
+
+    function rapidTogglePlay() {
+        if (!rapidSessionActive) {
+            rapidResetSession(false);
+            rapidIsPlaying = true;
+            rapidNext();
+            rapidStartInterval();
+            rapidPlayPauseBtn.innerHTML = '⏸️ PAUSE';
+            return;
+        }
+        if (rapidIsPlaying) {
+            rapidStopInterval();
+            rapidPlayPauseBtn.innerHTML = '▶️ START';
+            rapidIsPlaying = false;
+        } else {
+            rapidStartInterval();
+            rapidPlayPauseBtn.innerHTML = '⏸️ PAUSE';
+            rapidIsPlaying = true;
+        }
+    }
+
+    rapidPlayPauseBtn.addEventListener('click', rapidTogglePlay);
+    rapidNextBtn.addEventListener('click', () => {
+        if (!rapidSessionActive) {
+            rapidResetSession(false);
+            rapidNext();
+            rapidIsPlaying = false;
+            rapidPlayPauseBtn.innerHTML = '▶️ START';
+        } else rapidNext();
+    });
+    rapidSpeedSlider.addEventListener('input', e => {
+        rapidBaseSpeed = parseFloat(e.target.value);
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter / 10) * 0.2) : rapidBaseSpeed;
+        rapidSpeedValue.textContent = rapidDynamicSpeed.toFixed(1) + 's';
+        rapidSpeedDisplay.textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        if (rapidIsPlaying) rapidStartInterval();
+    });
+    rapidCategorySelect.addEventListener('change', e => {
+        rapidCategory = e.target.value;
+        if (!rapidSessionActive) {
+            rapidCurrentWord = rapidPickWord();
+            rapidWordEl.textContent = rapidCurrentWord.word;
+            rapidWordEl.classList.toggle('new-word', rapidCurrentWord.isNew);
+            rapidCategoryTag.textContent = formatCategory(rapidCurrentWord.category);
+            rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
+        }
+    });
+    rapidRoundInput.addEventListener('change', () => {
+        rapidRoundLimit = parseInt(rapidRoundInput.value) || 10;
+        if (!rapidSessionActive) rapidRoundsInfo.textContent = `🎯 0 / ${rapidRoundLimit}`;
+        else rapidRoundsInfo.textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
+    });
+
+    // Rapid init
+    rapidCurrentWord = rapidPickWord();
+    rapidWordEl.textContent = rapidCurrentWord.word;
+    rapidWordEl.classList.toggle('new-word', rapidCurrentWord.isNew);
+    rapidCategoryTag.textContent = formatCategory(rapidCurrentWord.category);
+    rapidWordCounter.textContent = `📋 ${rapidGetFilteredList().length} words`;
+
+    // ========== SPELLING CHALLENGE MODE ==========
+    let spellingSessionActive = false;
+    let spellingRound = 0, spellingRoundLimit = 10;
+    let spellingCorrect = 0, spellingWrong = 0;
+    let spellingCurrentWord = vocabularyDB[0];
+    let spellingTimerInterval = null;
+    let spellingTimeLeft = 10;
+
+    const spellingHint = document.getElementById('spellingHint');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const spellingInput = document.getElementById('spellingInput');
+    const spellingCategoryTag = document.getElementById('spellingCategory');
+    const spellingStartBtn = document.getElementById('spellingStartBtn');
+    const spellingNextBtn = document.getElementById('spellingNextBtn');
+    const spellingAudioBtn = document.getElementById('spellingAudioBtn');
+    const spellingCategorySelect = document.getElementById('spellingCategorySelect');
+    const spellingRoundsInput = document.getElementById('spellingRounds');
+    const timerSecondsInput = document.getElementById('timerSeconds');
+    const spellingCorrectSpan = document.getElementById('correctCount');
+    const spellingWrongSpan = document.getElementById('wrongCount');
+    const spellingRoundsInfo = document.getElementById('spellingRoundsInfo');
+    const spellingWordCounter = document.getElementById('spellingWordCounter');
+    const spellingFeedback = document.getElementById('spellingFeedback');
+
+    function spellingGetList() {
+        const cat = spellingCategorySelect.value;
+        return cat === 'all' ? vocabularyDB : vocabularyDB.filter(w => w.category === cat);
+    }
+
+    function spellingPickWord() {
+        const list = spellingGetList();
+        return list.length ? list[Math.floor(Math.random() * list.length)] : vocabularyDB[0];
+    }
+
+    function spellingUpdateUI() {
+        spellingHint.textContent = `🇪🇸 ${spellingCurrentWord.es}`;
+        spellingCategoryTag.textContent = formatCategory(spellingCurrentWord.category);
+        spellingWordCounter.textContent = `📋 ${spellingGetList().length} words`;
+        spellingRoundsInfo.textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
+        spellingCorrectSpan.textContent = spellingCorrect;
+        spellingWrongSpan.textContent = spellingWrong;
+    }
+
+    function spellingStopTimer() {
+        if (spellingTimerInterval) clearInterval(spellingTimerInterval);
+        spellingTimerInterval = null;
+    }
+
+    function spellingStartTimer() {
+        spellingStopTimer();
+        spellingTimeLeft = parseInt(timerSecondsInput.value, 10);
+        timerDisplay.textContent = spellingTimeLeft;
+        spellingTimerInterval = setInterval(() => {
+            spellingTimeLeft--;
+            timerDisplay.textContent = spellingTimeLeft;
+            if (spellingTimeLeft <= 0) {
+                spellingStopTimer();
+                spellingFeedback.innerHTML = `⏰ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
+                spellingWrong++;
+                spellingUpdateUI();
+                setTimeout(() => spellingNext(), 1500);
+            }
+        }, 1000);
+    }
+
+    function spellingNext() {
+        if (!spellingSessionActive) return;
+        if (spellingRound >= spellingRoundLimit) {
+            spellingFinish();
+            return;
+        }
+        spellingRound++;
+        spellingCurrentWord = spellingPickWord();
+        spellingUpdateUI();
+        spellingInput.value = '';
+        spellingInput.focus();
+        spellingFeedback.innerHTML = '';
+        spellingStartTimer();
+    }
+
+    function spellingFinish() {
+        spellingSessionActive = false;
+        spellingStopTimer();
+        spellingStartBtn.innerHTML = '🔄 RESTART';
+        spellingHint.textContent = '🏁 Session finished!';
+        spellingInput.disabled = true;
+        spellingFeedback.innerHTML = `Final score: ✅ ${spellingCorrect}  ❌ ${spellingWrong}`;
+    }
+
+    function spellingReset() {
+        spellingStopTimer();
+        spellingSessionActive = true;
+        spellingRound = 0;
+        spellingRoundLimit = parseInt(spellingRoundsInput.value, 10) || 10;
+        spellingCorrect = 0; spellingWrong = 0;
+        spellingInput.disabled = false;
+        spellingStartBtn.innerHTML = '⏸️ PAUSE';
+        spellingNext();
+    }
+
+    function spellingCheckAnswer() {
+        if (!spellingSessionActive) return;
+        const ans = spellingInput.value.trim();
+        if (ans.toLowerCase() === spellingCurrentWord.word.toLowerCase()) {
+            spellingCorrect++;
+            spellingFeedback.innerHTML = '✅ Correct!';
+            spellingUpdateUI();
+            spellingStopTimer();
+            setTimeout(() => spellingNext(), 800);
+        } else {
+            spellingWrong++;
+            spellingFeedback.innerHTML = '❌ Try again!';
+            spellingUpdateUI();
+            spellingInput.value = '';
+            spellingInput.focus();
+        }
+    }
+
+    spellingInput.addEventListener('keypress', e => { if (e.key === 'Enter') spellingCheckAnswer(); });
+    spellingStartBtn.addEventListener('click', () => {
+        if (!spellingSessionActive) spellingReset();
+        else {
+            if (spellingTimerInterval) {
+                spellingStopTimer();
+                spellingStartBtn.innerHTML = '▶️ RESUME';
+                spellingInput.disabled = true;
+            } else {
+                spellingStartTimer();
+                spellingStartBtn.innerHTML = '⏸️ PAUSE';
+                spellingInput.disabled = false;
+                spellingInput.focus();
+            }
+        }
+    });
+    spellingNextBtn.addEventListener('click', () => {
+        if (!spellingSessionActive) spellingReset();
+        else {
+            spellingStopTimer();
+            spellingWrong++;
+            spellingUpdateUI();
+            spellingFeedback.innerHTML = `⏭️ Skipped. Answer: ${spellingCurrentWord.word}`;
+            setTimeout(() => spellingNext(), 1000);
+        }
+    });
+    spellingAudioBtn.addEventListener('click', () => playWordAudio(spellingCurrentWord.word));
+    spellingCategorySelect.addEventListener('change', () => {
+        if (!spellingSessionActive) {
+            spellingCurrentWord = spellingPickWord();
+            spellingUpdateUI();
+        }
+    });
+    spellingRoundsInput.addEventListener('change', () => {
+        spellingRoundLimit = parseInt(spellingRoundsInput.value) || 10;
+        if (!spellingSessionActive) spellingRoundsInfo.textContent = `🎯 0 / ${spellingRoundLimit}`;
+        else spellingRoundsInfo.textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
+    });
+
+    spellingCurrentWord = spellingPickWord();
+    spellingUpdateUI();
+    spellingInput.disabled = true;
+
+    // ========== MISSING LETTERS MODE ==========
     let missingSessionActive = false;
     let missingRound = 0, missingRoundLimit = 10;
     let missingCorrect = 0, missingWrong = 0;
@@ -639,14 +953,13 @@
     }
 
     function generateMissingWord(word) {
-        if (word.length <= 2) return word; 
+        if (word.length <= 2) return word;
         const chars = word.split('');
-        const numToHide = Math.floor(Math.random() * (chars.length * 0.5)) + 1; // 1 a ~50%
+        const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1);
         const indices = [];
-        for (let i = 1; i < chars.length; i++) { // dejar primera letra visible
+        for (let i = 1; i < chars.length; i++) {
             if (chars[i] !== ' ') indices.push(i);
         }
-        // Mezclar y seleccionar
         for (let i = indices.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -661,7 +974,6 @@
     }
 
     function missingUpdateUI() {
-        if (!missingCurrentWord) return;
         missingHint.textContent = `🇪🇸 ${missingCurrentWord.es}`;
         missingWordDisplay.textContent = generateMissingWord(missingCurrentWord.word);
         missingCategory.textContent = formatCategory(missingCurrentWord.category);
@@ -755,7 +1067,6 @@
         setTimeout(() => missingNext(), 1500);
     }
 
-    // Event listeners
     missingInput.addEventListener('keypress', e => { if (e.key === 'Enter') missingCheckAnswer(); });
     missingStartBtn.addEventListener('click', () => {
         if (!missingSessionActive) missingReset();
@@ -796,14 +1107,12 @@
         else missingRoundsInfo.textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
     });
 
-    // Inicializar UI Missing
     missingCurrentWord = missingPickWord();
     missingUpdateUI();
     missingInput.disabled = true;
     missingStartBtn.innerHTML = '▶️ START';
 
-    // ========== INICIALIZACIÓN GENERAL ==========
-    // (Rapid y Spelling ya tienen su propia inicialización)
+    // Start in Rapid mode
     switchMode('rapid');
 })();
 </script>
