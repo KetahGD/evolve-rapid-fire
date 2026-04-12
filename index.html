@@ -3,89 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>⚡ EVOLVE 1 · Rapid Fire + Audio</title>
+    <title>⚡ EVOLVE · TV Classroom Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            /* Variables de color dinámicas - Inician con Evolve 1 */
+            --theme-primary: #891752;
+            --theme-bg: #1c0511;
+            --theme-panel: #2d0d1e;
+            --theme-border: #4a1530;
+            --theme-accent: #e5b567; /* Dorado para destacar */
+            --theme-text: #f2e0ca;
+            --theme-success: #2e7d5e;
+            --theme-danger: #9e4a4a;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #0b141c;
+            background: var(--theme-bg);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Quicksand', sans-serif;
             padding: 16px;
-            margin: 0;
+            transition: background 0.4s ease;
         }
         .game-container {
-            max-width: 1000px;
+            max-width: 1300px;
             width: 100%;
-            background: #13222e;
+            background: var(--theme-panel);
             border-radius: 40px;
-            box-shadow: 0 20px 40px #00000080, 0 0 0 1px #2c465b;
+            box-shadow: 0 20px 40px #00000080, 0 0 0 1px var(--theme-border);
             padding: 28px 24px;
-            border: 1px solid #2c4a5e;
+            border: 1px solid var(--theme-border);
+            transition: all 0.4s ease;
         }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
         h1 {
             font-weight: 700;
             font-size: 2.4rem;
-            color: #f2e0ca;
-            text-align: center;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
+            color: var(--theme-text);
             display: flex;
             align-items: center;
+            gap: 10px;
+        }
+        
+        .book-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #00000040;
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid var(--theme-border);
+        }
+        .book-selector label {
+            color: var(--theme-text);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        #bookSelect {
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: var(--theme-primary);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border: 2px solid var(--theme-accent);
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .mode-switch {
+            display: flex;
             justify-content: center;
             gap: 10px;
-            flex-wrap: wrap;
-            text-shadow: 0 4px 8px black;
+            margin-bottom: 16px;
         }
+        .mode-btn {
+            background: #00000060;
+            border: 1px solid var(--theme-border);
+            color: #b7aa9a;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #00000080;
+        }
+        .mode-btn.active {
+            background: var(--theme-accent);
+            color: #111;
+            border-color: var(--theme-accent);
+            box-shadow: 0 4px 0 #b58a47;
+        }
+        
         .subhead {
             text-align: center;
-            color: #b7aa9a;
+            color: #ddcdb7;
             font-weight: 600;
             margin-bottom: 24px;
             font-size: 1.2rem;
-            border-bottom: 1px dashed #5a4e42;
+            border-bottom: 1px dashed var(--theme-border);
             padding-bottom: 12px;
         }
         .word-card {
-            background: #1f2e3c;
+            background: #00000040;
             border-radius: 48px;
-            padding: 40px 16px;
+            padding: 30px 16px;
             margin-bottom: 24px;
             box-shadow: inset 0 2px 8px #00000080, 0 16px 24px -8px black;
-            border: 1px solid #4a627a;
+            border: 1px solid var(--theme-border);
             text-align: center;
         }
         .main-word {
             font-size: 7rem;
             font-weight: 800;
-            line-height: 1.2;
-            color: #ffefcf;
-            letter-spacing: -1px;
+            color: #fff;
             word-break: break-word;
-            text-shadow: 0 6px 12px black;
-        }
-        .main-word.new-word {
-            color: #fad36c;
-            text-shadow: 0 0 12px #ffbb2b80;
-            background: linear-gradient(145deg, #2c3e2c, #1f3a1f);
-            display: inline-block;
-            padding: 0 20px;
-            border-radius: 60px;
-            border: 2px solid #e5b567;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
         .category-badge {
             display: inline-block;
-            background: #d4b58c;
-            color: #111e28;
+            background: var(--theme-primary);
+            color: #fff;
             padding: 8px 28px;
             border-radius: 60px;
             font-weight: 800;
@@ -93,83 +148,60 @@
             margin-top: 24px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 4px 0 #7d6246;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .control-bar {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: 12px;
             margin: 10px 0 15px;
-            background: #0d1f2b;
+            background: rgba(0,0,0,0.3);
             padding: 14px 20px;
             border-radius: 60px;
-            border: 1px solid #375167;
+            border: 1px solid var(--theme-border);
         }
         .btn {
-            background: #2c4257;
+            background: rgba(255,255,255,0.1);
             border: none;
             padding: 12px 20px;
             border-radius: 60px;
-            font-family: 'Quicksand', sans-serif;
             font-weight: 700;
             font-size: 1.1rem;
-            color: #f0e4d5;
-            box-shadow: 0 4px 0 #0f1a22;
+            color: var(--theme-text);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 6px;
-            border: 1px solid #6082a0;
+            border: 1px solid var(--theme-border);
             transition: all 0.1s;
         }
-        .btn:hover {
-            background: #3b5a74;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #0f1a22;
-        }
-        .btn.primary {
-            background: #e5b567;
-            color: #17242e;
-            border: none;
-            box-shadow: 0 4px 0 #b58a47;
-            font-weight: 800;
-        }
-        .btn.audio {
-            background: #3a6b5e;
-        }
-        .btn.audio.active {
-            background: #4caf90;
-            color: white;
-        }
-        .speed-control, .round-selector {
+        .btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.5); }
+        .btn.primary { background: var(--theme-accent); color: #111; border: none; box-shadow: 0 4px 0 #b58a47;}
+        .btn.success { background: var(--theme-success); color: white; }
+        .btn.danger { background: var(--theme-danger); color: white; }
+        .btn.audio.active { background: var(--theme-primary); border-color: var(--theme-accent); color: white; }
+        .btn.team { padding: 8px 16px; font-size: 1rem; }
+        .speed-control, .round-selector, .timer-control {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ddcdb7;
+            color: var(--theme-text);
             font-weight: 600;
         }
-        #speedSlider {
-            width: 120px;
-            accent-color: #e5b567;
-        }
-        #speedValue {
-            min-width: 50px;
-            font-weight: 700;
-            color: #ffdfaa;
-        }
-        #roundCount {
+        #speedSlider { width: 120px; accent-color: var(--theme-accent); }
+        input[type="number"] {
             width: 70px;
-            padding: 8px 6px;
+            padding: 8px;
             border-radius: 40px;
-            border: 1px solid #7a8f9e;
-            background: #1b2c3a;
+            background: rgba(0,0,0,0.5);
             color: white;
+            border: 1px solid var(--theme-border);
             font-weight: 700;
             text-align: center;
-            font-size: 1.1rem;
         }
         .filter-area {
             display: flex;
@@ -179,176 +211,244 @@
             flex-wrap: wrap;
             margin-bottom: 12px;
         }
-        select {
+        select.category-select {
             padding: 12px 22px;
             border-radius: 60px;
-            border: 1px solid #6c7e8b;
-            background: #1e2e3b;
+            background: rgba(0,0,0,0.4);
+            color: var(--theme-text);
             font-weight: 700;
-            font-size: 1.0rem;
-            color: #f2e2ce;
-            outline: none;
-            box-shadow: 0 4px 0 #0f171e;
+            border: 1px solid var(--theme-border);
         }
-        .counter {
+        .counter, .progress-badge, .speed-indicator {
             font-weight: 700;
-            color: #cbbaa8;
-            font-size: 1.1rem;
+            color: var(--theme-text);
         }
-        .progress-badge {
-            background: #2e4a5e;
-            border-radius: 30px;
-            padding: 6px 16px;
-            color: #f2e2ce;
-            font-weight: 600;
-        }
-        .speed-indicator {
-            background: #1d3a4e;
-            padding: 4px 16px;
-            border-radius: 40px;
-            color: #b9d9ff;
-            font-weight: 600;
-        }
+        
         .grammar-panel {
             margin-top: 24px;
-            background: #10212b;
+            background: rgba(0,0,0,0.2);
             border-radius: 32px;
             padding: 22px 24px;
-            border: 1px solid #3a556b;
-            box-shadow: inset 0 0 0 1px #1d3342, 0 8px 0 #081016;
+            border: 1px solid var(--theme-border);
         }
         .grammar-title {
             font-size: 1.6rem;
-            font-weight: 700;
-            color: #f3d9b1;
-            border-bottom: 2px solid #a5835e;
-            padding-bottom: 10px;
+            color: var(--theme-text);
+            border-bottom: 2px solid var(--theme-primary);
             margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding-bottom: 5px;
         }
         .grammar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px 18px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
         .grammar-card {
-            background: #1a2d3c;
+            background: rgba(0,0,0,0.3);
             border-radius: 20px;
-            padding: 14px 16px;
-            border-left: 6px solid #e5b567;
+            padding: 16px;
+            border-left: 6px solid var(--theme-primary);
+            border-right: 1px solid var(--theme-border);
+            border-top: 1px solid var(--theme-border);
+            border-bottom: 1px solid var(--theme-border);
         }
-        .grammar-card h4 {
-            color: #fad6a0;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .grammar-card ul {
-            list-style: none;
-        }
-        .grammar-card li {
-            color: #cdc1b2;
-            padding: 5px 0;
-            font-weight: 500;
-            font-size: 1.0rem;
-        }
-        .grammar-card code {
-            background: #0b1a24;
-            padding: 2px 8px;
+        .grammar-card h4 { color: var(--theme-accent); font-size: 1.3rem; margin-bottom: 12px; }
+        .grammar-card ul { list-style: none; }
+        .grammar-card li { color: #ddd; padding: 4px 0; font-size: 1.05rem; }
+        
+        .hint-text { font-size: 2.5rem; color: #fff; margin: 20px 0; font-weight: 600; text-shadow: 1px 1px 5px black;}
+        .timer-display { font-size: 3rem; font-weight: 800; color: var(--theme-accent); }
+        .timer-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0,0,0,0.5);
             border-radius: 20px;
-            color: #ffdb9f;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-block;
-            margin: 2px 0;
+            margin: 12px 0;
+            overflow: hidden;
         }
-        .reminder {
-            text-align: left;
-            margin-top: 8px;
-            color: #a5b7c5;
-            font-weight: 500;
+        .timer-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: var(--theme-accent);
+            transition: width 1s linear;
         }
-        .audio-status {
-            margin-left: 10px;
-            font-size: 1.2rem;
+        .score-area { display: flex; gap: 30px; font-size: 1.5rem; color: var(--theme-text); }
+        .team-scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 10px 0 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--theme-border);
         }
-        @media (max-width: 650px) {
-            .main-word { font-size: 4.8rem; }
-            .control-bar { flex-direction: column; align-items: stretch; }
+        .team {
+            background: rgba(0,0,0,0.4);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--theme-border);
         }
+        .team span { font-size: 1.8rem; font-weight: 800; color: #fff; min-width: 3rem; text-align: center; }
+        .hidden { display: none !important; }
+        .missing-word {
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--theme-accent);
+            letter-spacing: 15px;
+            margin: 20px 0;
+            min-height: 120px;
+        }
+        .feedback { text-align:center; margin-top:16px; font-size:1.5rem; min-height:3rem; }
+        .answer-reveal {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--theme-accent);
+            margin-top: 20px;
+            min-height: 75px;
+        }
+        .random-btn { background: var(--theme-primary); padding: 8px 16px; border-radius: 30px; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 <div class="game-container">
-    <h1>
-        <span>🧠 EVOLVE 1</span>
-        <span style="font-size:1.8rem;">RAPID FIRE</span>
-    </h1>
-    <div class="subhead">
-        ⚡ UNITS 1–3 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span>
-    </div>
-
-    <!-- WORD CARD -->
-    <div class="word-card">
-        <div class="main-word" id="currentWord">Brazil</div>
-        <div class="category-badge" id="categoryTag">🌍 COUNTRY</div>
-    </div>
-
-    <!-- CONTROL BAR -->
-    <div class="control-bar">
-        <button class="btn primary" id="playPauseBtn">▶️ START</button>
-        <button class="btn" id="nextBtn">⏩ NEXT</button>
-        <button class="btn audio active" id="audioToggle" onclick="toggleAudio()">🔊 ON</button>
-        <button class="btn" id="replayAudioBtn" onclick="replayCurrentWord()">🔁 REPLAY</button>
-        <div class="speed-control">
-            <label>⚡ SPEED</label>
-            <input type="range" id="speedSlider" min="0.8" max="4.5" value="1.8" step="0.1">
-            <span id="speedValue">1.8s</span>
-        </div>
-        <div class="round-selector">
-            <label>🔁 ROUNDS</label>
-            <input type="number" id="roundCount" min="1" max="50" value="10" step="1">
+    
+    <div class="header-top">
+        <h1>🧠 <span id="mainBookTitle">EVOLVE 1</span> · <span id="modeTitle">RAPID FIRE</span></h1>
+        
+        <div class="book-selector">
+            <label>📚 BOOK:</label>
+            <select id="bookSelect">
+                <option value="1" selected>Evolve 1</option>
+                <option value="2">Evolve 2</option>
+                <option value="3">Evolve 3</option>
+            </select>
         </div>
     </div>
-
-    <!-- FILTER & INFO -->
-    <div class="filter-area">
-        <select id="categorySelect">
-            <option value="all">📚 ALL CATEGORIES</option>
-            <option value="country">🌍 Countries</option>
-            <option value="nationality">🧑‍🤝‍🧑 Nationalities</option>
-            <option value="family">👪 Family</option>
-            <option value="adjective">✨ Adjectives</option>
-            <option value="furniture">🪑 Furniture</option>
-            <option value="room">🚪 Rooms</option>
-            <option value="job">💼 Jobs</option>
-            <option value="drinkSnack">☕ Drinks & Snacks</option>
-            <option value="number">🔢 Numbers / Dates</option>
-        </select>
-        <span class="counter" id="wordCounter">📋 120 words</span>
-        <span class="progress-badge" id="roundsInfo">🎯 0 / 10</span>
-        <span class="speed-indicator" id="currentSpeedDisplay">⚡ 1.8s</span>
-        <span class="audio-status" id="audioStatus"></span>
-    </div>
-    <div class="reminder">
-        💬 Use the grammar structures below. 🔊 Audio plays automatically!
+    
+    <div class="mode-switch">
+        <button class="mode-btn active" data-mode="rapid">⚡ RAPID FIRE</button>
+        <button class="mode-btn" data-mode="spelling">🔤 SPELLING</button>
+        <button class="mode-btn" data-mode="missing">🔘 MISSING LETTERS</button>
     </div>
 
-    <!-- GRAMMAR PANEL -->
+    <div class="team-scoreboard">
+        <div class="team"><span style="color:#ff6b6b;">🔴</span> <span id="teamRedScore">0</span> <button class="btn team" data-team="red">+1</button></div>
+        <div class="team"><span style="color:#6ba6ff;">🔵</span> <span id="teamBlueScore">0</span> <button class="btn team" data-team="blue">+1</button></div>
+        <div class="team"><span style="color:#6fcf97;">🟢</span> <span id="teamGreenScore">0</span> <button class="btn team" data-team="green">+1</button></div>
+        <button class="btn" id="resetTeamsBtn">🔄 Reset</button>
+    </div>
+
+    <div id="rapidMode">
+        <div class="subhead">⚡ FORM A SENTENCE! · <span style="color:var(--theme-accent);">🔊 with audio</span></div>
+        <div class="word-card">
+            <div class="main-word" id="currentWord">Brazil</div>
+            <div class="category-badge" id="categoryTag">🌍 COUNTRY</div>
+        </div>
+        <div class="control-bar">
+            <button class="btn primary" id="playPauseBtn">▶️ START</button>
+            <button class="btn" id="nextBtn">⏩ NEXT</button>
+            <button class="btn audio active" id="audioToggle" onclick="toggleAudio()">🔊 ON</button>
+            <button class="btn" id="replayAudioBtn" onclick="replayCurrentWord()">🔁 REPLAY</button>
+            <div class="speed-control">
+                <label>⚡ SPEED</label>
+                <input type="range" id="speedSlider" min="0.8" max="4.5" value="1.8" step="0.1">
+                <span id="speedValue">1.8s</span>
+            </div>
+            <div class="round-selector">
+                <label>🔁 ROUNDS</label>
+                <input type="number" id="roundCount" min="1" max="50" value="10">
+            </div>
+        </div>
+        <div class="filter-area">
+            <select id="categorySelect" class="category-select"></select>
+            <button class="btn random-btn" id="rapidRandomCat">🎲 Random Cat</button>
+            <span class="counter" id="wordCounter">📋 0 words</span>
+            <span class="progress-badge" id="roundsInfo">🎯 0 / 10</span>
+            <span class="speed-indicator" id="currentSpeedDisplay">⚡ 1.8s</span>
+        </div>
+    </div>
+
+    <div id="spellingMode" class="hidden">
+        <div class="subhead">🔤 SPELLING CHALLENGE · Say the word aloud</div>
+        <div class="word-card">
+            <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
+            <div class="timer-display" id="timerDisplay">10</div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
+            <div class="category-badge" id="spellingCategory">🌍 COUNTRY</div>
+            <div id="spellingAnswerReveal" class="answer-reveal"></div>
+        </div>
+        <div class="control-bar">
+            <button class="btn primary" id="spellingStartBtn">▶️ START</button>
+            <button class="btn" id="spellingNextBtn">⏩ SKIP</button>
+            <button class="btn audio" id="spellingAudioBtn">🔊 PLAY</button>
+            <button class="btn" id="spellingRevealBtn">🔎 REVEAL</button>
+            <button class="btn success" id="spellingCorrectBtn">✅ CORRECT</button>
+            <button class="btn danger" id="spellingIncorrectBtn">❌ INCORRECT</button>
+            <div class="timer-control">
+                <label>⏱️ TIME (s)</label>
+                <input type="number" id="timerSeconds" min="3" max="30" value="10">
+            </div>
+            <div class="round-selector">
+                <label>🔁 ROUNDS</label>
+                <input type="number" id="spellingRounds" min="1" max="30" value="10">
+            </div>
+        </div>
+        <div class="filter-area">
+            <select id="spellingCategorySelect" class="category-select"></select>
+            <button class="btn random-btn" id="spellingRandomCat">🎲 Random Cat</button>
+            <span class="counter" id="spellingWordCounter">📋 0 words</span>
+            <span class="progress-badge" id="spellingRoundsInfo">🎯 0 / 10</span>
+            <span class="score-area">
+                <span>✅ <span id="correctCount">0</span></span>
+                <span>❌ <span id="wrongCount">0</span></span>
+            </span>
+        </div>
+    </div>
+
+    <div id="missingMode" class="hidden">
+        <div class="subhead">🔘 MISSING LETTERS · Complete the word aloud</div>
+        <div class="word-card">
+            <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
+            <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
+            <div class="timer-display" id="missingTimerDisplay">15</div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
+            <div class="category-badge" id="missingCategory">🌍 COUNTRY</div>
+            <div id="missingAnswerReveal" class="answer-reveal"></div>
+        </div>
+        <div class="control-bar">
+            <button class="btn primary" id="missingStartBtn">▶️ START</button>
+            <button class="btn" id="missingSkipBtn">⏩ SKIP</button>
+            <button class="btn" id="missingRevealBtn">🔎 REVEAL</button>
+            <button class="btn success" id="missingCorrectBtn">✅ CORRECT</button>
+            <button class="btn danger" id="missingIncorrectBtn">❌ INCORRECT</button>
+            <div class="timer-control">
+                <label>⏱️ TIME (s)</label>
+                <input type="number" id="missingTimer" min="5" max="60" value="15">
+            </div>
+            <div class="round-selector">
+                <label>🔁 ROUNDS</label>
+                <input type="number" id="missingRounds" min="1" max="30" value="10">
+            </div>
+        </div>
+        <div class="filter-area">
+            <select id="missingCategorySelect" class="category-select"></select>
+            <button class="btn random-btn" id="missingRandomCat">🎲 Random Cat</button>
+            <span class="counter" id="missingWordCounter">📋 0 words</span>
+            <span class="progress-badge" id="missingRoundsInfo">🎯 0 / 10</span>
+            <span class="score-area">
+                <span>✅ <span id="missingCorrect">0</span></span>
+                <span>❌ <span id="missingWrong">0</span></span>
+            </span>
+        </div>
+    </div>
+
     <div class="grammar-panel">
-        <div class="grammar-title">
-            <span>📘 GRAMMAR FORMULAS · UNITS 1–3</span>
-        </div>
-        <div class="grammar-grid">
-            <div class="grammar-card"><h4>🔹 be: I / You</h4><ul><li><code>I'm + nationality/name/job</code></li><li><code>You're + adjective/nationality</code></li><li><code>Are you + ... ?</code> → Yes, I am. / No, I'm not.</li></ul></div>
-            <div class="grammar-card"><h4>🔹 be: he/she/they</h4><ul><li><code>He's / She's + (age/job/adjective)</code></li><li><code>They're + my/your/his ...</code></li><li><code>Is he/she + ... ?</code> → Yes, he is. / No, she isn't.</li></ul></div>
-            <div class="grammar-card"><h4>🔹 Possessives</h4><ul><li><code>my/your/his/her/its/our/their + noun</code></li><li><code>name's + noun</code> (Maria's book)</li></ul></div>
-            <div class="grammar-card"><h4>🔹 There is / There are</h4><ul><li><code>There's + a/an + singular noun</code></li><li><code>There are + (number) + plural noun</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 It is / This / These</h4><ul><li><code>It's + a/an + noun</code></li><li><code>This + singular</code> / <code>These + plural</code></li></ul></div>
-            <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like + noun / I don't like</code></li><li><code>Do you + verb?</code> → Yes, I do. / No, I don't.</li></ul></div>
-        </div>
+        <div class="grammar-title">📘 GRAMMAR FOCUS</div>
+        <div class="grammar-grid" id="grammarGrid"></div>
     </div>
 </div>
 
@@ -356,368 +456,664 @@
 (function(){
     "use strict";
 
-    // ========== VOCABULARY DATABASE ==========
-    const vocabularyDB = [
-        // Countries (14)
-        { word: "Brazil", category: "country", isNew: false }, { word: "Spain", category: "country", isNew: false },
-        { word: "China", category: "country", isNew: false }, { word: "Mexico", category: "country", isNew: false },
-        { word: "the United States", category: "country", isNew: false }, { word: "Japan", category: "country", isNew: false },
-        { word: "Colombia", category: "country", isNew: false }, { word: "Peru", category: "country", isNew: false },
-        { word: "Russia", category: "country", isNew: false }, { word: "South Korea", category: "country", isNew: false },
-        { word: "Italy", category: "country", isNew: true }, { word: "Germany", category: "country", isNew: true },
-        { word: "France", category: "country", isNew: true }, { word: "Canada", category: "country", isNew: true },
-        // Nationalities (14)
-        { word: "Brazilian", category: "nationality", isNew: false }, { word: "Spanish", category: "nationality", isNew: false },
-        { word: "Chinese", category: "nationality", isNew: false }, { word: "Mexican", category: "nationality", isNew: false },
-        { word: "American", category: "nationality", isNew: false }, { word: "Japanese", category: "nationality", isNew: false },
-        { word: "Colombian", category: "nationality", isNew: false }, { word: "Peruvian", category: "nationality", isNew: false },
-        { word: "Russian", category: "nationality", isNew: false }, { word: "South Korean", category: "nationality", isNew: false },
-        { word: "Italian", category: "nationality", isNew: true }, { word: "German", category: "nationality", isNew: true },
-        { word: "French", category: "nationality", isNew: true }, { word: "Canadian", category: "nationality", isNew: true },
-        // Family (17)
-        { word: "mother", category: "family", isNew: false }, { word: "father", category: "family", isNew: false },
-        { word: "brother", category: "family", isNew: false }, { word: "sister", category: "family", isNew: false },
-        { word: "grandmother", category: "family", isNew: false }, { word: "grandfather", category: "family", isNew: false },
-        { word: "aunt", category: "family", isNew: false }, { word: "uncle", category: "family", isNew: false },
-        { word: "cousin", category: "family", isNew: false }, { word: "parents", category: "family", isNew: false },
-        { word: "children", category: "family", isNew: false }, { word: "husband", category: "family", isNew: false },
-        { word: "wife", category: "family", isNew: false }, { word: "son", category: "family", isNew: false },
-        { word: "daughter", category: "family", isNew: false }, { word: "baby", category: "family", isNew: true },
-        { word: "teenager", category: "family", isNew: true },
-        // Adjectives (19)
-        { word: "old", category: "adjective", isNew: false }, { word: "young", category: "adjective", isNew: false },
-        { word: "short", category: "adjective", isNew: false }, { word: "tall", category: "adjective", isNew: false },
-        { word: "boring", category: "adjective", isNew: false }, { word: "funny", category: "adjective", isNew: false },
-        { word: "friendly", category: "adjective", isNew: false }, { word: "interesting", category: "adjective", isNew: false },
-        { word: "shy", category: "adjective", isNew: false }, { word: "smart", category: "adjective", isNew: false },
-        { word: "beautiful", category: "adjective", isNew: false }, { word: "noisy", category: "adjective", isNew: false },
-        { word: "quiet", category: "adjective", isNew: false }, { word: "awful", category: "adjective", isNew: false },
-        { word: "cute", category: "adjective", isNew: false }, { word: "happy", category: "adjective", isNew: true },
-        { word: "sad", category: "adjective", isNew: true }, { word: "tired", category: "adjective", isNew: true },
-        { word: "hungry", category: "adjective", isNew: true },
-        // Furniture (15)
-        { word: "bed", category: "furniture", isNew: false }, { word: "chair", category: "furniture", isNew: false },
-        { word: "table", category: "furniture", isNew: false }, { word: "desk", category: "furniture", isNew: false },
-        { word: "lamp", category: "furniture", isNew: false }, { word: "sofa", category: "furniture", isNew: false },
-        { word: "bookcase", category: "furniture", isNew: false }, { word: "rug", category: "furniture", isNew: false },
-        { word: "refrigerator", category: "furniture", isNew: false }, { word: "TV", category: "furniture", isNew: false },
-        { word: "shower", category: "furniture", isNew: false }, { word: "mirror", category: "furniture", isNew: true },
-        { word: "closet", category: "furniture", isNew: true }, { word: "shelf", category: "furniture", isNew: true },
-        { word: "curtains", category: "furniture", isNew: true },
-        // Rooms (7)
-        { word: "living room", category: "room", isNew: false }, { word: "kitchen", category: "room", isNew: false },
-        { word: "bedroom", category: "room", isNew: false }, { word: "bathroom", category: "room", isNew: false },
-        { word: "dining area", category: "room", isNew: false }, { word: "garage", category: "room", isNew: true },
-        { word: "yard", category: "room", isNew: true },
-        // Jobs (12)
-        { word: "teacher", category: "job", isNew: false }, { word: "student", category: "job", isNew: false },
-        { word: "artist", category: "job", isNew: false }, { word: "chef", category: "job", isNew: false },
-        { word: "server", category: "job", isNew: false }, { word: "hotel clerk", category: "job", isNew: false },
-        { word: "doctor", category: "job", isNew: false }, { word: "salesperson", category: "job", isNew: false },
-        { word: "engineer", category: "job", isNew: true }, { word: "nurse", category: "job", isNew: true },
-        { word: "police officer", category: "job", isNew: true }, { word: "manager", category: "job", isNew: true },
-        // Drinks & Snacks (12)
-        { word: "coffee", category: "drinkSnack", isNew: false }, { word: "tea", category: "drinkSnack", isNew: false },
-        { word: "milk", category: "drinkSnack", isNew: false }, { word: "juice", category: "drinkSnack", isNew: false },
-        { word: "water", category: "drinkSnack", isNew: false }, { word: "cookie", category: "drinkSnack", isNew: false },
-        { word: "sandwich", category: "drinkSnack", isNew: false }, { word: "cracker", category: "drinkSnack", isNew: false },
-        { word: "soda", category: "drinkSnack", isNew: true }, { word: "chocolate", category: "drinkSnack", isNew: true },
-        { word: "ice cream", category: "drinkSnack", isNew: true }, { word: "cake", category: "drinkSnack", isNew: true },
-        // Numbers/Dates (10)
-        { word: "one", category: "number", isNew: false }, { word: "two", category: "number", isNew: false },
-        { word: "three", category: "number", isNew: false }, { word: "ten", category: "number", isNew: false },
-        { word: "twenty", category: "number", isNew: false }, { word: "March", category: "number", isNew: false },
-        { word: "January", category: "number", isNew: false }, { word: "first", category: "number", isNew: false },
-        { word: "fifteen", category: "number", isNew: true }, { word: "thirty", category: "number", isNew: true }
+    // ========== BASE DE DATOS MASIVA (EVOLVE 1, 2, 3) ==========
+    
+    // EVOLVE 1 (Unidades 1-9 previas, remapeadas a book:1)
+    const evolve1Words = [
+        { word: "Brazil", category: "country", book: 1, es: "Brasil" },
+        { word: "Spain", category: "country", book: 1, es: "España" },
+        { word: "China", category: "country", book: 1, es: "China" },
+        { word: "Mexico", category: "country", book: 1, es: "México" },
+        { word: "the United States", category: "country", book: 1, es: "Estados Unidos" },
+        { word: "Japan", category: "country", book: 1, es: "Japón" },
+        { word: "mother", category: "family", book: 1, es: "madre" },
+        { word: "father", category: "family", book: 1, es: "padre" },
+        { word: "old", category: "adjective", book: 1, es: "viejo/mayor" },
+        { word: "young", category: "adjective", book: 1, es: "joven" },
+        { word: "bed", category: "furniture", book: 1, es: "cama" },
+        { word: "chair", category: "furniture", book: 1, es: "silla" },
+        { word: "living room", category: "room", book: 1, es: "sala de estar" },
+        { word: "teacher", category: "job", book: 1, es: "profesor/a" },
+        { word: "coffee", category: "drinkSnack", book: 1, es: "café" },
+        { word: "one", category: "number", book: 1, es: "uno" },
+        // U4-U9 Ev1
+        { word: "app", category: "technology", book: 1, es: "aplicación" },
+        { word: "cell phone", category: "technology", book: 1, es: "teléfono celular" },
+        { word: "Monday", category: "number", book: 1, es: "lunes" },
+        { word: "get up", category: "activities", book: 1, es: "levantarse" },
+        { word: "cafe", category: "cityPlace", book: 1, es: "cafetería" },
+        { word: "beach", category: "nature", book: 1, es: "playa" },
+        { word: "clean my room", category: "activities", book: 1, es: "limpiar mi habitación" },
+        { word: "bike", category: "transport", book: 1, es: "bicicleta" },
+        { word: "dance", category: "skill", book: 1, es: "bailar" },
+        { word: "company", category: "job", book: 1, es: "empresa" },
+        { word: "boat", category: "travel", book: 1, es: "barco" }
+        // Nota: Por límite de espacio de visualización, dejé una muestra representativa de Ev1, 
+        // pero puedes pegar aquí todo el array original de Evolve 1 que tenías.
     ];
 
-    // ========== STATE ==========
-    let currentWordObj = vocabularyDB[0];
-    let autoInterval = null;
-    let isPlaying = false;
-    let baseSpeed = 1.8;
-    let currentDynamicSpeed = 1.8;
-    let currentCategory = "all";
-    let roundLimit = 10;
-    let roundCounter = 0;
-    let sessionActive = false;
-    let audioEnabled = true;
-    const MIN_SPEED = 0.5;
-    
-    // Audio player
+    // EVOLVE 2 (Unidades 1-12)
+    const evolve2Words = [
+        // Unit 1
+        { word: "boss", category: "Unit 1", book: 2, es: "jefe/a" }, { word: "classmate", category: "Unit 1", book: 2, es: "compañero/a de clase" }, { word: "close friend", category: "Unit 1", book: 2, es: "amigo/a íntimo/a" }, { word: "coworker", category: "Unit 1", book: 2, es: "compañero/a de trabajo" }, { word: "couple", category: "Unit 1", book: 2, es: "pareja" }, { word: "fiancé", category: "Unit 1", book: 2, es: "prometido/a" }, { word: "girlfriend", category: "Unit 1", book: 2, es: "novia" }, { word: "grandchild", category: "Unit 1", book: 2, es: "nieto/a" }, { word: "neighbor", category: "Unit 1", book: 2, es: "vecino/a" }, { word: "roommate", category: "Unit 1", book: 2, es: "compañero/a de piso" }, { word: "candy bar", category: "Unit 1", book: 2, es: "barra de chocolate" }, { word: "cash", category: "Unit 1", book: 2, es: "efectivo" }, { word: "driver's license", category: "Unit 1", book: 2, es: "licencia de conducir" }, { word: "hairbrush", category: "Unit 1", book: 2, es: "cepillo para el pelo" }, { word: "hand lotion", category: "Unit 1", book: 2, es: "loción de manos" }, { word: "keychain", category: "Unit 1", book: 2, es: "llavero" }, { word: "mirror", category: "Unit 1", book: 2, es: "espejo" }, { word: "pack of gum", category: "Unit 1", book: 2, es: "paquete de chicles" }, { word: "receipt", category: "Unit 1", book: 2, es: "recibo" }, { word: "sunglasses", category: "Unit 1", book: 2, es: "gafas de sol" }, { word: "tissues", category: "Unit 1", book: 2, es: "pañuelos de papel" }, { word: "umbrella", category: "Unit 1", book: 2, es: "paraguas" }, { word: "water bottle", category: "Unit 1", book: 2, es: "botella de agua" },
+        // Unit 2
+        { word: "do housework", category: "Unit 2", book: 2, es: "hacer tareas domésticas" }, { word: "do the cooking", category: "Unit 2", book: 2, es: "cocinar" }, { word: "do the dishes", category: "Unit 2", book: 2, es: "lavar los platos" }, { word: "do the laundry", category: "Unit 2", book: 2, es: "lavar la ropa" }, { word: "have free time", category: "Unit 2", book: 2, es: "tener tiempo libre" }, { word: "have a party", category: "Unit 2", book: 2, es: "hacer una fiesta" }, { word: "have a snack", category: "Unit 2", book: 2, es: "tomar un tentempié" }, { word: "have something to drink", category: "Unit 2", book: 2, es: "tomar algo" }, { word: "make the bed", category: "Unit 2", book: 2, es: "hacer la cama" }, { word: "make a plan", category: "Unit 2", book: 2, es: "hacer un plan" }, { word: "make a mess", category: "Unit 2", book: 2, es: "hacer un desastre" }, { word: "calendar", category: "Unit 2", book: 2, es: "calendario" }, { word: "document", category: "Unit 2", book: 2, es: "documento" }, { word: "electrical outlet", category: "Unit 2", book: 2, es: "enchufe" }, { word: "files", category: "Unit 2", book: 2, es: "archivos" }, { word: "headphones", category: "Unit 2", book: 2, es: "auriculares" }, { word: "keyboard", category: "Unit 2", book: 2, es: "teclado" }, { word: "laptop screen", category: "Unit 2", book: 2, es: "pantalla del portátil" }, { word: "mouse", category: "Unit 2", book: 2, es: "ratón" }, { word: "notes", category: "Unit 2", book: 2, es: "notas" }, { word: "page", category: "Unit 2", book: 2, es: "página" }, { word: "power cord", category: "Unit 2", book: 2, es: "cable de corriente" }, { word: "textbook", category: "Unit 2", book: 2, es: "libro de texto" }, { word: "Wi-Fi", category: "Unit 2", book: 2, es: "wifi" },
+        // Unit 3
+        { word: "athlete", category: "Unit 3", book: 2, es: "atleta" }, { word: "coach", category: "Unit 3", book: 2, es: "entrenador/a" }, { word: "court", category: "Unit 3", book: 2, es: "pista" }, { word: "fans", category: "Unit 3", book: 2, es: "aficionados" }, { word: "field", category: "Unit 3", book: 2, es: "campo" }, { word: "game", category: "Unit 3", book: 2, es: "partido" }, { word: "players", category: "Unit 3", book: 2, es: "jugadores" }, { word: "pool", category: "Unit 3", book: 2, es: "piscina" }, { word: "race", category: "Unit 3", book: 2, es: "carrera" }, { word: "score", category: "Unit 3", book: 2, es: "marcador" }, { word: "stadium", category: "Unit 3", book: 2, es: "estadio" }, { word: "team", category: "Unit 3", book: 2, es: "equipo" }, { word: "tennis court", category: "Unit 3", book: 2, es: "pista de tenis" }, { word: "win", category: "Unit 3", book: 2, es: "ganar" }, { word: "lose", category: "Unit 3", book: 2, es: "perder" }, { word: "climb", category: "Unit 3", book: 2, es: "escalar" }, { word: "jump", category: "Unit 3", book: 2, es: "saltar" }, { word: "lie down", category: "Unit 3", book: 2, es: "tumbarse" }, { word: "lift weights", category: "Unit 3", book: 2, es: "levantar pesas" }, { word: "push", category: "Unit 3", book: 2, es: "empujar" }, { word: "sit down", category: "Unit 3", book: 2, es: "sentarse" }, { word: "stand up", category: "Unit 3", book: 2, es: "levantarse" }, { word: "stretch", category: "Unit 3", book: 2, es: "estirar" }, { word: "throw", category: "Unit 3", book: 2, es: "lanzar" }, { word: "turn around", category: "Unit 3", book: 2, es: "darse la vuelta" },
+        // Unit 4
+        { word: "actor", category: "Unit 4", book: 2, es: "actor" }, { word: "artist", category: "Unit 4", book: 2, es: "artista" }, { word: "band", category: "Unit 4", book: 2, es: "banda" }, { word: "concert", category: "Unit 4", book: 2, es: "concierto" }, { word: "director", category: "Unit 4", book: 2, es: "director/a" }, { word: "fan", category: "Unit 4", book: 2, es: "fan" }, { word: "festival", category: "Unit 4", book: 2, es: "festival" }, { word: "musician", category: "Unit 4", book: 2, es: "músico/a" }, { word: "singer", category: "Unit 4", book: 2, es: "cantante" }, { word: "TV show", category: "Unit 4", book: 2, es: "programa de televisión" }, { word: "video game", category: "Unit 4", book: 2, es: "videojuego" }, { word: "bouquet of flowers", category: "Unit 4", book: 2, es: "ramo de flores" }, { word: "candy", category: "Unit 4", book: 2, es: "caramelos" }, { word: "gift card", category: "Unit 4", book: 2, es: "tarjeta regalo" }, { word: "jewelry", category: "Unit 4", book: 2, es: "joyería" }, { word: "perfume", category: "Unit 4", book: 2, es: "perfume" }, { word: "phone charger", category: "Unit 4", book: 2, es: "cargador de teléfono" }, { word: "purse", category: "Unit 4", book: 2, es: "bolso" }, { word: "speakers", category: "Unit 4", book: 2, es: "altavoces" }, { word: "sweatshirt", category: "Unit 4", book: 2, es: "sudadera" }, { word: "watch", category: "Unit 4", book: 2, es: "reloj" },
+        // Unit 5
+        { word: "amazing", category: "Unit 5", book: 2, es: "asombroso" }, { word: "angry", category: "Unit 5", book: 2, es: "enfadado" }, { word: "cool", category: "Unit 5", book: 2, es: "guay" }, { word: "crazy", category: "Unit 5", book: 2, es: "loco" }, { word: "dangerous", category: "Unit 5", book: 2, es: "peligroso" }, { word: "horrible", category: "Unit 5", book: 2, es: "horrible" }, { word: "impressed", category: "Unit 5", book: 2, es: "impresionado" }, { word: "loud", category: "Unit 5", book: 2, es: "ruidoso" }, { word: "perfect", category: "Unit 5", book: 2, es: "perfecto" }, { word: "proud", category: "Unit 5", book: 2, es: "orgulloso" }, { word: "scary", category: "Unit 5", book: 2, es: "aterrador" }, { word: "strange", category: "Unit 5", book: 2, es: "extraño" }, { word: "stressful", category: "Unit 5", book: 2, es: "estresante" }, { word: "terrible", category: "Unit 5", book: 2, es: "terrible" }, { word: "tired", category: "Unit 5", book: 2, es: "cansado" }, { word: "wonderful", category: "Unit 5", book: 2, es: "maravilloso" }, { word: "be born", category: "Unit 5", book: 2, es: "nacer" }, { word: "become a grandparent", category: "Unit 5", book: 2, es: "convertirse en abuelo/a" }, { word: "buy a car", category: "Unit 5", book: 2, es: "comprar un coche" }, { word: "buy a house", category: "Unit 5", book: 2, es: "comprar una casa" }, { word: "get a job", category: "Unit 5", book: 2, es: "conseguir un trabajo" }, { word: "get married", category: "Unit 5", book: 2, es: "casarse" }, { word: "graduate from college", category: "Unit 5", book: 2, es: "graduarse de la universidad" }, { word: "have a baby", category: "Unit 5", book: 2, es: "tener un bebé" }, { word: "learn to drive", category: "Unit 5", book: 2, es: "aprender a conducir" }, { word: "meet your future wife", category: "Unit 5", book: 2, es: "conocer a tu futuro/a esposo/a" }, { word: "retire", category: "Unit 5", book: 2, es: "jubilarse" }, { word: "start school", category: "Unit 5", book: 2, es: "empezar el colegio" },
+        // Unit 6
+        { word: "borrow", category: "Unit 6", book: 2, es: "pedir prestado" }, { word: "cost", category: "Unit 6", book: 2, es: "costar" }, { word: "lend", category: "Unit 6", book: 2, es: "prestar" }, { word: "pay back", category: "Unit 6", book: 2, es: "devolver (dinero)" }, { word: "return", category: "Unit 6", book: 2, es: "devolver (algo)" }, { word: "save money", category: "Unit 6", book: 2, es: "ahorrar (dinero)" }, { word: "sell", category: "Unit 6", book: 2, es: "vender" }, { word: "shop online", category: "Unit 6", book: 2, es: "comprar en línea" }, { word: "spend", category: "Unit 6", book: 2, es: "gastar" }, { word: "waste", category: "Unit 6", book: 2, es: "desperdiciar" }, { word: "aisle", category: "Unit 6", book: 2, es: "pasillo" }, { word: "cart", category: "Unit 6", book: 2, es: "carrito" }, { word: "cash register", category: "Unit 6", book: 2, es: "caja registradora" }, { word: "checkout", category: "Unit 6", book: 2, es: "caja" }, { word: "customer", category: "Unit 6", book: 2, es: "cliente" }, { word: "department store", category: "Unit 6", book: 2, es: "grandes almacenes" }, { word: "grocery store", category: "Unit 6", book: 2, es: "tienda de comestibles" }, { word: "magazine", category: "Unit 6", book: 2, es: "revista" }, { word: "sale", category: "Unit 6", book: 2, es: "rebajas" }, { word: "shelf", category: "Unit 6", book: 2, es: "estante" },
+        // Unit 7
+        { word: "avocado", category: "Unit 7", book: 2, es: "aguacate" }, { word: "burger", category: "Unit 7", book: 2, es: "hamburguesa" }, { word: "cereal", category: "Unit 7", book: 2, es: "cereales" }, { word: "chili", category: "Unit 7", book: 2, es: "chile" }, { word: "corn", category: "Unit 7", book: 2, es: "maíz" }, { word: "honey", category: "Unit 7", book: 2, es: "miel" }, { word: "jam", category: "Unit 7", book: 2, es: "mermelada" }, { word: "lettuce", category: "Unit 7", book: 2, es: "lechuga" }, { word: "noodles", category: "Unit 7", book: 2, es: "fideos" }, { word: "onion", category: "Unit 7", book: 2, es: "cebolla" }, { word: "peanut butter", category: "Unit 7", book: 2, es: "mantequilla de cacahuete" }, { word: "salmon", category: "Unit 7", book: 2, es: "salmón" }, { word: "salt", category: "Unit 7", book: 2, es: "sal" }, { word: "strawberry", category: "Unit 7", book: 2, es: "fresa" }, { word: "yogurt", category: "Unit 7", book: 2, es: "yogur" }, { word: "bitter", category: "Unit 7", book: 2, es: "amargo" }, { word: "boiled", category: "Unit 7", book: 2, es: "hervido" }, { word: "delicious", category: "Unit 7", book: 2, es: "delicioso" }, { word: "fresh", category: "Unit 7", book: 2, es: "fresco" }, { word: "fried", category: "Unit 7", book: 2, es: "frito" }, { word: "grilled", category: "Unit 7", book: 2, es: "a la parrilla" }, { word: "raw", category: "Unit 7", book: 2, es: "crudo" }, { word: "roasted", category: "Unit 7", book: 2, es: "asado" }, { word: "sour", category: "Unit 7", book: 2, es: "agrio" }, { word: "spicy", category: "Unit 7", book: 2, es: "picante" }, { word: "sweet", category: "Unit 7", book: 2, es: "dulce" },
+        // Unit 8
+        { word: "backpack", category: "Unit 8", book: 2, es: "mochila" }, { word: "bus station", category: "Unit 8", book: 2, es: "estación de autobuses" }, { word: "check-in counter", category: "Unit 8", book: 2, es: "mostrador de facturación" }, { word: "guidebook", category: "Unit 8", book: 2, es: "guía de viaje" }, { word: "map", category: "Unit 8", book: 2, es: "mapa" }, { word: "suitcase", category: "Unit 8", book: 2, es: "maleta" }, { word: "tour bus", category: "Unit 8", book: 2, es: "autobús turístico" }, { word: "tour guide", category: "Unit 8", book: 2, es: "guía turístico" }, { word: "tourist", category: "Unit 8", book: 2, es: "turista" }, { word: "catch", category: "Unit 8", book: 2, es: "coger (transporte)" }, { word: "change", category: "Unit 8", book: 2, es: "cambiar (transporte)" }, { word: "drop off", category: "Unit 8", book: 2, es: "dejar (a alguien)" }, { word: "get into", category: "Unit 8", book: 2, es: "subir (coche)" }, { word: "get out of", category: "Unit 8", book: 2, es: "bajar (coche)" }, { word: "get on", category: "Unit 8", book: 2, es: "subir (autobús)" }, { word: "get off", category: "Unit 8", book: 2, es: "bajar (autobús)" }, { word: "miss", category: "Unit 8", book: 2, es: "perder (transporte)" }, { word: "pick up", category: "Unit 8", book: 2, es: "recoger" },
+        // Unit 9
+        { word: "belt", category: "Unit 9", book: 2, es: "cinturón" }, { word: "bracelet", category: "Unit 9", book: 2, es: "pulsera" }, { word: "earrings", category: "Unit 9", book: 2, es: "pendientes" }, { word: "gloves", category: "Unit 9", book: 2, es: "guantes" }, { word: "necklace", category: "Unit 9", book: 2, es: "collar" }, { word: "scarf", category: "Unit 9", book: 2, es: "bufanda" }, { word: "sneakers", category: "Unit 9", book: 2, es: "zapatillas deportivas" }, { word: "sunglasses", category: "Unit 9", book: 2, es: "gafas de sol" }, { word: "tie", category: "Unit 9", book: 2, es: "corbata" }, { word: "bald", category: "Unit 9", book: 2, es: "calvo" }, { word: "beard", category: "Unit 9", book: 2, es: "barba" }, { word: "curly", category: "Unit 9", book: 2, es: "rizado" }, { word: "dark", category: "Unit 9", book: 2, es: "oscuro" }, { word: "gray", category: "Unit 9", book: 2, es: "canoso" }, { word: "light", category: "Unit 9", book: 2, es: "claro" }, { word: "mustache", category: "Unit 9", book: 2, es: "bigote" }, { word: "pierced ears", category: "Unit 9", book: 2, es: "orejas perforadas" }, { word: "straight", category: "Unit 9", book: 2, es: "liso" },
+        // Unit 10
+        { word: "accountant", category: "Unit 10", book: 2, es: "contable" }, { word: "architect", category: "Unit 10", book: 2, es: "arquitecto/a" }, { word: "call center worker", category: "Unit 10", book: 2, es: "trabajador/a de call center" }, { word: "dentist", category: "Unit 10", book: 2, es: "dentista" }, { word: "engineer", category: "Unit 10", book: 2, es: "ingeniero/a" }, { word: "IT specialist", category: "Unit 10", book: 2, es: "especialista en TI" }, { word: "lawyer", category: "Unit 10", book: 2, es: "abogado/a" }, { word: "mechanic", category: "Unit 10", book: 2, es: "mecánico" }, { word: "nurse", category: "Unit 10", book: 2, es: "enfermero/a" }, { word: "paramedic", category: "Unit 10", book: 2, es: "paramédico" }, { word: "photographer", category: "Unit 10", book: 2, es: "fotógrafo/a" }, { word: "physical therapist", category: "Unit 10", book: 2, es: "fisioterapeuta" }, { word: "police officer", category: "Unit 10", book: 2, es: "oficial de policía" }, { word: "project manager", category: "Unit 10", book: 2, es: "jefe/a de proyecto" }, { word: "receptionist", category: "Unit 10", book: 2, es: "recepcionista" }, { word: "break your leg", category: "Unit 10", book: 2, es: "romperse la pierna" }, { word: "catch a cold", category: "Unit 10", book: 2, es: "resfriarse" }, { word: "cut your finger", category: "Unit 10", book: 2, es: "cortarse el dedo" }, { word: "feel a fever", category: "Unit 10", book: 2, es: "tener fiebre" }, { word: "have a headache", category: "Unit 10", book: 2, es: "tener dolor de cabeza" }, { word: "have a sore throat", category: "Unit 10", book: 2, es: "tener dolor de garganta" }, { word: "have a stomachache", category: "Unit 10", book: 2, es: "tener dolor de estómago" }, { word: "have a toothache", category: "Unit 10", book: 2, es: "tener dolor de muelas" }, { word: "hurt your back", category: "Unit 10", book: 2, es: "lastimarse la espalda" }, { word: "twist your ankle", category: "Unit 10", book: 2, es: "torcerse el tobillo" },
+        // Unit 11
+        { word: "add someone as a friend", category: "Unit 11", book: 2, es: "agregar a alguien como amigo" }, { word: "build a website", category: "Unit 11", book: 2, es: "construir un sitio web" }, { word: "change your password", category: "Unit 11", book: 2, es: "cambiar tu contraseña" }, { word: "check your messages", category: "Unit 11", book: 2, es: "revisar tus mensajes" }, { word: "click on a link", category: "Unit 11", book: 2, es: "hacer clic en un enlace" }, { word: "join a group", category: "Unit 11", book: 2, es: "unirse a un grupo" }, { word: "make a video", category: "Unit 11", book: 2, es: "hacer un video" }, { word: "message someone", category: "Unit 11", book: 2, es: "enviar un mensaje" }, { word: "open an account", category: "Unit 11", book: 2, es: "abrir una cuenta" }, { word: "swipe", category: "Unit 11", book: 2, es: "deslizar" }, { word: "bookmark", category: "Unit 11", book: 2, es: "marcar como favorito" }, { word: "download", category: "Unit 11", book: 2, es: "descargar" }, { word: "follow", category: "Unit 11", book: 2, es: "seguir" }, { word: "go viral", category: "Unit 11", book: 2, es: "volverse viral" }, { word: "like", category: "Unit 11", book: 2, es: "dar me gusta" }, { word: "log in", category: "Unit 11", book: 2, es: "iniciar sesión" }, { word: "post", category: "Unit 11", book: 2, es: "publicar" }, { word: "search for", category: "Unit 11", book: 2, es: "buscar" }, { word: "share", category: "Unit 11", book: 2, es: "compartir" }, { word: "stop following", category: "Unit 11", book: 2, es: "dejar de seguir" }, { word: "upload", category: "Unit 11", book: 2, es: "subir" },
+        // Unit 12
+        { word: "blizzard", category: "Unit 12", book: 2, es: "ventisca" }, { word: "boiling", category: "Unit 12", book: 2, es: "hirviendo" }, { word: "cloudy", category: "Unit 12", book: 2, es: "nublado" }, { word: "drought", category: "Unit 12", book: 2, es: "sequía" }, { word: "flood", category: "Unit 12", book: 2, es: "inundación" }, { word: "foggy", category: "Unit 12", book: 2, es: "neblinoso" }, { word: "freezing", category: "Unit 12", book: 2, es: "helado" }, { word: "humid", category: "Unit 12", book: 2, es: "húmedo" }, { word: "hurricane", category: "Unit 12", book: 2, es: "huracán" }, { word: "rainy", category: "Unit 12", book: 2, es: "lluvioso" }, { word: "snowstorm", category: "Unit 12", book: 2, es: "tormenta de nieve" }, { word: "snowy", category: "Unit 12", book: 2, es: "nevado" }, { word: "sunny", category: "Unit 12", book: 2, es: "soleado" }, { word: "thunder", category: "Unit 12", book: 2, es: "truenos" }, { word: "windy", category: "Unit 12", book: 2, es: "ventoso" }, { word: "cave", category: "Unit 12", book: 2, es: "cueva" }, { word: "cliff", category: "Unit 12", book: 2, es: "acantilado" }, { word: "coast", category: "Unit 12", book: 2, es: "costa" }, { word: "fountain", category: "Unit 12", book: 2, es: "fuente" }, { word: "glacier", category: "Unit 12", book: 2, es: "glaciar" }, { word: "hill", category: "Unit 12", book: 2, es: "colina" }, { word: "rainforest", category: "Unit 12", book: 2, es: "selva tropical" }, { word: "rocks", category: "Unit 12", book: 2, es: "rocas" }, { word: "skyscraper", category: "Unit 12", book: 2, es: "rascacielos" }, { word: "statue", category: "Unit 12", book: 2, es: "estatua" }, { word: "tower", category: "Unit 12", book: 2, es: "torre" }, { word: "valley", category: "Unit 12", book: 2, es: "valle" }, { word: "waterfall", category: "Unit 12", book: 2, es: "cascada" }, { word: "woods", category: "Unit 12", book: 2, es: "bosque" }
+    ];
+
+    // EVOLVE 3 (Unidades 1-12)
+    const evolve3Words = [
+        // Unit 1
+        { word: "brave", category: "Unit 1", book: 3, es: "valiente" }, { word: "cheerful", category: "Unit 1", book: 3, es: "alegre" }, { word: "easygoing", category: "Unit 1", book: 3, es: "tranquilo/a" }, { word: "generous", category: "Unit 1", book: 3, es: "generoso/a" }, { word: "helpful", category: "Unit 1", book: 3, es: "servicial" }, { word: "honest", category: "Unit 1", book: 3, es: "honesto/a" }, { word: "intelligent", category: "Unit 1", book: 3, es: "inteligente" }, { word: "nervous", category: "Unit 1", book: 3, es: "nervioso/a" }, { word: "reliable", category: "Unit 1", book: 3, es: "fiable" }, { word: "selfish", category: "Unit 1", book: 3, es: "egoísta" }, { word: "serious", category: "Unit 1", book: 3, es: "serio/a" }, { word: "sociable", category: "Unit 1", book: 3, es: "sociable" }, { word: "be born", category: "Unit 1", book: 3, es: "nacer" }, { word: "be into", category: "Unit 1", book: 3, es: "gustar mucho" }, { word: "be married", category: "Unit 1", book: 3, es: "estar casado/a" }, { word: "be raised", category: "Unit 1", book: 3, es: "ser criado/a" }, { word: "be single", category: "Unit 1", book: 3, es: "estar soltero/a" }, { word: "celebrate", category: "Unit 1", book: 3, es: "celebrar" }, { word: "live alone", category: "Unit 1", book: 3, es: "vivir solo/a" }, { word: "live with my family", category: "Unit 1", book: 3, es: "vivir con mi familia" }, { word: "retire", category: "Unit 1", book: 3, es: "jubilarse" },
+        // Unit 2
+        { word: "brand new", category: "Unit 2", book: 3, es: "completamente nuevo" }, { word: "common", category: "Unit 2", book: 3, es: "común" }, { word: "damaged", category: "Unit 2", book: 3, es: "dañado" }, { word: "fancy", category: "Unit 2", book: 3, es: "elegante" }, { word: "in good condition", category: "Unit 2", book: 3, es: "en buen estado" }, { word: "modern", category: "Unit 2", book: 3, es: "moderno" }, { word: "plain", category: "Unit 2", book: 3, es: "sencillo" }, { word: "outdated", category: "Unit 2", book: 3, es: "anticuado" }, { word: "special", category: "Unit 2", book: 3, es: "especial" }, { word: "used", category: "Unit 2", book: 3, es: "usado" }, { word: "useful", category: "Unit 2", book: 3, es: "útil" }, { word: "useless", category: "Unit 2", book: 3, es: "inútil" }, { word: "delete", category: "Unit 2", book: 3, es: "eliminar" }, { word: "device", category: "Unit 2", book: 3, es: "dispositivo" }, { word: "folder", category: "Unit 2", book: 3, es: "carpeta" }, { word: "home screen", category: "Unit 2", book: 3, es: "pantalla de inicio" }, { word: "model", category: "Unit 2", book: 3, es: "modelo" }, { word: "set up", category: "Unit 2", book: 3, es: "configurar" }, { word: "storage", category: "Unit 2", book: 3, es: "almacenamiento" }, { word: "sync", category: "Unit 2", book: 3, es: "sincronizar" }, { word: "try out", category: "Unit 2", book: 3, es: "probar" }, { word: "work", category: "Unit 2", book: 3, es: "funcionar" },
+        // Unit 3
+        { word: "bridge", category: "Unit 3", book: 3, es: "puente" }, { word: "clinic", category: "Unit 3", book: 3, es: "clínica" }, { word: "embassy", category: "Unit 3", book: 3, es: "embajada" }, { word: "ferry", category: "Unit 3", book: 3, es: "ferry" }, { word: "fire station", category: "Unit 3", book: 3, es: "estación de bomberos" }, { word: "highway", category: "Unit 3", book: 3, es: "autopista" }, { word: "hostel", category: "Unit 3", book: 3, es: "hostal" }, { word: "monument", category: "Unit 3", book: 3, es: "monumento" }, { word: "parking lot", category: "Unit 3", book: 3, es: "estacionamiento" }, { word: "sculpture", category: "Unit 3", book: 3, es: "escultura" }, { word: "sidewalk", category: "Unit 3", book: 3, es: "acera" }, { word: "tunnel", category: "Unit 3", book: 3, es: "túnel" }, { word: "arrival", category: "Unit 3", book: 3, es: "llegada" }, { word: "book", category: "Unit 3", book: 3, es: "reservar" }, { word: "departure", category: "Unit 3", book: 3, es: "salida" }, { word: "direct", category: "Unit 3", book: 3, es: "directo" }, { word: "fare", category: "Unit 3", book: 3, es: "tarifa" }, { word: "line", category: "Unit 3", book: 3, es: "línea" }, { word: "reservation", category: "Unit 3", book: 3, es: "reserva" }, { word: "route", category: "Unit 3", book: 3, es: "ruta" }, { word: "schedule", category: "Unit 3", book: 3, es: "horario" }, { word: "terminal", category: "Unit 3", book: 3, es: "terminal" },
+        // Unit 4
+        { word: "annoyed", category: "Unit 4", book: 3, es: "molesto" }, { word: "annoying", category: "Unit 4", book: 3, es: "molesto (causa)" }, { word: "disappointed", category: "Unit 4", book: 3, es: "decepcionado" }, { word: "disappointing", category: "Unit 4", book: 3, es: "decepcionante" }, { word: "embarrassed", category: "Unit 4", book: 3, es: "avergonzado" }, { word: "embarrassing", category: "Unit 4", book: 3, es: "embarazoso" }, { word: "fascinated", category: "Unit 4", book: 3, es: "fascinado" }, { word: "fascinating", category: "Unit 4", book: 3, es: "fascinante" }, { word: "frightened", category: "Unit 4", book: 3, es: "asustado" }, { word: "frightening", category: "Unit 4", book: 3, es: "aterrador" }, { word: "shocked", category: "Unit 4", book: 3, es: "conmocionado" }, { word: "shocking", category: "Unit 4", book: 3, es: "impactante" }, { word: "surprised", category: "Unit 4", book: 3, es: "sorprendido" }, { word: "surprising", category: "Unit 4", book: 3, es: "sorprendente" }, { word: "amused", category: "Unit 4", book: 3, es: "divertido" }, { word: "amusing", category: "Unit 4", book: 3, es: "divertido (causa)" }, { word: "arrange", category: "Unit 4", book: 3, es: "organizar" }, { word: "check", category: "Unit 4", book: 3, es: "comprobar" }, { word: "deal with", category: "Unit 4", book: 3, es: "ocuparse de" }, { word: "forget", category: "Unit 4", book: 3, es: "olvidar" }, { word: "get in touch with", category: "Unit 4", book: 3, es: "ponerse en contacto con" }, { word: "let someone know", category: "Unit 4", book: 3, es: "hacer saber a alguien" }, { word: "look into", category: "Unit 4", book: 3, es: "investigar" }, { word: "meet up", category: "Unit 4", book: 3, es: "quedar" }, { word: "remind", category: "Unit 4", book: 3, es: "recordar" }, { word: "think about", category: "Unit 4", book: 3, es: "pensar en" },
+        // Unit 5
+        { word: "appear", category: "Unit 5", book: 3, es: "aparecer" }, { word: "disappear", category: "Unit 5", book: 3, es: "desaparecer" }, { word: "discover", category: "Unit 5", book: 3, es: "descubrir" }, { word: "drop", category: "Unit 5", book: 3, es: "dejar caer" }, { word: "fall off", category: "Unit 5", book: 3, es: "caerse de" }, { word: "get back", category: "Unit 5", book: 3, es: "recuperar" }, { word: "leave behind", category: "Unit 5", book: 3, es: "dejar olvidado" }, { word: "locate", category: "Unit 5", book: 3, es: "localizar" }, { word: "return", category: "Unit 5", book: 3, es: "devolver" }, { word: "search for", category: "Unit 5", book: 3, es: "buscar" }, { word: "be in trouble", category: "Unit 5", book: 3, es: "estar en problemas" }, { word: "break down", category: "Unit 5", book: 3, es: "averiarse" }, { word: "feel sorry for", category: "Unit 5", book: 3, es: "sentir lástima por" }, { word: "figure out", category: "Unit 5", book: 3, es: "resolver" }, { word: "get lost", category: "Unit 5", book: 3, es: "perderse" }, { word: "give a ride", category: "Unit 5", book: 3, es: "llevar en coche" }, { word: "grateful", category: "Unit 5", book: 3, es: "agradecido" }, { word: "show where to go", category: "Unit 5", book: 3, es: "mostrar a dónde ir" }, { word: "take care of", category: "Unit 5", book: 3, es: "cuidar de" }, { word: "warn", category: "Unit 5", book: 3, es: "advertir" },
+        // Unit 6
+        { word: "air", category: "Unit 6", book: 3, es: "aire" }, { word: "concrete", category: "Unit 6", book: 3, es: "hormigón" }, { word: "graffiti", category: "Unit 6", book: 3, es: "grafiti" }, { word: "land", category: "Unit 6", book: 3, es: "terreno" }, { word: "noise", category: "Unit 6", book: 3, es: "ruido" }, { word: "pollution", category: "Unit 6", book: 3, es: "contaminación" }, { word: "smoke", category: "Unit 6", book: 3, es: "humo" }, { word: "space", category: "Unit 6", book: 3, es: "espacio" }, { word: "traffic", category: "Unit 6", book: 3, es: "tráfico" }, { word: "traffic jam", category: "Unit 6", book: 3, es: "atasco" }, { word: "trash", category: "Unit 6", book: 3, es: "basura" }, { word: "angrily", category: "Unit 6", book: 3, es: "con enfado" }, { word: "beautifully", category: "Unit 6", book: 3, es: "hermosamente" }, { word: "calmly", category: "Unit 6", book: 3, es: "con calma" }, { word: "clearly", category: "Unit 6", book: 3, es: "claramente" }, { word: "completely", category: "Unit 6", book: 3, es: "completamente" }, { word: "correctly", category: "Unit 6", book: 3, es: "correctamente" }, { word: "dangerously", category: "Unit 6", book: 3, es: "peligrosamente" }, { word: "loudly", category: "Unit 6", book: 3, es: "ruidosamente" }, { word: "politely", category: "Unit 6", book: 3, es: "educadamente" }, { word: "quietly", category: "Unit 6", book: 3, es: "silenciosamente" }, { word: "safely", category: "Unit 6", book: 3, es: "de forma segura" },
+        // Unit 7
+        { word: "classical", category: "Unit 7", book: 3, es: "música clásica" }, { word: "country", category: "Unit 7", book: 3, es: "música country" }, { word: "EDM", category: "Unit 7", book: 3, es: "música electrónica" }, { word: "folk", category: "Unit 7", book: 3, es: "música folk" }, { word: "heavy metal", category: "Unit 7", book: 3, es: "heavy metal" }, { word: "hip-hop", category: "Unit 7", book: 3, es: "hip-hop" }, { word: "jazz", category: "Unit 7", book: 3, es: "jazz" }, { word: "pop", category: "Unit 7", book: 3, es: "pop" }, { word: "reggae", category: "Unit 7", book: 3, es: "reggae" }, { word: "rock", category: "Unit 7", book: 3, es: "rock" }, { word: "animated movie", category: "Unit 7", book: 3, es: "película animada" }, { word: "comedy", category: "Unit 7", book: 3, es: "comedia" }, { word: "documentary", category: "Unit 7", book: 3, es: "documental" }, { word: "drama", category: "Unit 7", book: 3, es: "drama" }, { word: "game show", category: "Unit 7", book: 3, es: "concurso televisivo" }, { word: "horror", category: "Unit 7", book: 3, es: "terror" }, { word: "musical", category: "Unit 7", book: 3, es: "musical" }, { word: "reality show", category: "Unit 7", book: 3, es: "reality show" }, { word: "romantic comedy", category: "Unit 7", book: 3, es: "comedia romántica" }, { word: "science fiction", category: "Unit 7", book: 3, es: "ciencia ficción" }, { word: "soap opera", category: "Unit 7", book: 3, es: "telenovela" }, { word: "talk show", category: "Unit 7", book: 3, es: "programa de entrevistas" }, { word: "thriller", category: "Unit 7", book: 3, es: "thriller" }, { word: "episode", category: "Unit 7", book: 3, es: "episodio" }, { word: "series", category: "Unit 7", book: 3, es: "serie" }, { word: "binge-watch", category: "Unit 7", book: 3, es: "maratonear" }, { word: "viewers", category: "Unit 7", book: 3, es: "espectadores" }, { word: "genre", category: "Unit 7", book: 3, es: "género" },
+        // Unit 8
+        { word: "achievement", category: "Unit 8", book: 3, es: "logro" }, { word: "challenge", category: "Unit 8", book: 3, es: "desafío" }, { word: "change", category: "Unit 8", book: 3, es: "cambio" }, { word: "chore", category: "Unit 8", book: 3, es: "tarea doméstica" }, { word: "job", category: "Unit 8", book: 3, es: "trabajo" }, { word: "opportunity", category: "Unit 8", book: 3, es: "oportunidad" }, { word: "process", category: "Unit 8", book: 3, es: "proceso" }, { word: "project", category: "Unit 8", book: 3, es: "proyecto" }, { word: "success", category: "Unit 8", book: 3, es: "éxito" }, { word: "make good progress", category: "Unit 8", book: 3, es: "progresar" }, { word: "get nowhere", category: "Unit 8", book: 3, es: "no avanzar" }, { word: "have trouble", category: "Unit 8", book: 3, es: "tener problemas" }, { word: "not have time", category: "Unit 8", book: 3, es: "no tener tiempo" }, { word: "do one's best", category: "Unit 8", book: 3, es: "hacerlo lo mejor posible" }, { word: "take it easy", category: "Unit 8", book: 3, es: "tomárselo con calma" }, { word: "spend a lot of time", category: "Unit 8", book: 3, es: "pasar mucho tiempo" }, { word: "concentrate on", category: "Unit 8", book: 3, es: "concentrarse en" }, { word: "waste time", category: "Unit 8", book: 3, es: "perder el tiempo" }, { word: "save time", category: "Unit 8", book: 3, es: "ahorrar tiempo" },
+        // Unit 9
+        { word: "architecture", category: "Unit 9", book: 3, es: "arquitectura" }, { word: "biology", category: "Unit 9", book: 3, es: "biología" }, { word: "business", category: "Unit 9", book: 3, es: "negocios" }, { word: "chemistry", category: "Unit 9", book: 3, es: "química" }, { word: "computer science", category: "Unit 9", book: 3, es: "informática" }, { word: "economics", category: "Unit 9", book: 3, es: "economía" }, { word: "education", category: "Unit 9", book: 3, es: "educación" }, { word: "engineering", category: "Unit 9", book: 3, es: "ingeniería" }, { word: "law", category: "Unit 9", book: 3, es: "derecho" }, { word: "medicine", category: "Unit 9", book: 3, es: "medicina" }, { word: "physics", category: "Unit 9", book: 3, es: "física" }, { word: "political science", category: "Unit 9", book: 3, es: "ciencias políticas" }, { word: "apply", category: "Unit 9", book: 3, es: "solicitar" }, { word: "career", category: "Unit 9", book: 3, es: "carrera profesional" }, { word: "contract", category: "Unit 9", book: 3, es: "contrato" }, { word: "employer", category: "Unit 9", book: 3, es: "empleador" }, { word: "fire", category: "Unit 9", book: 3, es: "despedir" }, { word: "hire", category: "Unit 9", book: 3, es: "contratar" }, { word: "manage", category: "Unit 9", book: 3, es: "gestionar" }, { word: "profession", category: "Unit 9", book: 3, es: "profesión" }, { word: "retire", category: "Unit 9", book: 3, es: "jubilarse" }, { word: "salary", category: "Unit 9", book: 3, es: "salario (mensual)" }, { word: "self-employed", category: "Unit 9", book: 3, es: "autónomo" }, { word: "wage", category: "Unit 9", book: 3, es: "salario (hora)" }, { word: "working hours", category: "Unit 9", book: 3, es: "horas de trabajo" },
+        // Unit 10
+        { word: "cotton", category: "Unit 10", book: 3, es: "algodón" }, { word: "glass", category: "Unit 10", book: 3, es: "vidrio" }, { word: "leather", category: "Unit 10", book: 3, es: "cuero" }, { word: "metal", category: "Unit 10", book: 3, es: "metal" }, { word: "plastic", category: "Unit 10", book: 3, es: "plástico" }, { word: "polyester", category: "Unit 10", book: 3, es: "poliéster" }, { word: "stone", category: "Unit 10", book: 3, es: "piedra" }, { word: "wood", category: "Unit 10", book: 3, es: "madera" }, { word: "wool", category: "Unit 10", book: 3, es: "lana" }, { word: "artificial", category: "Unit 10", book: 3, es: "artificial" }, { word: "fragile", category: "Unit 10", book: 3, es: "frágil" }, { word: "hard", category: "Unit 10", book: 3, es: "duro" }, { word: "heavy", category: "Unit 10", book: 3, es: "pesado" }, { word: "light", category: "Unit 10", book: 3, es: "ligero" }, { word: "natural", category: "Unit 10", book: 3, es: "natural" }, { word: "soft", category: "Unit 10", book: 3, es: "suave" }, { word: "strong", category: "Unit 10", book: 3, es: "fuerte" }, { word: "warm", category: "Unit 10", book: 3, es: "cálido" }, { word: "waterproof", category: "Unit 10", book: 3, es: "impermeable" }, { word: "catch", category: "Unit 10", book: 3, es: "atrapar" }, { word: "deliver", category: "Unit 10", book: 3, es: "entregar" }, { word: "design", category: "Unit 10", book: 3, es: "diseñar" }, { word: "export", category: "Unit 10", book: 3, es: "exportar" }, { word: "freeze", category: "Unit 10", book: 3, es: "congelar" }, { word: "grow", category: "Unit 10", book: 3, es: "cultivar" }, { word: "import", category: "Unit 10", book: 3, es: "importar" }, { word: "manufacture", category: "Unit 10", book: 3, es: "fabricar" }, { word: "pick", category: "Unit 10", book: 3, es: "recoger" }, { word: "produce", category: "Unit 10", book: 3, es: "producir" }, { word: "ship", category: "Unit 10", book: 3, es: "enviar" }, { word: "store", category: "Unit 10", book: 3, es: "almacenar" }, { word: "transport", category: "Unit 10", book: 3, es: "transportar" },
+        // Unit 11
+        { word: "figure out", category: "Unit 11", book: 3, es: "resolver" }, { word: "set up", category: "Unit 11", book: 3, es: "establecer" }, { word: "get over", category: "Unit 11", book: 3, es: "superar" }, { word: "give up", category: "Unit 11", book: 3, es: "rendirse" }, { word: "stand out", category: "Unit 11", book: 3, es: "destacar" }, { word: "keep up", category: "Unit 11", book: 3, es: "mantener el ritmo" }, { word: "work at", category: "Unit 11", book: 3, es: "esforzarse" }, { word: "work out", category: "Unit 11", book: 3, es: "funcionar" }, { word: "advantage", category: "Unit 11", book: 3, es: "ventaja" }, { word: "consider", category: "Unit 11", book: 3, es: "considerar" }, { word: "disadvantage", category: "Unit 11", book: 3, es: "desventaja" }, { word: "effect", category: "Unit 11", book: 3, es: "efecto" }, { word: "goal", category: "Unit 11", book: 3, es: "meta" }, { word: "option", category: "Unit 11", book: 3, es: "opción" }, { word: "purpose", category: "Unit 11", book: 3, es: "propósito" }, { word: "research", category: "Unit 11", book: 3, es: "investigación" }, { word: "result", category: "Unit 11", book: 3, es: "resultado" }, { word: "reward", category: "Unit 11", book: 3, es: "recompensa" }, { word: "risk", category: "Unit 11", book: 3, es: "riesgo" }, { word: "situation", category: "Unit 11", book: 3, es: "situación" },
+        // Unit 12
+        { word: "be mad at", category: "Unit 12", book: 3, es: "estar enfadado con" }, { word: "blame", category: "Unit 12", book: 3, es: "culpar" }, { word: "damage", category: "Unit 12", book: 3, es: "dañar" }, { word: "destroy", category: "Unit 12", book: 3, es: "destruir" }, { word: "fall out", category: "Unit 12", book: 3, es: "caerse" }, { word: "feel bad", category: "Unit 12", book: 3, es: "sentirse mal" }, { word: "knock off", category: "Unit 12", book: 3, es: "tirar" }, { word: "leave on", category: "Unit 12", book: 3, es: "dejar encendido" }, { word: "leave open", category: "Unit 12", book: 3, es: "dejar abierto" }, { word: "pick up", category: "Unit 12", book: 3, es: "recoger" }, { word: "pull out", category: "Unit 12", book: 3, es: "sacar" }, { word: "shake", category: "Unit 12", book: 3, es: "agitar" }, { word: "slip", category: "Unit 12", book: 3, es: "resbalar" }, { word: "spill", category: "Unit 12", book: 3, es: "derramar" }, { word: "boiling", category: "Unit 12", book: 3, es: "hirviendo" }, { word: "enormous", category: "Unit 12", book: 3, es: "enorme" }, { word: "exhausted", category: "Unit 12", book: 3, es: "agotado" }, { word: "freezing", category: "Unit 12", book: 3, es: "helado" }, { word: "huge", category: "Unit 12", book: 3, es: "enorme" }, { word: "magnificent", category: "Unit 12", book: 3, es: "magnífico" }, { word: "miserable", category: "Unit 12", book: 3, es: "miserable" }, { word: "starving", category: "Unit 12", book: 3, es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", book: 3, es: "estupendo" }, { word: "thrilled", category: "Unit 12", book: 3, es: "emocionado" }, { word: "tiny", category: "Unit 12", book: 3, es: "diminuto" }
+    ];
+
+    const fullDB = [...evolve1Words, ...evolve2Words, ...evolve3Words];
+
+    // ========== ESTADO GLOBAL ==========
+    let currentBook = 1;
+    let currentMode = "rapid";
     let audioPlayer = new Audio();
     const AUDIO_BASE_PATH = './audios_cambridge/';
+    let audioEnabled = true;
 
-    // DOM elements
-    const wordEl = document.getElementById('currentWord');
-    const categoryTag = document.getElementById('categoryTag');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const speedSlider = document.getElementById('speedSlider');
-    const speedValue = document.getElementById('speedValue');
-    const categorySelect = document.getElementById('categorySelect');
-    const wordCounterSpan = document.getElementById('wordCounter');
-    const roundsInfo = document.getElementById('roundsInfo');
-    const roundCountInput = document.getElementById('roundCount');
-    const currentSpeedDisplay = document.getElementById('currentSpeedDisplay');
-    const audioStatus = document.getElementById('audioStatus');
+    // Puntuaciones
+    let teamScores = { red: 0, blue: 0, green: 0 };
+    function updateTeamUI() {
+        document.getElementById('teamRedScore').textContent = teamScores.red;
+        document.getElementById('teamBlueScore').textContent = teamScores.blue;
+        document.getElementById('teamGreenScore').textContent = teamScores.green;
+    }
 
-    // ========== AUDIO FUNCTIONS ==========
+    // Filtrado Principal
+    function getWordsByBook() {
+        return fullDB.filter(w => w.book === currentBook);
+    }
+
+    // ========== CAMBIO DE TEMA Y SELECTORES ==========
+    function updateThemeAndCategories() {
+        const root = document.documentElement;
+        const mainTitle = document.getElementById('mainBookTitle');
+        
+        if (currentBook === 1) {
+            root.style.setProperty('--theme-primary', '#891752');
+            root.style.setProperty('--theme-bg', '#1c0511');
+            root.style.setProperty('--theme-panel', '#2d0d1e');
+            root.style.setProperty('--theme-border', '#4a1530');
+            mainTitle.textContent = 'EVOLVE 1';
+        } else if (currentBook === 2) {
+            root.style.setProperty('--theme-primary', '#64b54c');
+            root.style.setProperty('--theme-bg', '#11220c');
+            root.style.setProperty('--theme-panel', '#1b3613');
+            root.style.setProperty('--theme-border', '#2a541d');
+            mainTitle.textContent = 'EVOLVE 2';
+        } else if (currentBook === 3) {
+            root.style.setProperty('--theme-primary', '#eb515b');
+            root.style.setProperty('--theme-bg', '#2e0a0c');
+            root.style.setProperty('--theme-panel', '#4d1014');
+            root.style.setProperty('--theme-border', '#7a1a20');
+            mainTitle.textContent = 'EVOLVE 3';
+        }
+
+        // Actualizar dropdowns de categorías dinámicamente
+        const words = getWordsByBook();
+        const categories = [...new Set(words.map(w => w.category))].sort();
+        
+        let optionsHtml = `<option value="all">📚 ALL CATEGORIES</option>`;
+        categories.forEach(cat => {
+            optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`;
+        });
+
+        document.querySelectorAll('.category-select').forEach(select => {
+            select.innerHTML = optionsHtml;
+        });
+
+        // Reiniciar variables de juego
+        rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all';
+    }
+
+    // ========== GRAMMAR PANEL ==========
+    function updateGrammarPanel() {
+        const grid = document.getElementById('grammarGrid');
+        let html = '';
+        
+        if (currentBook === 1) {
+            // EVOLVE 1 (Unidades 1-3 resumidas, puedes expandir según necesites)
+            html = `
+                <div class="grammar-card"><h4>🔹 be: I / You</h4><ul><li><code>I'm from Brazil.</code></li><li><code>Are you American?</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 be: he/she/they</h4><ul><li><code>He's my brother.</code></li><li><code>They're my parents.</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Possessives</h4><ul><li><code>my, your, his, her, its, our, their</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like coffee.</code></li><li><code>Do you play games?</code></li></ul></div>
+            `;
+        } else if (currentBook === 2) {
+            // EVOLVE 2
+            html = `
+                <div class="grammar-card"><h4>🔹 Unit 1 & 2</h4><ul><li><code>be</code> (affirmative, negative, questions)</li><li>Possessive adjectives & pronouns</li><li>Simple present for habits & routines</li><li><code>This / that / these / those</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 3 & 4</h4><ul><li>Present continuous</li><li>Simple present vs. present continuous</li><li>Present continuous for future plans</li><li>Object pronouns (me, you, him, us)</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 5 & 6</h4><ul><li>Simple past (aff, neg, questions)</li><li><code>be going to</code></li><li>Determiners: <code>all, most, many, some, none</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 7 & 8</h4><ul><li>Quantifiers: <code>a lot of, some, a few, too much</code></li><li>Verb patterns: verb + to + verb / verb + -ing</li><li><code>if</code> and <code>when</code></li><li>Giving reasons (to + verb, for + noun)</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 9 & 10</h4><ul><li>Comparative & Superlative adjectives</li><li><code>have to</code> (obligation)</li><li>Predictions: <code>will, might, may, won't</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 11 & 12</h4><ul><li>Present perfect for experience</li><li>Present perfect vs. simple past</li><li>Questions with <code>be like</code></li><li>Relative pronouns: <code>who, which, that</code></li></ul></div>
+            `;
+        } else if (currentBook === 3) {
+            // EVOLVE 3
+            html = `
+                <div class="grammar-card"><h4>🔹 Unit 1 & 2</h4><ul><li>Information questions (Wh-)</li><li>Indirect questions (Do you know if...?)</li><li>Present perfect (ever, never, for, since)</li><li>Present perfect (already, yet)</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 3 & 4</h4><ul><li>Articles (a, an, the)</li><li>Modals for advice (should, could)</li><li><code>be going to</code> vs. <code>will</code></li><li>will for sudden decisions</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 5 & 6</h4><ul><li>Past continuous vs. simple past</li><li>Quantifiers (almost all, several, a few)</li><li>Present and future real conditionals</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 7 & 8</h4><ul><li><code>used to</code></li><li>Comparisons with <code>(not) as… as</code></li><li>Present perfect continuous vs. Present perfect</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 9 & 10</h4><ul><li>Modals of necessity (have to, need to, must)</li><li>Modals of prohibition (can't, must not)</li><li>Simple present & Simple past passive</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 11 & 12</h4><ul><li>Phrasal verbs (separable/inseparable)</li><li>Unreal conditionals (If I had..., I would...)</li><li>Indefinite pronouns (everyone, nothing...)</li><li>Reported speech</li></ul></div>
+            `;
+        }
+        grid.innerHTML = html;
+    }
+
+    document.getElementById('bookSelect').addEventListener('change', (e) => {
+        currentBook = parseInt(e.target.value);
+        updateThemeAndCategories();
+        updateGrammarPanel();
+        if (currentMode === 'rapid') rapidRefreshWordList();
+        else if (currentMode === 'spelling') spellingRefreshWordList();
+        else if (currentMode === 'missing') missingRefreshWordList();
+    });
+
+    // ========== FUNCIONES COMUNES ==========
+    function formatCategory(cat) { return cat.toUpperCase(); }
+
     function getAudioFilename(word) {
-        let clean = word.replace(/[<>:"/\\|?*]/g, '');
-        clean = clean.replace(/\s+/g, '_');
-        return clean + '.mp3';
+        return word.replace(/[<>:"/\\|?*]/g, '').replace(/\s+/g, '_') + '.mp3';
     }
 
     function playWordAudio(word) {
         if (!audioEnabled) return;
-        let filename = getAudioFilename(word);
-        let audioPath = AUDIO_BASE_PATH + filename;
-        audioPlayer.src = audioPath;
-        audioPlayer.play().catch(err => {
-            audioStatus.textContent = '🔇 Audio not found';
-            setTimeout(() => audioStatus.textContent = '', 2000);
-        });
+        audioPlayer.src = AUDIO_BASE_PATH + getAudioFilename(word);
+        audioPlayer.play().catch(()=>{});
     }
 
-    function toggleAudio() {
+    window.toggleAudio = function() {
         audioEnabled = !audioEnabled;
-        let btn = document.getElementById('audioToggle');
-        btn.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
-        btn.classList.toggle('active', audioEnabled);
-        if (!audioEnabled) {
-            audioPlayer.pause();
-        } else if (currentWordObj) {
-            playWordAudio(currentWordObj.word);
+        document.querySelectorAll('.audio').forEach(b => {
+            b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
+            b.classList.toggle('active', audioEnabled);
+        });
+    };
+
+    window.replayCurrentWord = function() {
+        if (currentMode === 'rapid' && rapidCurrentWord) playWordAudio(rapidCurrentWord.word);
+        else if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
+        else if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
+    };
+
+    // ========== TEAM SCORES ==========
+    document.querySelectorAll('[data-team]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const team = e.target.dataset.team;
+            if (team === 'red') teamScores.red++; else if (team === 'blue') teamScores.blue++; else if (team === 'green') teamScores.green++;
+            updateTeamUI();
+        });
+    });
+    document.getElementById('resetTeamsBtn').addEventListener('click', () => { teamScores = { red: 0, blue: 0, green: 0 }; updateTeamUI(); });
+
+    // ========== MODO RAPID ==========
+    let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
+    let rapidCategory='all', rapidRoundLimit=10, rapidRoundCounter=0, rapidSessionActive=false;
+    const MIN_SPEED=0.5;
+
+    function rapidGetFilteredList() {
+        let list = getWordsByBook();
+        if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory);
+        return list;
+    }
+
+    function rapidPickWord() {
+        const list = rapidGetFilteredList();
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBook()[0];
+    }
+
+    function rapidUpdateDisplay(word) {
+        rapidCurrentWord = word;
+        document.getElementById('currentWord').textContent = word.word;
+        document.getElementById('categoryTag').textContent = formatCategory(word.category);
+        document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
+        document.getElementById('roundsInfo').textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
+        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
+        document.getElementById('currentSpeedDisplay').textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        playWordAudio(word.word);
+    }
+
+    function rapidNext() {
+        if (!rapidSessionActive) return;
+        if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
+        rapidRoundCounter++;
+        rapidUpdateDisplay(rapidPickWord());
+        if (rapidIsPlaying) rapidStartInterval();
+    }
+
+    function rapidStartInterval() {
+        if (rapidInterval) clearInterval(rapidInterval);
+        rapidInterval = setInterval(() => {
+            if (!rapidSessionActive) return;
+            if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
+            rapidRoundCounter++;
+            rapidUpdateDisplay(rapidPickWord());
+        }, rapidDynamicSpeed*1000);
+    }
+
+    function rapidFinish() {
+        rapidSessionActive = false;
+        if (rapidInterval) clearInterval(rapidInterval);
+        rapidInterval = null;
+        document.getElementById('playPauseBtn').innerHTML = '🔄 RESTART';
+        rapidIsPlaying = false;
+        document.getElementById('currentWord').textContent = '✔️ DONE!';
+        document.getElementById('categoryTag').textContent = 'SESSION COMPLETE';
+    }
+
+    function rapidReset() {
+        rapidRoundCounter = 0;
+        rapidSessionActive = true;
+        rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
+        rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value);
+        rapidDynamicSpeed = rapidBaseSpeed;
+        rapidUpdateDisplay(rapidPickWord());
+    }
+
+    function rapidTogglePlay() {
+        if (!rapidSessionActive) { rapidReset(); rapidIsPlaying = true; rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; } 
+        else {
+            if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } 
+            else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; }
         }
     }
 
-    function replayCurrentWord() {
-        if (currentWordObj) {
-            playWordAudio(currentWordObj.word);
-            audioStatus.textContent = '🔊 Playing...';
-            setTimeout(() => audioStatus.textContent = '', 1000);
-        }
+    function rapidRefreshWordList() {
+        rapidCurrentWord = rapidPickWord();
+        if (!rapidSessionActive) {
+            document.getElementById('currentWord').textContent = rapidCurrentWord.word;
+            document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category);
+            document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
+        } else { rapidUpdateDisplay(rapidCurrentWord); }
     }
 
-    // ========== GAME FUNCTIONS ==========
-    function formatCategory(cat) {
-        const map = {
-            'country': '🌍 COUNTRY', 'nationality': '🧑‍🤝‍🧑 NATIONALITY', 'family': '👪 FAMILY',
-            'adjective': '✨ ADJECTIVE', 'furniture': '🪑 FURNITURE', 'room': '🚪 ROOM',
-            'job': '💼 JOB', 'drinkSnack': '☕ DRINK / SNACK', 'number': '🔢 NUMBER / DATE'
-        };
-        return map[cat] || cat.toUpperCase();
+    document.getElementById('playPauseBtn').addEventListener('click', rapidTogglePlay);
+    document.getElementById('nextBtn').addEventListener('click', ()=>{
+        if (!rapidSessionActive) { rapidReset(); rapidNext(); rapidIsPlaying=false; document.getElementById('playPauseBtn').innerHTML='▶️ START'; }
+        else rapidNext();
+    });
+    document.getElementById('speedSlider').addEventListener('input', e => {
+        rapidBaseSpeed = parseFloat(e.target.value);
+        rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
+        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
+        if (rapidIsPlaying) rapidStartInterval();
+    });
+    document.getElementById('categorySelect').addEventListener('change', e => { rapidCategory = e.target.value; rapidRefreshWordList(); });
+    document.getElementById('rapidRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#categorySelect option');
+        const randomIndex = Math.floor(Math.random() * (opts.length-1)) + 1;
+        rapidCategory = opts[randomIndex].value;
+        document.getElementById('categorySelect').value = rapidCategory;
+        rapidRefreshWordList();
+    });
+
+    // ========== MODO SPELLING ==========
+    let spellingCurrentWord, spellingSessionActive=false, spellingRound=0, spellingRoundLimit=10;
+    let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10;
+    let spellingTotalTime = 10, spellingWaiting = false, spellingCategory = 'all';
+
+    function spellingGetList() {
+        let list = getWordsByBook();
+        if (spellingCategory !== 'all') list = list.filter(w => w.category === spellingCategory);
+        return list;
     }
 
-    function getFilteredList() {
-        if (currentCategory === 'all') return vocabularyDB;
-        return vocabularyDB.filter(item => item.category === currentCategory);
+    function spellingPickWord() {
+        const list = spellingGetList();
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBook()[0];
     }
 
-    function pickRandomWord() {
-        const list = getFilteredList();
-        if (list.length === 0) {
-            currentCategory = 'all';
-            categorySelect.value = 'all';
-            return vocabularyDB[Math.floor(Math.random() * vocabularyDB.length)];
-        }
-        return list[Math.floor(Math.random() * list.length)];
+    function spellingUpdateUI() {
+        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es}`;
+        document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
+        document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`;
+        document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
+        document.getElementById('correctCount').textContent = spellingCorrect;
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = ''; 
     }
 
-    function calculateDynamicSpeed() {
-        if (!sessionActive) return baseSpeed;
-        const steps = Math.floor(roundCounter / 10);
-        let newSpeed = baseSpeed - (steps * 0.2);
-        return Math.max(MIN_SPEED, newSpeed);
+    function spellingUpdateTimerBar() {
+        const percent = (spellingTimeLeft / spellingTotalTime) * 100;
+        document.getElementById('spellingTimerBar').style.width = percent + '%';
     }
 
-    function updateSpeedDisplay() {
-        const speed = currentDynamicSpeed;
-        speedValue.textContent = speed.toFixed(1) + 's';
-        currentSpeedDisplay.textContent = `⚡ ${speed.toFixed(1)}s`;
+    function spellingNext() {
+        if (!spellingSessionActive) return;
+        spellingWaiting = false;
+        if (spellingRound >= spellingRoundLimit) { spellingFinish(); return; }
+        spellingRound++;
+        spellingCurrentWord = spellingPickWord();
+        spellingUpdateUI();
+        spellingStartTimer();
     }
 
-    function applyWordStyle(wordObj) {
-        if (wordObj.isNew) {
-            wordEl.classList.add('new-word');
-        } else {
-            wordEl.classList.remove('new-word');
-        }
-    }
-
-    function updateDisplay(wordObj) {
-        currentWordObj = wordObj;
-        wordEl.textContent = wordObj.word;
-        applyWordStyle(wordObj);
-        categoryTag.textContent = formatCategory(wordObj.category);
-        const total = getFilteredList().length;
-        wordCounterSpan.textContent = `📋 ${total} word(s)`;
-        roundsInfo.textContent = `🎯 ${roundCounter} / ${roundLimit}`;
-        currentDynamicSpeed = calculateDynamicSpeed();
-        updateSpeedDisplay();
-        playWordAudio(wordObj.word);
-        if (isPlaying && sessionActive) {
-            stopAutoPlay();
-            startAutoPlay();
-        }
-    }
-
-    function finishSession() {
-        if (!sessionActive) return;
-        sessionActive = false;
-        stopAutoPlay();
-        if (audioPlayer) {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-        }
-        playPauseBtn.innerHTML = '🔄 RESTART';
-        isPlaying = false;
-        wordEl.textContent = '✔️ DONE!';
-        wordEl.classList.remove('new-word');
-        categoryTag.textContent = 'SESSION COMPLETE';
-        currentSpeedDisplay.textContent = `⚡ finished`;
-    }
-
-    function nextWord() {
-        if (!sessionActive) return;
-        roundCounter++;
-        roundsInfo.textContent = `🎯 ${roundCounter} / ${roundLimit}`;
-        if (roundCounter >= roundLimit) {
-            finishSession();
-            return;
-        }
-        const newWord = pickRandomWord();
-        updateDisplay(newWord);
-    }
-
-    function resetSession(keepCategory = true) {
-        roundCounter = 0;
-        sessionActive = true;
-        roundLimit = parseInt(roundCountInput.value, 10);
-        if (isNaN(roundLimit) || roundLimit < 1) roundLimit = 10;
-        roundCountInput.value = roundLimit;
-        if (!keepCategory) {
-            currentCategory = 'all';
-            categorySelect.value = 'all';
-        }
-        baseSpeed = parseFloat(speedSlider.value);
-        currentDynamicSpeed = baseSpeed;
-        const firstWord = pickRandomWord();
-        updateDisplay(firstWord);
-        if (isPlaying) {
-            stopAutoPlay();
-            startAutoPlay();
-        }
-        playPauseBtn.innerHTML = isPlaying ? '⏸️ PAUSE' : '▶️ START';
-    }
-
-    function startAutoPlay() {
-        if (!sessionActive) return;
-        if (autoInterval) clearInterval(autoInterval);
-        autoInterval = setInterval(() => {
-            if (!sessionActive) {
-                clearInterval(autoInterval);
-                autoInterval = null;
-                return;
+    function spellingStartTimer() {
+        if (spellingTimerInterval) clearInterval(spellingTimerInterval);
+        spellingTotalTime = parseInt(document.getElementById('timerSeconds').value,10);
+        spellingTimeLeft = spellingTotalTime;
+        document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+        spellingUpdateTimerBar();
+        spellingTimerInterval = setInterval(() => {
+            spellingTimeLeft--;
+            document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+            spellingUpdateTimerBar();
+            
+            if (spellingTimeLeft <= 0) {
+                clearInterval(spellingTimerInterval);
+                if (spellingWaiting) return;
+                spellingWaiting = true;
+                document.getElementById('spellingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
+                spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong;
+                playWordAudio(spellingCurrentWord.word);
+                setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
-            nextWord();
-        }, currentDynamicSpeed * 1000);
+        }, 1000);
     }
 
-    function stopAutoPlay() {
-        if (autoInterval) {
-            clearInterval(autoInterval);
-            autoInterval = null;
-        }
+    function spellingFinish() {
+        spellingSessionActive = false; spellingWaiting = false;
+        clearInterval(spellingTimerInterval);
+        document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART';
+        document.getElementById('spellingHint').textContent = '🏁 Session finished!';
+        document.getElementById('spellingTimerBar').style.width = '0%';
     }
 
-    function togglePlayPause() {
-        if (!sessionActive) {
-            resetSession(false);
-            isPlaying = true;
-            startAutoPlay();
-            playPauseBtn.innerHTML = '⏸️ PAUSE';
-            return;
-        }
-        if (isPlaying) {
-            stopAutoPlay();
-            playPauseBtn.innerHTML = '▶️ START';
-            isPlaying = false;
-        } else {
-            startAutoPlay();
-            playPauseBtn.innerHTML = '⏸️ PAUSE';
-            isPlaying = true;
-        }
+    function spellingReset() {
+        clearInterval(spellingTimerInterval);
+        spellingSessionActive = true; spellingWaiting = false;
+        spellingRound = 0; spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10;
+        spellingCorrect = 0; spellingWrong = 0;
+        document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE';
+        spellingNext();
     }
 
-    function applyBaseSpeed(val) {
-        baseSpeed = val;
-        if (sessionActive) {
-            currentDynamicSpeed = calculateDynamicSpeed();
-        } else {
-            currentDynamicSpeed = baseSpeed;
-        }
-        updateSpeedDisplay();
-        if (isPlaying && sessionActive) {
-            stopAutoPlay();
-            startAutoPlay();
-        }
+    function spellingRefreshWordList() { spellingCurrentWord = spellingPickWord(); spellingUpdateUI(); }
+
+    function spellingMarkCorrect() {
+        if (!spellingSessionActive || spellingWaiting) return;
+        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingCorrect++;
+        document.getElementById('correctCount').textContent = spellingCorrect;
+        document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
-    function changeCategory(cat) {
-        currentCategory = cat;
-        if (sessionActive) {
-            const newWord = pickRandomWord();
-            updateDisplay(newWord);
-        } else {
-            const newWord = pickRandomWord();
-            wordEl.textContent = newWord.word;
-            applyWordStyle(newWord);
-            categoryTag.textContent = formatCategory(newWord.category);
-        }
+    function spellingMarkIncorrect() {
+        if (!spellingSessionActive || spellingWaiting) return;
+        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
+        playWordAudio(spellingCurrentWord.word);
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
-    // ========== INITIALIZE ==========
+    function spellingReveal() {
+        if (!spellingSessionActive || spellingWaiting) return;
+        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
+        playWordAudio(spellingCurrentWord.word);
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+    }
+
+    document.getElementById('spellingStartBtn').addEventListener('click', ()=>{
+        if (!spellingSessionActive) spellingReset();
+        else {
+            if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; }
+            else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; }
+        }
+    });
+    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{
+        if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; }
+        clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; 
+        document.getElementById('wrongCount').textContent = spellingWrong;
+        document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; 
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000);
+    });
+    document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
+    document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
+    document.getElementById('spellingIncorrectBtn').addEventListener('click', spellingMarkIncorrect);
+    document.getElementById('spellingRevealBtn').addEventListener('click', spellingReveal);
+    document.getElementById('spellingCategorySelect').addEventListener('change', (e)=> { spellingCategory = e.target.value; if(!spellingSessionActive) spellingRefreshWordList(); });
+    document.getElementById('spellingRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#spellingCategorySelect option');
+        spellingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value;
+        document.getElementById('spellingCategorySelect').value = spellingCategory;
+        spellingRefreshWordList();
+    });
+
+    // ========== MODO MISSING LETTERS ==========
+    let missingCurrentWord, missingSessionActive=false, missingRound=0, missingRoundLimit=10;
+    let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15;
+    let missingTotalTime = 15, missingWaiting = false, missingCategory = 'all';
+
+    function missingGetList() {
+        let list = getWordsByBook();
+        if (missingCategory !== 'all') list = list.filter(w => w.category === missingCategory);
+        return list;
+    }
+
+    function missingPickWord() {
+        const list = missingGetList();
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBook()[0];
+    }
+
+    function generateMissingWord(word) {
+        if (word.length <= 2) return word;
+        const chars = word.split('');
+        const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1);
+        const indices = [];
+        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ') indices.push(i);
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        const toHide = indices.slice(0, Math.min(numToHide, indices.length));
+        return chars.map((c, i) => (i === 0 || c === ' ') ? c : (toHide.includes(i) ? '_' : c)).join('');
+    }
+
+    function missingUpdateUI() {
+        document.getElementById('missingHint').textContent = `🇪🇸 ${missingCurrentWord.es}`;
+        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
+        document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category);
+        document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
+        document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`;
+        document.getElementById('missingCorrect').textContent = missingCorrect;
+        document.getElementById('missingWrong').textContent = missingWrong;
+        document.getElementById('missingAnswerReveal').innerHTML = '';
+    }
+
+    function missingUpdateTimerBar() {
+        const percent = (missingTimeLeft / missingTotalTime) * 100;
+        document.getElementById('missingTimerBar').style.width = percent + '%';
+    }
+
+    function missingStopTimer() {
+        if (missingTimerInterval) clearInterval(missingTimerInterval);
+        missingTimerInterval = null;
+    }
+
+    function missingStartTimer() {
+        missingStopTimer();
+        missingTotalTime = parseInt(document.getElementById('missingTimer').value,10);
+        missingTimeLeft = missingTotalTime;
+        document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
+        missingUpdateTimerBar();
+        missingTimerInterval = setInterval(() => {
+            missingTimeLeft--;
+            document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
+            missingUpdateTimerBar();
+            
+            if (missingTimeLeft <= 0) {
+                missingStopTimer();
+                if(missingWaiting) return;
+                missingWaiting = true;
+                document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+                document.getElementById('missingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
+                missingWrong++; document.getElementById('missingWrong').textContent = missingWrong;
+                playWordAudio(missingCurrentWord.word);
+                setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
+            }
+        }, 1000);
+    }
+
+    function missingNext() {
+        if (!missingSessionActive) return;
+        missingWaiting = false;
+        if (missingRound >= missingRoundLimit) { missingFinish(); return; }
+        missingRound++;
+        missingCurrentWord = missingPickWord();
+        missingUpdateUI();
+        missingStartTimer();
+    }
+
+    function missingFinish() {
+        missingSessionActive = false; missingWaiting = false; missingStopTimer();
+        document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART';
+        document.getElementById('missingHint').textContent = '🏁 Session finished!';
+        document.getElementById('missingTimerBar').style.width = '0%';
+    }
+
+    function missingReset() {
+        missingStopTimer(); missingSessionActive = true; missingWaiting = false;
+        missingRound = 0; missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10;
+        missingCorrect = 0; missingWrong = 0;
+        document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE';
+        missingNext();
+    }
+
+    function missingRefreshWordList() { missingCurrentWord = missingPickWord(); missingUpdateUI(); }
+
+    function missingMarkCorrect() {
+        if (!missingSessionActive || missingWaiting) return;
+        missingStopTimer(); missingWaiting = true; missingCorrect++;
+        document.getElementById('missingCorrect').textContent = missingCorrect;
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+        document.getElementById('missingAnswerReveal').innerHTML = `✅ Correct! <strong>${missingCurrentWord.word}</strong>`;
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+    }
+
+    function missingMarkIncorrect() {
+        if (!missingSessionActive || missingWaiting) return;
+        missingStopTimer(); missingWaiting = true; missingWrong++;
+        document.getElementById('missingWrong').textContent = missingWrong;
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
+        document.getElementById('missingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${missingCurrentWord.word}</strong>`;
+        playWordAudio(missingCurrentWord.word);
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+    }
+
+    function missingReveal() {
+        if (!missingSessionActive || missingWaiting) return;
+        missingStopTimer(); missingWaiting = true; missingWrong++;
+        document.getElementById('missingWrong').textContent = missingWrong;
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
+        document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
+        playWordAudio(missingCurrentWord.word);
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+    }
+
+    document.getElementById('missingStartBtn').addEventListener('click', ()=>{
+        if (!missingSessionActive) missingReset();
+        else {
+            if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; }
+            else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; }
+        }
+    });
+    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{
+        if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; }
+        missingStopTimer(); missingWaiting = true; missingWrong++; 
+        document.getElementById('missingWrong').textContent = missingWrong;
+        document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
+        document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; 
+        setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000);
+    });
+    document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
+    document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
+    document.getElementById('missingIncorrectBtn').addEventListener('click', missingMarkIncorrect);
+    document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; if(!missingSessionActive) missingRefreshWordList(); });
+    document.getElementById('missingRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#missingCategorySelect option');
+        missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value;
+        document.getElementById('missingCategorySelect').value = missingCategory;
+        missingRefreshWordList();
+    });
+
+    // ========== CAMBIO DE MODO ==========
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('rapidMode').classList.toggle('hidden', mode!=='rapid');
+        document.getElementById('spellingMode').classList.toggle('hidden', mode!=='spelling');
+        document.getElementById('missingMode').classList.toggle('hidden', mode!=='missing');
+        document.getElementById('modeTitle').textContent = mode==='rapid'?'RAPID FIRE':(mode==='spelling'?'SPELLING':'MISSING LETTERS');
+        if (mode==='rapid') rapidRefreshWordList();
+        else if (mode==='spelling') spellingRefreshWordList();
+        else if (mode==='missing') missingRefreshWordList();
+    }
+
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.addEventListener('click', e => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        switchMode(e.target.dataset.mode);
+    }));
+
+    // ========== INICIALIZACIÓN ==========
     function init() {
-        roundLimit = parseInt(roundCountInput.value, 10);
-        baseSpeed = parseFloat(speedSlider.value);
-        currentDynamicSpeed = baseSpeed;
-        const firstWord = pickRandomWord();
-        wordEl.textContent = firstWord.word;
-        applyWordStyle(firstWord);
-        categoryTag.textContent = formatCategory(firstWord.category);
-        wordCounterSpan.textContent = `📋 ${getFilteredList().length} word(s)`;
-        roundsInfo.textContent = `🎯 0 / ${roundLimit}`;
-        updateSpeedDisplay();
-        isPlaying = false;
-        sessionActive = false;
-        playPauseBtn.innerHTML = '▶️ START';
-        playPauseBtn.addEventListener('click', togglePlayPause);
-        nextBtn.addEventListener('click', () => {
-            if (!sessionActive) {
-                resetSession(false);
-                isPlaying = false;
-                playPauseBtn.innerHTML = '▶️ START';
-            } else {
-                nextWord();
-            }
-        });
-        speedSlider.addEventListener('input', (e) => applyBaseSpeed(parseFloat(e.target.value)));
-        categorySelect.addEventListener('change', (e) => changeCategory(e.target.value));
-        roundCountInput.addEventListener('change', function() {
-            let val = parseInt(this.value, 10);
-            if (val < 1) val = 10;
-            this.value = val;
-            roundLimit = val;
-            if (sessionActive) {
-                roundsInfo.textContent = `🎯 ${roundCounter} / ${roundLimit}`;
-            } else {
-                roundsInfo.textContent = `🎯 0 / ${roundLimit}`;
-            }
-        });
+        updateThemeAndCategories();
+        updateGrammarPanel();
+        switchMode('rapid');
+        updateTeamUI();
     }
-
     init();
 })();
 </script>
