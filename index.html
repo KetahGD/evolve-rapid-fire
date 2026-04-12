@@ -19,7 +19,7 @@
             padding: 16px;
         }
         .game-container {
-            max-width: 1200px;
+            max-width: 1300px;
             width: 100%;
             background: #13222e;
             border-radius: 40px;
@@ -165,6 +165,7 @@
         .btn.danger { background: #9e4a4a; color: white; }
         .btn.audio { background: #3a6b5e; }
         .btn.audio.active { background: #4caf90; }
+        .btn.team { padding: 8px 16px; font-size: 1rem; }
         .speed-control, .round-selector, .timer-control {
             display: flex;
             align-items: center;
@@ -239,7 +240,37 @@
         }
         .hint-text { font-size: 2.5rem; color: #f2e0ca; margin: 20px 0; }
         .timer-display { font-size: 3rem; font-weight: 800; color: #e5b567; }
+        .timer-bar {
+            width: 100%;
+            height: 12px;
+            background: #1e3a4a;
+            border-radius: 20px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .timer-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: #e5b567;
+            transition: width 1s linear;
+        }
         .score-area { display: flex; gap: 30px; font-size: 1.5rem; color: #ddcdb7; }
+        .team-scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 10px 0 5px;
+        }
+        .team {
+            background: #1a2f3c;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #5b7a93;
+        }
+        .team span { font-size: 1.8rem; font-weight: 800; color: #fad6a0; min-width: 3rem; text-align: center; }
         .hidden { display: none !important; }
         .missing-word {
             font-size: 5rem;
@@ -255,11 +286,11 @@
             color: #e5b567;
             margin-top: 20px;
         }
-        .eval-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+        .random-btn {
+            background: #5f4a3a;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -273,6 +304,14 @@
         <button class="mode-btn" data-mode="missing">🔘 MISSING LETTERS</button>
     </div>
 
+    <!-- Pizarra de equipos (TV friendly) -->
+    <div class="team-scoreboard">
+        <div class="team"><span style="color:#ff6b6b;">🔴</span> <span id="teamRedScore">0</span> <button class="btn team" data-team="red">+1</button></div>
+        <div class="team"><span style="color:#6ba6ff;">🔵</span> <span id="teamBlueScore">0</span> <button class="btn team" data-team="blue">+1</button></div>
+        <div class="team"><span style="color:#6fcf97;">🟢</span> <span id="teamGreenScore">0</span> <button class="btn team" data-team="green">+1</button></div>
+        <button class="btn" id="resetTeamsBtn">🔄 Reset</button>
+    </div>
+
     <div class="course-selector">
         <label>📚 COURSE:</label>
         <select id="courseSelect">
@@ -283,7 +322,7 @@
         </select>
     </div>
 
-    <!-- RAPID FIRE MODE (sin cambios) -->
+    <!-- RAPID FIRE MODE -->
     <div id="rapidMode">
         <div class="subhead">⚡ UNITS 1–9 · FORM A SENTENCE! · <span style="color:#e5b567;">🔊 with audio</span></div>
         <div class="word-card">
@@ -308,36 +347,22 @@
         <div class="filter-area">
             <select id="categorySelect">
                 <option value="all">📚 ALL CATEGORIES</option>
-                <option value="country">🌍 Countries</option>
-                <option value="nationality">🧑‍🤝‍🧑 Nationalities</option>
-                <option value="family">👪 Family</option>
-                <option value="adjective">✨ Adjectives</option>
-                <option value="furniture">🪑 Furniture</option>
-                <option value="room">🚪 Rooms</option>
-                <option value="job">💼 Jobs</option>
-                <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers/Dates</option>
-                <option value="technology">📱 Technology</option>
-                <option value="activities">🎯 Activities</option>
-                <option value="cityPlace">🏙️ City Places</option>
-                <option value="nature">🌿 Nature</option>
-                <option value="transport">🚗 Transport</option>
-                <option value="skill">🎨 Skills</option>
-                <option value="travel">✈️ Travel</option>
+                <option value="country">🌍 Countries</option><option value="nationality">🧑‍🤝‍🧑 Nationalities</option><option value="family">👪 Family</option><option value="adjective">✨ Adjectives</option><option value="furniture">🪑 Furniture</option><option value="room">🚪 Rooms</option><option value="job">💼 Jobs</option><option value="drinkSnack">☕ Drinks & Snacks</option><option value="number">🔢 Numbers/Dates</option><option value="technology">📱 Technology</option><option value="activities">🎯 Activities</option><option value="cityPlace">🏙️ City Places</option><option value="nature">🌿 Nature</option><option value="transport">🚗 Transport</option><option value="skill">🎨 Skills</option><option value="travel">✈️ Travel</option>
             </select>
+            <button class="btn random-btn" id="rapidRandomCat">🎲 Random</button>
             <span class="counter" id="wordCounter">📋 0 words</span>
             <span class="progress-badge" id="roundsInfo">🎯 0 / 10</span>
             <span class="speed-indicator" id="currentSpeedDisplay">⚡ 1.8s</span>
-            <span id="audioStatus"></span>
         </div>
     </div>
 
-    <!-- SPELLING MODE (adaptado sin input de texto) -->
+    <!-- SPELLING MODE (con barra de progreso y reveal) -->
     <div id="spellingMode" class="hidden">
         <div class="subhead">🔤 SPELLING CHALLENGE · Say the word aloud</div>
         <div class="word-card">
             <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
             <div class="timer-display" id="timerDisplay">10</div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
             <div class="category-badge" id="spellingCategory">🌍 COUNTRY</div>
             <div id="spellingAnswerReveal" class="answer-reveal"></div>
         </div>
@@ -345,6 +370,7 @@
             <button class="btn primary" id="spellingStartBtn">▶️ START</button>
             <button class="btn" id="spellingNextBtn">⏩ SKIP</button>
             <button class="btn audio" id="spellingAudioBtn">🔊 PLAY</button>
+            <button class="btn" id="spellingRevealBtn">🔎 REVEAL</button>
             <button class="btn success" id="spellingCorrectBtn">✅ CORRECT</button>
             <button class="btn danger" id="spellingIncorrectBtn">❌ INCORRECT</button>
             <div class="timer-control">
@@ -359,23 +385,9 @@
         <div class="filter-area">
             <select id="spellingCategorySelect">
                 <option value="all">📚 ALL CATEGORIES</option>
-                <option value="country">🌍 Countries</option>
-                <option value="nationality">🧑‍🤝‍🧑 Nationalities</option>
-                <option value="family">👪 Family</option>
-                <option value="adjective">✨ Adjectives</option>
-                <option value="furniture">🪑 Furniture</option>
-                <option value="room">🚪 Rooms</option>
-                <option value="job">💼 Jobs</option>
-                <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers/Dates</option>
-                <option value="technology">📱 Technology</option>
-                <option value="activities">🎯 Activities</option>
-                <option value="cityPlace">🏙️ City Places</option>
-                <option value="nature">🌿 Nature</option>
-                <option value="transport">🚗 Transport</option>
-                <option value="skill">🎨 Skills</option>
-                <option value="travel">✈️ Travel</option>
+                <option value="country">🌍 Countries</option><option value="nationality">🧑‍🤝‍🧑 Nationalities</option><option value="family">👪 Family</option><option value="adjective">✨ Adjectives</option><option value="furniture">🪑 Furniture</option><option value="room">🚪 Rooms</option><option value="job">💼 Jobs</option><option value="drinkSnack">☕ Drinks & Snacks</option><option value="number">🔢 Numbers/Dates</option><option value="technology">📱 Technology</option><option value="activities">🎯 Activities</option><option value="cityPlace">🏙️ City Places</option><option value="nature">🌿 Nature</option><option value="transport">🚗 Transport</option><option value="skill">🎨 Skills</option><option value="travel">✈️ Travel</option>
             </select>
+            <button class="btn random-btn" id="spellingRandomCat">🎲 Random</button>
             <span class="counter" id="spellingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="spellingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
@@ -386,13 +398,14 @@
         <div id="spellingFeedback" class="feedback"></div>
     </div>
 
-    <!-- MISSING LETTERS MODE (adaptado sin input de texto) -->
+    <!-- MISSING LETTERS MODE (con barra de progreso) -->
     <div id="missingMode" class="hidden">
         <div class="subhead">🔘 MISSING LETTERS · Complete the word aloud</div>
         <div class="word-card">
             <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
             <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
             <div class="timer-display" id="missingTimerDisplay">15</div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
             <div class="category-badge" id="missingCategory">🌍 COUNTRY</div>
             <div id="missingAnswerReveal" class="answer-reveal"></div>
         </div>
@@ -414,23 +427,9 @@
         <div class="filter-area">
             <select id="missingCategorySelect">
                 <option value="all">📚 ALL CATEGORIES</option>
-                <option value="country">🌍 Countries</option>
-                <option value="nationality">🧑‍🤝‍🧑 Nationalities</option>
-                <option value="family">👪 Family</option>
-                <option value="adjective">✨ Adjectives</option>
-                <option value="furniture">🪑 Furniture</option>
-                <option value="room">🚪 Rooms</option>
-                <option value="job">💼 Jobs</option>
-                <option value="drinkSnack">☕ Drinks & Snacks</option>
-                <option value="number">🔢 Numbers/Dates</option>
-                <option value="technology">📱 Technology</option>
-                <option value="activities">🎯 Activities</option>
-                <option value="cityPlace">🏙️ City Places</option>
-                <option value="nature">🌿 Nature</option>
-                <option value="transport">🚗 Transport</option>
-                <option value="skill">🎨 Skills</option>
-                <option value="travel">✈️ Travel</option>
+                <option value="country">🌍 Countries</option><option value="nationality">🧑‍🤝‍🧑 Nationalities</option><option value="family">👪 Family</option><option value="adjective">✨ Adjectives</option><option value="furniture">🪑 Furniture</option><option value="room">🚪 Rooms</option><option value="job">💼 Jobs</option><option value="drinkSnack">☕ Drinks & Snacks</option><option value="number">🔢 Numbers/Dates</option><option value="technology">📱 Technology</option><option value="activities">🎯 Activities</option><option value="cityPlace">🏙️ City Places</option><option value="nature">🌿 Nature</option><option value="transport">🚗 Transport</option><option value="skill">🎨 Skills</option><option value="travel">✈️ Travel</option>
             </select>
+            <button class="btn random-btn" id="missingRandomCat">🎲 Random</button>
             <span class="counter" id="missingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="missingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
@@ -441,7 +440,7 @@
         <div id="missingFeedback" class="feedback"></div>
     </div>
 
-    <!-- GRAMMAR PANEL (enriquecido) -->
+    <!-- GRAMMAR PANEL -->
     <div class="grammar-panel">
         <div class="grammar-title">📘 GRAMMAR & VOCABULARY · <span id="grammarCourseLabel">Course 1 (Units 1–3)</span></div>
         <div class="grammar-grid" id="grammarGrid"></div>
@@ -707,12 +706,21 @@
     const AUDIO_BASE_PATH = './audios_cambridge/';
     let audioEnabled = true;
 
+    // Puntuaciones de equipos
+    let teamScores = { red: 0, blue: 0, green: 0 };
+
+    function updateTeamUI() {
+        document.getElementById('teamRedScore').textContent = teamScores.red;
+        document.getElementById('teamBlueScore').textContent = teamScores.blue;
+        document.getElementById('teamGreenScore').textContent = teamScores.green;
+    }
+
     function filterByCourse(words, course) {
         if (course === 'all') return words;
         return words.filter(w => w.course === parseInt(course));
     }
 
-    // ========== GRAMMAR PANEL (ENRIQUECIDO) ==========
+    // ========== GRAMMAR PANEL ==========
     function updateGrammarPanel(course) {
         const grid = document.getElementById('grammarGrid');
         const label = document.getElementById('grammarCourseLabel');
@@ -799,6 +807,21 @@
         else if (currentMode === 'spelling' && spellingCurrentWord) playWordAudio(spellingCurrentWord.word);
         else if (currentMode === 'missing' && missingCurrentWord) playWordAudio(missingCurrentWord.word);
     };
+
+    // ========== TEAM SCORES ==========
+    document.querySelectorAll('[data-team]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const team = e.target.dataset.team;
+            if (team === 'red') teamScores.red++;
+            else if (team === 'blue') teamScores.blue++;
+            else if (team === 'green') teamScores.green++;
+            updateTeamUI();
+        });
+    });
+    document.getElementById('resetTeamsBtn').addEventListener('click', () => {
+        teamScores = { red: 0, blue: 0, green: 0 };
+        updateTeamUI();
+    });
 
     // ========== MODO RAPID ==========
     let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
@@ -910,10 +933,18 @@
     });
     document.getElementById('categorySelect').addEventListener('change', e => { rapidCategory = e.target.value; rapidRefreshWordList(); });
     document.getElementById('roundCount').addEventListener('change', e => { rapidRoundLimit = parseInt(e.target.value)||10; });
+    document.getElementById('rapidRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#categorySelect option');
+        const randomIndex = Math.floor(Math.random() * (opts.length-1)) + 1;
+        rapidCategory = opts[randomIndex].value;
+        document.getElementById('categorySelect').value = rapidCategory;
+        rapidRefreshWordList();
+    });
 
-    // ========== MODO SPELLING (adaptado sin input) ==========
+    // ========== MODO SPELLING (con barra y reveal) ==========
     let spellingCurrentWord, spellingSessionActive=false, spellingRound=0, spellingRoundLimit=10;
     let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10;
+    let spellingTotalTime = 10;
 
     function spellingGetList() {
         let list = filterByCourse(fullDB, currentCourse);
@@ -938,6 +969,11 @@
         document.getElementById('spellingFeedback').innerHTML = '';
     }
 
+    function spellingUpdateTimerBar() {
+        const percent = (spellingTimeLeft / spellingTotalTime) * 100;
+        document.getElementById('spellingTimerBar').style.width = percent + '%';
+    }
+
     function spellingNext() {
         if (!spellingSessionActive) return;
         if (spellingRound >= spellingRoundLimit) { spellingFinish(); return; }
@@ -949,18 +985,19 @@
 
     function spellingStartTimer() {
         if (spellingTimerInterval) clearInterval(spellingTimerInterval);
-        spellingTimeLeft = parseInt(document.getElementById('timerSeconds').value,10);
+        spellingTotalTime = parseInt(document.getElementById('timerSeconds').value,10);
+        spellingTimeLeft = spellingTotalTime;
         document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+        spellingUpdateTimerBar();
         spellingTimerInterval = setInterval(() => {
             spellingTimeLeft--;
             document.getElementById('timerDisplay').textContent = spellingTimeLeft;
+            spellingUpdateTimerBar();
             if (spellingTimeLeft <= 0) {
                 clearInterval(spellingTimerInterval);
-                // Mostrar respuesta
                 document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
                 spellingWrong++;
                 spellingUpdateUI();
-                // Esperar para avanzar automáticamente
                 setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
         }, 1000);
@@ -971,6 +1008,7 @@
         clearInterval(spellingTimerInterval);
         document.getElementById('spellingStartBtn').innerHTML = '🔄 RESTART';
         document.getElementById('spellingHint').textContent = '🏁 Session finished!';
+        document.getElementById('spellingTimerBar').style.width = '0%';
     }
 
     function spellingReset() {
@@ -1006,6 +1044,15 @@
         setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
+    function spellingReveal() {
+        if (!spellingSessionActive) return;
+        clearInterval(spellingTimerInterval);
+        spellingWrong++;
+        document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
+        spellingUpdateUI();
+        setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+    }
+
     document.getElementById('spellingStartBtn').addEventListener('click', ()=>{
         if (!spellingSessionActive) spellingReset();
         else {
@@ -1020,11 +1067,19 @@
     document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
     document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
     document.getElementById('spellingIncorrectBtn').addEventListener('click', spellingMarkIncorrect);
+    document.getElementById('spellingRevealBtn').addEventListener('click', spellingReveal);
     document.getElementById('spellingCategorySelect').addEventListener('change', ()=> { if(!spellingSessionActive) spellingRefreshWordList(); });
+    document.getElementById('spellingRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#spellingCategorySelect option');
+        const idx = Math.floor(Math.random() * (opts.length-1)) + 1;
+        document.getElementById('spellingCategorySelect').value = opts[idx].value;
+        spellingRefreshWordList();
+    });
 
-    // ========== MODO MISSING LETTERS (adaptado sin input) ==========
+    // ========== MODO MISSING LETTERS ==========
     let missingCurrentWord, missingSessionActive=false, missingRound=0, missingRoundLimit=10;
     let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15;
+    let missingTotalTime = 15;
 
     function missingGetList() {
         let list = filterByCourse(fullDB, currentCourse);
@@ -1069,6 +1124,11 @@
         document.getElementById('missingFeedback').innerHTML = '';
     }
 
+    function missingUpdateTimerBar() {
+        const percent = (missingTimeLeft / missingTotalTime) * 100;
+        document.getElementById('missingTimerBar').style.width = percent + '%';
+    }
+
     function missingStopTimer() {
         if (missingTimerInterval) clearInterval(missingTimerInterval);
         missingTimerInterval = null;
@@ -1076,11 +1136,14 @@
 
     function missingStartTimer() {
         missingStopTimer();
-        missingTimeLeft = parseInt(document.getElementById('missingTimer').value,10);
+        missingTotalTime = parseInt(document.getElementById('missingTimer').value,10);
+        missingTimeLeft = missingTotalTime;
         document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
+        missingUpdateTimerBar();
         missingTimerInterval = setInterval(() => {
             missingTimeLeft--;
             document.getElementById('missingTimerDisplay').textContent = missingTimeLeft;
+            missingUpdateTimerBar();
             if (missingTimeLeft <= 0) {
                 missingStopTimer();
                 document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
@@ -1105,6 +1168,7 @@
         missingStopTimer();
         document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART';
         document.getElementById('missingHint').textContent = '🏁 Session finished!';
+        document.getElementById('missingTimerBar').style.width = '0%';
     }
 
     function missingReset() {
@@ -1164,6 +1228,12 @@
     document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
     document.getElementById('missingIncorrectBtn').addEventListener('click', missingMarkIncorrect);
     document.getElementById('missingCategorySelect').addEventListener('change', ()=> { if(!missingSessionActive) missingRefreshWordList(); });
+    document.getElementById('missingRandomCat').addEventListener('click', ()=>{
+        const opts = document.querySelectorAll('#missingCategorySelect option');
+        const idx = Math.floor(Math.random() * (opts.length-1)) + 1;
+        document.getElementById('missingCategorySelect').value = opts[idx].value;
+        missingRefreshWordList();
+    });
 
     // ========== CAMBIO DE MODO ==========
     function switchMode(mode) {
@@ -1189,6 +1259,7 @@
         document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category);
         updateGrammarPanel('1');
         switchMode('rapid');
+        updateTeamUI();
     }
     init();
 })();
