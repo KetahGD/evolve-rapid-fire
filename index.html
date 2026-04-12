@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Tema Evolve 1 por defecto */
             --theme-primary: #891752;
             --theme-bg: #1c0511;
             --theme-panel: #2d0d1e;
@@ -73,7 +74,7 @@
             font-weight: 700;
             font-size: 1.2rem;
         }
-        #courseSelect {
+        #blockSelect {
             padding: 8px 16px;
             border-radius: 30px;
             background: var(--theme-primary);
@@ -84,6 +85,17 @@
             cursor: pointer;
             outline: none;
             transition: all 0.3s;
+        }
+        #blockSelect optgroup {
+            background: #111;
+            color: var(--theme-accent);
+            font-weight: 800;
+            font-style: normal;
+        }
+        #blockSelect option {
+            background: #222;
+            color: #fff;
+            font-weight: 500;
         }
         
         .mode-switch {
@@ -130,7 +142,7 @@
             text-align: center;
         }
         .main-word {
-            font-size: 6.5rem;
+            font-size: 6rem;
             font-weight: 800;
             color: #fff;
             word-break: break-word;
@@ -185,6 +197,7 @@
         .btn.danger { background: var(--theme-danger); color: white; }
         .btn.audio.active { background: var(--theme-primary); border-color: var(--theme-accent); color: white; }
         .btn.team { padding: 8px 16px; font-size: 1rem; }
+        
         .speed-control, .round-selector, .timer-control {
             display: flex;
             align-items: center;
@@ -219,10 +232,6 @@
             font-weight: 700;
             border: 1px solid var(--theme-border);
             max-width: 250px;
-        }
-        .counter, .progress-badge, .speed-indicator {
-            font-weight: 700;
-            color: var(--theme-text);
         }
         
         .grammar-panel {
@@ -260,22 +269,10 @@
         .grammar-card li { color: #ddd; padding: 4px 0; font-size: 1.05rem; }
         .grammar-card code { background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; color: #fff;}
         
-        .hint-text { font-size: 2.5rem; color: #fff; margin: 20px 0; font-weight: 600; text-shadow: 1px 1px 5px black;}
+        .hint-text { font-size: 2.2rem; color: #fff; margin: 20px 0; font-weight: 600; text-shadow: 1px 1px 5px black;}
         .timer-display { font-size: 3rem; font-weight: 800; color: var(--theme-accent); }
-        .timer-bar {
-            width: 100%;
-            height: 12px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 20px;
-            margin: 12px 0;
-            overflow: hidden;
-        }
-        .timer-bar-fill {
-            height: 100%;
-            width: 100%;
-            background: var(--theme-accent);
-            transition: width 1s linear;
-        }
+        .timer-bar { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 20px; margin: 12px 0; overflow: hidden; }
+        .timer-bar-fill { height: 100%; width: 100%; background: var(--theme-accent); transition: width 1s linear; }
         .score-area { display: flex; gap: 30px; font-size: 1.5rem; color: var(--theme-text); }
         .team-scoreboard {
             display: flex;
@@ -287,33 +284,11 @@
             border-radius: 20px;
             border: 1px solid var(--theme-border);
         }
-        .team {
-            background: rgba(0,0,0,0.4);
-            padding: 10px 20px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid var(--theme-border);
-        }
+        .team { background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--theme-border); }
         .team span { font-size: 1.8rem; font-weight: 800; color: #fff; min-width: 3rem; text-align: center; }
         .hidden { display: none !important; }
-        .missing-word {
-            font-size: 5rem;
-            font-weight: 800;
-            color: var(--theme-accent);
-            letter-spacing: 15px;
-            margin: 20px 0;
-            min-height: 120px;
-        }
-        .feedback { text-align:center; margin-top:16px; font-size:1.5rem; min-height:3rem; }
-        .answer-reveal {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--theme-accent);
-            margin-top: 20px;
-            min-height: 75px;
-        }
+        .missing-word { font-size: 5rem; font-weight: 800; color: var(--theme-accent); letter-spacing: 15px; margin: 20px 0; min-height: 120px; }
+        .answer-reveal { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); margin-top: 20px; min-height: 75px; }
         .random-btn { background: var(--theme-primary); padding: 8px 16px; border-radius: 30px; font-size: 1.2rem; }
     </style>
 </head>
@@ -324,25 +299,25 @@
         <h1>🧠 <span id="mainBookTitle">EVOLVE 1</span> · <span id="modeTitle">RAPID FIRE</span></h1>
         
         <div class="book-selector">
-            <label>📚 COURSE:</label>
-            <select id="courseSelect">
-                <optgroup label="Evolve 1">
-                    <option value="1" selected>Course 1 (Units 1-3)</option>
-                    <option value="2">Course 2 (Units 4-6)</option>
-                    <option value="3">Course 3 (Units 7-9)</option>
-                    <option value="4">Course 4 (Units 10-12)</option>
+            <label>📚 SELECTION:</label>
+            <select id="blockSelect">
+                <optgroup label="📘 EVOLVE 1 (A1)">
+                    <option value="1_1" selected>Block 1: Units 1-3</option>
+                    <option value="1_2">Block 2: Units 4-6</option>
+                    <option value="1_3">Block 3: Units 7-9</option>
+                    <option value="1_4">Block 4: Units 10-12</option>
                 </optgroup>
-                <optgroup label="Evolve 2">
-                    <option value="5">Course 5 (Units 1-3)</option>
-                    <option value="6">Course 6 (Units 4-6)</option>
-                    <option value="7">Course 7 (Units 7-9)</option>
-                    <option value="8">Course 8 (Units 10-12)</option>
+                <optgroup label="📗 EVOLVE 2 (A2)">
+                    <option value="2_1">Block 1: Units 1-3</option>
+                    <option value="2_2">Block 2: Units 4-6</option>
+                    <option value="2_3">Block 3: Units 7-9</option>
+                    <option value="2_4">Block 4: Units 10-12</option>
                 </optgroup>
-                <optgroup label="Evolve 3">
-                    <option value="9">Course 9 (Units 1-3)</option>
-                    <option value="10">Course 10 (Units 4-6)</option>
-                    <option value="11">Course 11 (Units 7-9)</option>
-                    <option value="12">Course 12 (Units 10-12)</option>
+                <optgroup label="📕 EVOLVE 3 (B1)">
+                    <option value="3_1">Block 1: Units 1-3</option>
+                    <option value="3_2">Block 2: Units 4-6</option>
+                    <option value="3_3">Block 3: Units 7-9</option>
+                    <option value="3_4">Block 4: Units 10-12</option>
                 </optgroup>
             </select>
         </div>
@@ -365,7 +340,7 @@
         <div class="subhead">⚡ FORM A SENTENCE! · <span style="color:var(--theme-accent);">🔊 with audio</span></div>
         <div class="word-card">
             <div class="main-word" id="currentWord">Brazil</div>
-            <div class="category-badge" id="categoryTag">🌍 COUNTRY</div>
+            <div class="category-badge" id="categoryTag">UNIT 1</div>
         </div>
         <div class="control-bar">
             <button class="btn primary" id="playPauseBtn">▶️ START</button>
@@ -384,7 +359,7 @@
         </div>
         <div class="filter-area">
             <select id="categorySelect" class="category-select"></select>
-            <button class="btn random-btn" id="rapidRandomCat">🎲 Random Cat</button>
+            <button class="btn random-btn" id="rapidRandomCat">🎲 Random Unit</button>
             <span class="counter" id="wordCounter">📋 0 words</span>
             <span class="progress-badge" id="roundsInfo">🎯 0 / 10</span>
             <span class="speed-indicator" id="currentSpeedDisplay">⚡ 1.8s</span>
@@ -397,7 +372,7 @@
             <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
             <div class="timer-display" id="timerDisplay">10</div>
             <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
-            <div class="category-badge" id="spellingCategory">🌍 COUNTRY</div>
+            <div class="category-badge" id="spellingCategory">UNIT 1</div>
             <div id="spellingAnswerReveal" class="answer-reveal"></div>
         </div>
         <div class="control-bar">
@@ -418,7 +393,7 @@
         </div>
         <div class="filter-area">
             <select id="spellingCategorySelect" class="category-select"></select>
-            <button class="btn random-btn" id="spellingRandomCat">🎲 Random Cat</button>
+            <button class="btn random-btn" id="spellingRandomCat">🎲 Random Unit</button>
             <span class="counter" id="spellingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="spellingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
@@ -435,7 +410,7 @@
             <div class="missing-word" id="missingWordDisplay">B _ _ z _ l</div>
             <div class="timer-display" id="missingTimerDisplay">15</div>
             <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
-            <div class="category-badge" id="missingCategory">🌍 COUNTRY</div>
+            <div class="category-badge" id="missingCategory">UNIT 1</div>
             <div id="missingAnswerReveal" class="answer-reveal"></div>
         </div>
         <div class="control-bar">
@@ -455,7 +430,7 @@
         </div>
         <div class="filter-area">
             <select id="missingCategorySelect" class="category-select"></select>
-            <button class="btn random-btn" id="missingRandomCat">🎲 Random Cat</button>
+            <button class="btn random-btn" id="missingRandomCat">🎲 Random Unit</button>
             <span class="counter" id="missingWordCounter">📋 0 words</span>
             <span class="progress-badge" id="missingRoundsInfo">🎯 0 / 10</span>
             <span class="score-area">
@@ -478,79 +453,80 @@
 (function(){
     "use strict";
 
-    // ========== BASE DE DATOS MASIVA SINCRONIZADA CON WORDLIST ==========
+    // ========== BASE DE DATOS MASIVA (Basada en wordlist.txt) ==========
     
-    // EVOLVE 1 (Course 1-4)
+    // EVOLVE 1
     const evolve1Raw = [
-        // Unit 1-3
-        { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "South Korea", category: "Unit 1", es: "Corea del Sur" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" }, { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "tired", category: "Unit 2", es: "cansado" }, { word: "hungry", category: "Unit 2", es: "hambriento" }, { word: "bed", category: "Unit 3", es: "cama" }, { word: "chair", category: "Unit 3", es: "silla" }, { word: "table", category: "Unit 3", es: "mesa" }, { word: "desk", category: "Unit 3", es: "escritorio" }, { word: "lamp", category: "Unit 3", es: "lámpara" }, { word: "sofa", category: "Unit 3", es: "sofá" }, { word: "bookcase", category: "Unit 3", es: "estantería" }, { word: "rug", category: "Unit 3", es: "alfombra" }, { word: "refrigerator", category: "Unit 3", es: "nevera" }, { word: "TV", category: "Unit 3", es: "televisor" }, { word: "shower", category: "Unit 3", es: "ducha" }, { word: "mirror", category: "Unit 3", es: "espejo" }, { word: "closet", category: "Unit 3", es: "armario" }, { word: "shelf", category: "Unit 3", es: "estante" }, { word: "curtains", category: "Unit 3", es: "cortinas" }, { word: "living room", category: "Unit 3", es: "sala de estar" }, { word: "kitchen", category: "Unit 3", es: "cocina" }, { word: "bedroom", category: "Unit 3", es: "dormitorio" }, { word: "bathroom", category: "Unit 3", es: "baño" }, { word: "dining area", category: "Unit 3", es: "comedor" }, { word: "garage", category: "Unit 3", es: "garaje" }, { word: "yard", category: "Unit 3", es: "patio" },
-        // Unit 4-6
-        { word: "app", category: "Unit 4", es: "aplicación" }, { word: "camera", category: "Unit 4", es: "cámara" }, { word: "cell phone", category: "Unit 4", es: "teléfono celular" }, { word: "earphones", category: "Unit 4", es: "auriculares" }, { word: "games", category: "Unit 4", es: "juegos" }, { word: "laptop", category: "Unit 4", es: "portátil" }, { word: "smartwatch", category: "Unit 4", es: "reloj inteligente" }, { word: "tablet", category: "Unit 4", es: "tableta" }, { word: "buy", category: "Unit 4", es: "comprar" }, { word: "play games", category: "Unit 4", es: "jugar juegos" }, { word: "call", category: "Unit 4", es: "llamar" }, { word: "post photos", category: "Unit 4", es: "publicar fotos" }, { word: "chat with friends", category: "Unit 4", es: "chatear con amigos" }, { word: "read emails", category: "Unit 4", es: "leer correos" }, { word: "watch videos", category: "Unit 4", es: "ver videos" }, { word: "listen to music", category: "Unit 4", es: "escuchar música" }, { word: "send messages", category: "Unit 4", es: "enviar mensajes" }, { word: "Monday", category: "Unit 5", es: "lunes" }, { word: "Tuesday", category: "Unit 5", es: "martes" }, { word: "Wednesday", category: "Unit 5", es: "miércoles" }, { word: "Thursday", category: "Unit 5", es: "jueves" }, { word: "Friday", category: "Unit 5", es: "viernes" }, { word: "Saturday", category: "Unit 5", es: "sábado" }, { word: "Sunday", category: "Unit 5", es: "domingo" }, { word: "get up", category: "Unit 5", es: "levantarse" }, { word: "have breakfast", category: "Unit 5", es: "desayunar" }, { word: "go to work", category: "Unit 5", es: "ir al trabajo" }, { word: "have lunch", category: "Unit 5", es: "almorzar" }, { word: "go home", category: "Unit 5", es: "ir a casa" }, { word: "have dinner", category: "Unit 5", es: "cenar" }, { word: "watch TV", category: "Unit 5", es: "ver televisión" }, { word: "go to bed", category: "Unit 5", es: "acostarse" }, { word: "cafe", category: "Unit 6", es: "cafetería" }, { word: "college", category: "Unit 6", es: "universidad" }, { word: "hospital", category: "Unit 6", es: "hospital" }, { word: "hotel", category: "Unit 6", es: "hotel" }, { word: "mall", category: "Unit 6", es: "centro comercial" }, { word: "movie theater", category: "Unit 6", es: "cine" }, { word: "museum", category: "Unit 6", es: "museo" }, { word: "park", category: "Unit 6", es: "parque" }, { word: "restaurant", category: "Unit 6", es: "restaurante" }, { word: "school", category: "Unit 6", es: "escuela" }, { word: "supermarket", category: "Unit 6", es: "supermercado" }, { word: "zoo", category: "Unit 6", es: "zoológico" }, { word: "beach", category: "Unit 6", es: "playa" }, { word: "desert", category: "Unit 6", es: "desierto" }, { word: "flower", category: "Unit 6", es: "flor" }, { word: "forest", category: "Unit 6", es: "bosque" }, { word: "grass", category: "Unit 6", es: "césped" }, { word: "hill", category: "Unit 6", es: "colina" }, { word: "island", category: "Unit 6", es: "isla" }, { word: "lake", category: "Unit 6", es: "lago" }, { word: "mountain", category: "Unit 6", es: "montaña" }, { word: "ocean", category: "Unit 6", es: "océano" }, { word: "plant", category: "Unit 6", es: "planta" }, { word: "river", category: "Unit 6", es: "río" }, { word: "snow", category: "Unit 6", es: "nieve" }, { word: "tree", category: "Unit 6", es: "árbol" },
-        // Unit 7-9
-        { word: "clean my room", category: "Unit 7", es: "limpiar mi habitación" }, { word: "cook dinner", category: "Unit 7", es: "cocinar la cena" }, { word: "do homework", category: "Unit 7", es: "hacer tarea" }, { word: "do the dishes", category: "Unit 7", es: "lavar los platos" }, { word: "drive the car", category: "Unit 7", es: "conducir el coche" }, { word: "help my grandmother", category: "Unit 7", es: "ayudar a mi abuela" }, { word: "take a bath", category: "Unit 7", es: "bañarse" }, { word: "take a shower", category: "Unit 7", es: "ducharse" }, { word: "wash the car", category: "Unit 7", es: "lavar el coche" }, { word: "wash my hair", category: "Unit 7", es: "lavarse el cabello" }, { word: "brush my hair", category: "Unit 7", es: "cepillarse el cabello" }, { word: "brush my teeth", category: "Unit 7", es: "cepillarse los dientes" }, { word: "bike", category: "Unit 7", es: "bicicleta" }, { word: "bus", category: "Unit 7", es: "autobús" }, { word: "car", category: "Unit 7", es: "coche" }, { word: "subway", category: "Unit 7", es: "metro" }, { word: "taxi", category: "Unit 7", es: "taxi" }, { word: "train", category: "Unit 7", es: "tren" }, { word: "walk", category: "Unit 7", es: "caminar" }, { word: "dance", category: "Unit 8", es: "bailar" }, { word: "draw", category: "Unit 8", es: "dibujar" }, { word: "fix things", category: "Unit 8", es: "arreglar cosas" }, { word: "paint", category: "Unit 8", es: "pintar" }, { word: "play the guitar", category: "Unit 8", es: "tocar la guitarra" }, { word: "read music", category: "Unit 8", es: "leer música" }, { word: "sing", category: "Unit 8", es: "cantar" }, { word: "skateboard", category: "Unit 8", es: "patinar" }, { word: "snowboard", category: "Unit 8", es: "hacer snowboard" }, { word: "speak English", category: "Unit 8", es: "hablar inglés" }, { word: "surf", category: "Unit 8", es: "surfear" }, { word: "swim", category: "Unit 8", es: "nadar" }, { word: "company", category: "Unit 8", es: "empresa" }, { word: "coworker", category: "Unit 8", es: "compañero de trabajo" }, { word: "office", category: "Unit 8", es: "oficina" }, { word: "worker", category: "Unit 8", es: "trabajador" }, { word: "work hard", category: "Unit 8", es: "trabajar duro" }, { word: "have a meeting", category: "Unit 8", es: "tener una reunión" }, { word: "think", category: "Unit 8", es: "pensar" }, { word: "take a break", category: "Unit 8", es: "tomar un descanso" }, { word: "boat", category: "Unit 9", es: "barco" }, { word: "country", category: "Unit 9", es: "país / campo" }, { word: "farm", category: "Unit 9", es: "granja" }, { word: "plane", category: "Unit 9", es: "avión" }, { word: "ranch", category: "Unit 9", es: "rancho" }, { word: "ticket", category: "Unit 9", es: "boleto" }, { word: "tour", category: "Unit 9", es: "tour" }, { word: "town", category: "Unit 9", es: "pueblo" }, { word: "vacation", category: "Unit 9", es: "vacaciones" }, { word: "arrive at", category: "Unit 9", es: "llegar a" }, { word: "buy tickets online", category: "Unit 9", es: "comprar boletos en línea" }, { word: "check in", category: "Unit 9", es: "registrarse" }, { word: "fly to", category: "Unit 9", es: "volar a" }, { word: "have a great trip", category: "Unit 9", es: "tener un buen viaje" }, { word: "leave your house", category: "Unit 9", es: "salir de casa" }, { word: "stay in a hotel", category: "Unit 9", es: "hospedarse en un hotel" },
-        // Unit 10-12 (Mapped conceptually for completeness if needed)
-        { word: "teacher", category: "Unit 10", es: "profesor/a" }, { word: "student", category: "Unit 10", es: "estudiante" }, { word: "artist", category: "Unit 10", es: "artista" }, { word: "chef", category: "Unit 10", es: "chef" }, { word: "server", category: "Unit 10", es: "mesero/a" }, { word: "doctor", category: "Unit 10", es: "médico/a" }, { word: "engineer", category: "Unit 10", es: "ingeniero/a" }, { word: "police officer", category: "Unit 10", es: "policía" }, { word: "manager", category: "Unit 10", es: "gerente" }, { word: "coffee", category: "Unit 11", es: "café" }, { word: "tea", category: "Unit 11", es: "té" }, { word: "milk", category: "Unit 11", es: "leche" }, { word: "juice", category: "Unit 11", es: "jugo" }, { word: "water", category: "Unit 11", es: "agua" }, { word: "cookie", category: "Unit 11", es: "galleta" }, { word: "sandwich", category: "Unit 11", es: "sándwich" }, { word: "soda", category: "Unit 11", es: "refresco" }, { word: "chocolate", category: "Unit 11", es: "chocolate" }, { word: "ice cream", category: "Unit 11", es: "helado" }, { word: "cake", category: "Unit 11", es: "pastel" }, { word: "one", category: "Unit 12", es: "uno" }, { word: "two", category: "Unit 12", es: "dos" }, { word: "three", category: "Unit 12", es: "tres" }, { word: "ten", category: "Unit 12", es: "diez" }, { word: "twenty", category: "Unit 12", es: "veinte" }, { word: "March", category: "Unit 12", es: "marzo" }, { word: "January", category: "Unit 12", es: "enero" }, { word: "first", category: "Unit 12", es: "primero" }, { word: "fifteen", category: "Unit 12", es: "quince" }, { word: "thirty", category: "Unit 12", es: "treinta" }
+        { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" },
+        { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "hungry", category: "Unit 2", es: "hambriento" },
+        { word: "bed", category: "Unit 3", es: "cama" }, { word: "chair", category: "Unit 3", es: "silla" }, { word: "table", category: "Unit 3", es: "mesa" }, { word: "desk", category: "Unit 3", es: "escritorio" }, { word: "lamp", category: "Unit 3", es: "lámpara" }, { word: "sofa", category: "Unit 3", es: "sofá" }, { word: "bookcase", category: "Unit 3", es: "estantería" }, { word: "rug", category: "Unit 3", es: "alfombra" }, { word: "refrigerator", category: "Unit 3", es: "nevera" }, { word: "TV", category: "Unit 3", es: "televisor" }, { word: "shower", category: "Unit 3", es: "ducha" }, { word: "closet", category: "Unit 3", es: "armario" }, { word: "kitchen", category: "Unit 3", es: "cocina" }, { word: "bedroom", category: "Unit 3", es: "dormitorio" }, { word: "bathroom", category: "Unit 3", es: "baño" }, { word: "garage", category: "Unit 3", es: "garaje" }, { word: "yard", category: "Unit 3", es: "patio" },
+        { word: "app", category: "Unit 4", es: "aplicación" }, { word: "camera", category: "Unit 4", es: "cámara" }, { word: "cell phone", category: "Unit 4", es: "teléfono celular" }, { word: "earphones", category: "Unit 4", es: "auriculares" }, { word: "games", category: "Unit 4", es: "juegos" }, { word: "laptop", category: "Unit 4", es: "portátil" }, { word: "smartwatch", category: "Unit 4", es: "reloj inteligente" }, { word: "tablet", category: "Unit 4", es: "tableta" }, { word: "buy", category: "Unit 4", es: "comprar" }, { word: "play games", category: "Unit 4", es: "jugar juegos" }, { word: "call", category: "Unit 4", es: "llamar" }, { word: "post photos", category: "Unit 4", es: "publicar fotos" }, { word: "chat with friends", category: "Unit 4", es: "chatear con amigos" }, { word: "read emails", category: "Unit 4", es: "leer correos" }, { word: "watch videos", category: "Unit 4", es: "ver videos" }, { word: "listen to music", category: "Unit 4", es: "escuchar música" }, { word: "send messages", category: "Unit 4", es: "enviar mensajes" },
+        { word: "Monday", category: "Unit 5", es: "lunes" }, { word: "Tuesday", category: "Unit 5", es: "martes" }, { word: "Wednesday", category: "Unit 5", es: "miércoles" }, { word: "Thursday", category: "Unit 5", es: "jueves" }, { word: "Friday", category: "Unit 5", es: "viernes" }, { word: "Saturday", category: "Unit 5", es: "sábado" }, { word: "Sunday", category: "Unit 5", es: "domingo" }, { word: "get up", category: "Unit 5", es: "levantarse" }, { word: "have breakfast", category: "Unit 5", es: "desayunar" }, { word: "go to work", category: "Unit 5", es: "ir al trabajo" }, { word: "have lunch", category: "Unit 5", es: "almorzar" }, { word: "go home", category: "Unit 5", es: "ir a casa" }, { word: "have dinner", category: "Unit 5", es: "cenar" }, { word: "watch TV", category: "Unit 5", es: "ver televisión" }, { word: "go to bed", category: "Unit 5", es: "acostarse" },
+        { word: "cafe", category: "Unit 6", es: "cafetería" }, { word: "college", category: "Unit 6", es: "universidad" }, { word: "hospital", category: "Unit 6", es: "hospital" }, { word: "hotel", category: "Unit 6", es: "hotel" }, { word: "mall", category: "Unit 6", es: "centro comercial" }, { word: "movie theater", category: "Unit 6", es: "cine" }, { word: "museum", category: "Unit 6", es: "museo" }, { word: "park", category: "Unit 6", es: "parque" }, { word: "restaurant", category: "Unit 6", es: "restaurante" }, { word: "school", category: "Unit 6", es: "escuela" }, { word: "supermarket", category: "Unit 6", es: "supermercado" }, { word: "zoo", category: "Unit 6", es: "zoológico" }, { word: "beach", category: "Unit 6", es: "playa" }, { word: "desert", category: "Unit 6", es: "desierto" }, { word: "flower", category: "Unit 6", es: "flor" }, { word: "forest", category: "Unit 6", es: "bosque" }, { word: "grass", category: "Unit 6", es: "césped" }, { word: "hill", category: "Unit 6", es: "colina" }, { word: "island", category: "Unit 6", es: "isla" }, { word: "lake", category: "Unit 6", es: "lago" }, { word: "mountain", category: "Unit 6", es: "montaña" }, { word: "ocean", category: "Unit 6", es: "océano" }, { word: "plant", category: "Unit 6", es: "planta" }, { word: "river", category: "Unit 6", es: "río" }, { word: "snow", category: "Unit 6", es: "nieve" }, { word: "tree", category: "Unit 6", es: "árbol" },
+        { word: "clean my room", category: "Unit 7", es: "limpiar mi habitación" }, { word: "cook dinner", category: "Unit 7", es: "cocinar la cena" }, { word: "do homework", category: "Unit 7", es: "hacer tarea" }, { word: "do the dishes", category: "Unit 7", es: "lavar los platos" }, { word: "drive the car", category: "Unit 7", es: "conducir el coche" }, { word: "help my grandmother", category: "Unit 7", es: "ayudar a mi abuela" }, { word: "take a bath", category: "Unit 7", es: "bañarse" }, { word: "take a shower", category: "Unit 7", es: "ducharse" }, { word: "wash the car", category: "Unit 7", es: "lavar el coche" }, { word: "wash my hair", category: "Unit 7", es: "lavarse el cabello" }, { word: "brush my hair", category: "Unit 7", es: "cepillarse el cabello" }, { word: "brush my teeth", category: "Unit 7", es: "cepillarse los dientes" }, { word: "bike", category: "Unit 7", es: "bicicleta" }, { word: "bus", category: "Unit 7", es: "autobús" }, { word: "car", category: "Unit 7", es: "coche" }, { word: "subway", category: "Unit 7", es: "metro" }, { word: "taxi", category: "Unit 7", es: "taxi" }, { word: "train", category: "Unit 7", es: "tren" }, { word: "walk", category: "Unit 7", es: "caminar" },
+        { word: "dance", category: "Unit 8", es: "bailar" }, { word: "draw", category: "Unit 8", es: "dibujar" }, { word: "fix things", category: "Unit 8", es: "arreglar cosas" }, { word: "paint", category: "Unit 8", es: "pintar" }, { word: "play the guitar", category: "Unit 8", es: "tocar la guitarra" }, { word: "read music", category: "Unit 8", es: "leer música" }, { word: "sing", category: "Unit 8", es: "cantar" }, { word: "skateboard", category: "Unit 8", es: "patinar" }, { word: "snowboard", category: "Unit 8", es: "hacer snowboard" }, { word: "speak English", category: "Unit 8", es: "hablar inglés" }, { word: "surf", category: "Unit 8", es: "surfear" }, { word: "swim", category: "Unit 8", es: "nadar" }, { word: "company", category: "Unit 8", es: "empresa" }, { word: "coworker", category: "Unit 8", es: "compañero de trabajo" }, { word: "office", category: "Unit 8", es: "oficina" }, { word: "worker", category: "Unit 8", es: "trabajador" }, { word: "work hard", category: "Unit 8", es: "trabajar duro" }, { word: "have a meeting", category: "Unit 8", es: "tener una reunión" }, { word: "think", category: "Unit 8", es: "pensar" }, { word: "take a break", category: "Unit 8", es: "tomar un descanso" },
+        { word: "boat", category: "Unit 9", es: "barco" }, { word: "country", category: "Unit 9", es: "país / campo" }, { word: "farm", category: "Unit 9", es: "granja" }, { word: "plane", category: "Unit 9", es: "avión" }, { word: "ranch", category: "Unit 9", es: "rancho" }, { word: "ticket", category: "Unit 9", es: "boleto" }, { word: "tour", category: "Unit 9", es: "tour" }, { word: "town", category: "Unit 9", es: "pueblo" }, { word: "vacation", category: "Unit 9", es: "vacaciones" }, { word: "arrive at", category: "Unit 9", es: "llegar a" }, { word: "buy tickets online", category: "Unit 9", es: "comprar boletos en línea" }, { word: "check in", category: "Unit 9", es: "registrarse" }, { word: "fly to", category: "Unit 9", es: "volar a" }, { word: "have a great trip", category: "Unit 9", es: "tener un buen viaje" }, { word: "leave your house", category: "Unit 9", es: "salir de casa" }, { word: "stay in a hotel", category: "Unit 9", es: "hospedarse en un hotel" },
+        { word: "teacher", category: "Unit 10", es: "profesor/a" }, { word: "student", category: "Unit 10", es: "estudiante" }, { word: "artist", category: "Unit 10", es: "artista" }, { word: "chef", category: "Unit 10", es: "chef" }, { word: "server", category: "Unit 10", es: "mesero/a" }, { word: "doctor", category: "Unit 10", es: "médico/a" }, { word: "engineer", category: "Unit 10", es: "ingeniero/a" }, { word: "police officer", category: "Unit 10", es: "policía" }, { word: "manager", category: "Unit 10", es: "gerente" },
+        { word: "coffee", category: "Unit 11", es: "café" }, { word: "tea", category: "Unit 11", es: "té" }, { word: "milk", category: "Unit 11", es: "leche" }, { word: "juice", category: "Unit 11", es: "jugo" }, { word: "water", category: "Unit 11", es: "agua" }, { word: "cookie", category: "Unit 11", es: "galleta" }, { word: "sandwich", category: "Unit 11", es: "sándwich" }, { word: "soda", category: "Unit 11", es: "refresco" }, { word: "chocolate", category: "Unit 11", es: "chocolate" }, { word: "cake", category: "Unit 11", es: "pastel" }, { word: "salt", category: "Unit 11", es: "sal" },
+        { word: "one", category: "Unit 12", es: "uno" }, { word: "two", category: "Unit 12", es: "dos" }, { word: "three", category: "Unit 12", es: "tres" }, { word: "ten", category: "Unit 12", es: "diez" }, { word: "twenty", category: "Unit 12", es: "veinte" }, { word: "thirty", category: "Unit 12", es: "treinta" }, { word: "fifteen", category: "Unit 12", es: "quince" }, { word: "first", category: "Unit 12", es: "primero" }, { word: "March", category: "Unit 12", es: "marzo" }, { word: "January", category: "Unit 12", es: "enero" }
     ];
 
-    // EVOLVE 2 (Course 5-8)
+    // EVOLVE 2
     const evolve2Raw = [
-        // Unit 1-3
         { word: "boss", category: "Unit 1", es: "jefe/a" }, { word: "classmate", category: "Unit 1", es: "compañero/a de clase" }, { word: "close friend", category: "Unit 1", es: "amigo/a íntimo/a" }, { word: "coworker", category: "Unit 1", es: "compañero/a de trabajo" }, { word: "couple", category: "Unit 1", es: "pareja" }, { word: "fiancé", category: "Unit 1", es: "prometido/a" }, { word: "girlfriend", category: "Unit 1", es: "novia" }, { word: "grandchild", category: "Unit 1", es: "nieto/a" }, { word: "neighbor", category: "Unit 1", es: "vecino/a" }, { word: "roommate", category: "Unit 1", es: "compañero/a de piso" }, { word: "candy bar", category: "Unit 1", es: "barra de chocolate" }, { word: "cash", category: "Unit 1", es: "efectivo" }, { word: "driver's license", category: "Unit 1", es: "licencia de conducir" }, { word: "hairbrush", category: "Unit 1", es: "cepillo para el pelo" }, { word: "hand lotion", category: "Unit 1", es: "loción de manos" }, { word: "keychain", category: "Unit 1", es: "llavero" }, { word: "mirror", category: "Unit 1", es: "espejo" }, { word: "pack of gum", category: "Unit 1", es: "paquete de chicles" }, { word: "receipt", category: "Unit 1", es: "recibo" }, { word: "sunglasses", category: "Unit 1", es: "gafas de sol" }, { word: "tissues", category: "Unit 1", es: "pañuelos de papel" }, { word: "umbrella", category: "Unit 1", es: "paraguas" }, { word: "water bottle", category: "Unit 1", es: "botella de agua" },
         { word: "do housework", category: "Unit 2", es: "hacer tareas domésticas" }, { word: "do the cooking", category: "Unit 2", es: "cocinar" }, { word: "do the dishes", category: "Unit 2", es: "lavar los platos" }, { word: "do the laundry", category: "Unit 2", es: "lavar la ropa" }, { word: "have free time", category: "Unit 2", es: "tener tiempo libre" }, { word: "have a party", category: "Unit 2", es: "hacer una fiesta" }, { word: "have a snack", category: "Unit 2", es: "tomar un tentempié" }, { word: "have something to drink", category: "Unit 2", es: "tomar algo" }, { word: "make the bed", category: "Unit 2", es: "hacer la cama" }, { word: "make a plan", category: "Unit 2", es: "hacer un plan" }, { word: "make a mess", category: "Unit 2", es: "hacer un desastre" }, { word: "calendar", category: "Unit 2", es: "calendario" }, { word: "document", category: "Unit 2", es: "documento" }, { word: "electrical outlet", category: "Unit 2", es: "enchufe" }, { word: "files", category: "Unit 2", es: "archivos" }, { word: "headphones", category: "Unit 2", es: "auriculares" }, { word: "keyboard", category: "Unit 2", es: "teclado" }, { word: "laptop screen", category: "Unit 2", es: "pantalla del portátil" }, { word: "mouse", category: "Unit 2", es: "ratón" }, { word: "notes", category: "Unit 2", es: "notas" }, { word: "page", category: "Unit 2", es: "página" }, { word: "power cord", category: "Unit 2", es: "cable de corriente" }, { word: "textbook", category: "Unit 2", es: "libro de texto" }, { word: "Wi-Fi", category: "Unit 2", es: "wifi" },
         { word: "athlete", category: "Unit 3", es: "atleta" }, { word: "coach", category: "Unit 3", es: "entrenador/a" }, { word: "court", category: "Unit 3", es: "pista" }, { word: "fans", category: "Unit 3", es: "aficionados" }, { word: "field", category: "Unit 3", es: "campo" }, { word: "game", category: "Unit 3", es: "partido" }, { word: "players", category: "Unit 3", es: "jugadores" }, { word: "pool", category: "Unit 3", es: "piscina" }, { word: "race", category: "Unit 3", es: "carrera" }, { word: "score", category: "Unit 3", es: "marcador" }, { word: "stadium", category: "Unit 3", es: "estadio" }, { word: "team", category: "Unit 3", es: "equipo" }, { word: "tennis court", category: "Unit 3", es: "pista de tenis" }, { word: "win", category: "Unit 3", es: "ganar" }, { word: "lose", category: "Unit 3", es: "perder" }, { word: "climb", category: "Unit 3", es: "escalar" }, { word: "jump", category: "Unit 3", es: "saltar" }, { word: "lie down", category: "Unit 3", es: "tumbarse" }, { word: "lift weights", category: "Unit 3", es: "levantar pesas" }, { word: "push", category: "Unit 3", es: "empujar" }, { word: "sit down", category: "Unit 3", es: "sentarse" }, { word: "stand up", category: "Unit 3", es: "levantarse" }, { word: "stretch", category: "Unit 3", es: "estirar" }, { word: "throw", category: "Unit 3", es: "lanzar" }, { word: "turn around", category: "Unit 3", es: "darse la vuelta" },
-        // Unit 4-6
         { word: "actor", category: "Unit 4", es: "actor" }, { word: "artist", category: "Unit 4", es: "artista" }, { word: "band", category: "Unit 4", es: "banda" }, { word: "concert", category: "Unit 4", es: "concierto" }, { word: "director", category: "Unit 4", es: "director/a" }, { word: "fan", category: "Unit 4", es: "fan" }, { word: "festival", category: "Unit 4", es: "festival" }, { word: "musician", category: "Unit 4", es: "músico/a" }, { word: "singer", category: "Unit 4", es: "cantante" }, { word: "TV show", category: "Unit 4", es: "programa de televisión" }, { word: "video game", category: "Unit 4", es: "videojuego" }, { word: "bouquet of flowers", category: "Unit 4", es: "ramo de flores" }, { word: "candy", category: "Unit 4", es: "caramelos" }, { word: "gift card", category: "Unit 4", es: "tarjeta regalo" }, { word: "jewelry", category: "Unit 4", es: "joyería" }, { word: "perfume", category: "Unit 4", es: "perfume" }, { word: "phone charger", category: "Unit 4", es: "cargador de teléfono" }, { word: "purse", category: "Unit 4", es: "bolso" }, { word: "speakers", category: "Unit 4", es: "altavoces" }, { word: "sweatshirt", category: "Unit 4", es: "sudadera" }, { word: "watch", category: "Unit 4", es: "reloj" },
         { word: "amazing", category: "Unit 5", es: "asombroso" }, { word: "angry", category: "Unit 5", es: "enfadado" }, { word: "cool", category: "Unit 5", es: "guay" }, { word: "crazy", category: "Unit 5", es: "loco" }, { word: "dangerous", category: "Unit 5", es: "peligroso" }, { word: "horrible", category: "Unit 5", es: "horrible" }, { word: "impressed", category: "Unit 5", es: "impresionado" }, { word: "loud", category: "Unit 5", es: "ruidoso" }, { word: "perfect", category: "Unit 5", es: "perfecto" }, { word: "proud", category: "Unit 5", es: "orgulloso" }, { word: "scary", category: "Unit 5", es: "aterrador" }, { word: "strange", category: "Unit 5", es: "extraño" }, { word: "stressful", category: "Unit 5", es: "estresante" }, { word: "terrible", category: "Unit 5", es: "terrible" }, { word: "tired", category: "Unit 5", es: "cansado" }, { word: "wonderful", category: "Unit 5", es: "maravilloso" }, { word: "be born", category: "Unit 5", es: "nacer" }, { word: "become a grandparent", category: "Unit 5", es: "convertirse en abuelo/a" }, { word: "buy a car", category: "Unit 5", es: "comprar un coche" }, { word: "buy a house", category: "Unit 5", es: "comprar una casa" }, { word: "get a job", category: "Unit 5", es: "conseguir un trabajo" }, { word: "get married", category: "Unit 5", es: "casarse" }, { word: "graduate from college", category: "Unit 5", es: "graduarse de la universidad" }, { word: "have a baby", category: "Unit 5", es: "tener un bebé" }, { word: "learn to drive", category: "Unit 5", es: "aprender a conducir" }, { word: "meet your future wife", category: "Unit 5", es: "conocer a tu futuro/a esposo/a" }, { word: "retire", category: "Unit 5", es: "jubilarse" }, { word: "start school", category: "Unit 5", es: "empezar el colegio" },
         { word: "borrow", category: "Unit 6", es: "pedir prestado" }, { word: "cost", category: "Unit 6", es: "costar" }, { word: "lend", category: "Unit 6", es: "prestar" }, { word: "pay back", category: "Unit 6", es: "devolver (dinero)" }, { word: "return", category: "Unit 6", es: "devolver (algo)" }, { word: "save money", category: "Unit 6", es: "ahorrar (dinero)" }, { word: "sell", category: "Unit 6", es: "vender" }, { word: "shop online", category: "Unit 6", es: "comprar en línea" }, { word: "spend", category: "Unit 6", es: "gastar" }, { word: "waste", category: "Unit 6", es: "desperdiciar" }, { word: "aisle", category: "Unit 6", es: "pasillo" }, { word: "cart", category: "Unit 6", es: "carrito" }, { word: "cash register", category: "Unit 6", es: "caja registradora" }, { word: "checkout", category: "Unit 6", es: "caja" }, { word: "customer", category: "Unit 6", es: "cliente" }, { word: "department store", category: "Unit 6", es: "grandes almacenes" }, { word: "grocery store", category: "Unit 6", es: "tienda de comestibles" }, { word: "magazine", category: "Unit 6", es: "revista" }, { word: "sale", category: "Unit 6", es: "rebajas" }, { word: "shelf", category: "Unit 6", es: "estante" },
-        // Unit 7-9
         { word: "avocado", category: "Unit 7", es: "aguacate" }, { word: "burger", category: "Unit 7", es: "hamburguesa" }, { word: "cereal", category: "Unit 7", es: "cereales" }, { word: "chili", category: "Unit 7", es: "chile" }, { word: "corn", category: "Unit 7", es: "maíz" }, { word: "honey", category: "Unit 7", es: "miel" }, { word: "jam", category: "Unit 7", es: "mermelada" }, { word: "lettuce", category: "Unit 7", es: "lechuga" }, { word: "noodles", category: "Unit 7", es: "fideos" }, { word: "onion", category: "Unit 7", es: "cebolla" }, { word: "peanut butter", category: "Unit 7", es: "mantequilla de cacahuete" }, { word: "salmon", category: "Unit 7", es: "salmón" }, { word: "salt", category: "Unit 7", es: "sal" }, { word: "strawberry", category: "Unit 7", es: "fresa" }, { word: "yogurt", category: "Unit 7", es: "yogur" }, { word: "bitter", category: "Unit 7", es: "amargo" }, { word: "boiled", category: "Unit 7", es: "hervido" }, { word: "delicious", category: "Unit 7", es: "delicioso" }, { word: "fresh", category: "Unit 7", es: "fresco" }, { word: "fried", category: "Unit 7", es: "frito" }, { word: "grilled", category: "Unit 7", es: "a la parrilla" }, { word: "raw", category: "Unit 7", es: "crudo" }, { word: "roasted", category: "Unit 7", es: "asado" }, { word: "sour", category: "Unit 7", es: "agrio" }, { word: "spicy", category: "Unit 7", es: "picante" }, { word: "sweet", category: "Unit 7", es: "dulce" },
-        { word: "backpack", category: "Unit 8", es: "mochila" }, { word: "bus station", category: "Unit 8", es: "estación de autobuses" }, { word: "check-in counter", category: "Unit 8", es: "mostrador de facturación" }, { word: "guidebook", category: "Unit 8", es: "guía de viaje" }, { word: "map", category: "Unit 8", es: "mapa" }, { word: "suitcase", category: "Unit 8", es: "maleta" }, { word: "tour bus", category: "Unit 8", es: "autobús turístico" }, { word: "tour guide", category: "Unit 8", es: "guía turístico" }, { word: "tourist", category: "Unit 8", es: "turista" }, { word: "catch", category: "Unit 8", es: "coger (transporte)" }, { word: "change", category: "Unit 8", es: "cambiar (transporte)" }, { word: "drop off", category: "Unit 8", es: "dejar (a alguien)" }, { word: "get into", category: "Unit 8", es: "subir (coche)" }, { word: "get out of", category: "Unit 8", es: "bajar (coche)" }, { word: "get on", category: "Unit 8", es: "subir (autobús)" }, { word: "get off", category: "Unit 8", es: "bajar (autobús)" }, { word: "miss", category: "Unit 8", es: "perder (transporte)" }, { word: "pick up", category: "Unit 8", es: "recoger" },
-        { word: "belt", category: "Unit 9", es: "cinturón" }, { word: "bracelet", category: "Unit 9", es: "pulsera" }, { word: "earrings", category: "Unit 9", es: "pendientes" }, { word: "gloves", category: "Unit 9", es: "guantes" }, { word: "necklace", category: "Unit 9", es: "collar" }, { word: "scarf", category: "Unit 9", es: "bufanda" }, { word: "sneakers", category: "Unit 9", es: "zapatillas deportivas" }, { word: "sunglasses", category: "Unit 9", es: "gafas de sol" }, { word: "tie", category: "Unit 9", es: "corbata" }, { word: "bald", category: "Unit 9", es: "calvo" }, { word: "beard", category: "Unit 9", es: "barba" }, { word: "curly", category: "Unit 9", es: "rizado" }, { word: "dark", category: "Unit 9", es: "oscuro" }, { word: "gray", category: "Unit 9", es: "canoso" }, { word: "light", category: "Unit 9", es: "claro" }, { word: "mustache", category: "Unit 9", es: "bigote" }, { word: "pierced ears", category: "Unit 9", es: "orejas perforadas" }, { word: "straight", category: "Unit 9", es: "liso" },
-        // Unit 10-12
-        { word: "accountant", category: "Unit 10", es: "contable" }, { word: "architect", category: "Unit 10", es: "arquitecto/a" }, { word: "call center worker", category: "Unit 10", es: "trabajador/a de call center" }, { word: "dentist", category: "Unit 10", es: "dentista" }, { word: "engineer", category: "Unit 10", es: "ingeniero/a" }, { word: "IT specialist", category: "Unit 10", es: "especialista en TI" }, { word: "lawyer", category: "Unit 10", es: "abogado/a" }, { word: "mechanic", category: "Unit 10", es: "mecánico" }, { word: "nurse", category: "Unit 10", es: "enfermero/a" }, { word: "paramedic", category: "Unit 10", es: "paramédico" }, { word: "photographer", category: "Unit 10", es: "fotógrafo/a" }, { word: "physical therapist", category: "Unit 10", es: "fisioterapeuta" }, { word: "police officer", category: "Unit 10", es: "oficial de policía" }, { word: "project manager", category: "Unit 10", es: "jefe/a de proyecto" }, { word: "receptionist", category: "Unit 10", es: "recepcionista" }, { word: "break your leg", category: "Unit 10", es: "romperse la pierna" }, { word: "catch a cold", category: "Unit 10", es: "resfriarse" }, { word: "cut your finger", category: "Unit 10", es: "cortarse el dedo" }, { word: "feel a fever", category: "Unit 10", es: "tener fiebre" }, { word: "have a headache", category: "Unit 10", es: "tener dolor de cabeza" }, { word: "have a sore throat", category: "Unit 10", es: "tener dolor de garganta" }, { word: "have a stomachache", category: "Unit 10", es: "tener dolor de estómago" }, { word: "have a toothache", category: "Unit 10", es: "tener dolor de muelas" }, { word: "hurt your back", category: "Unit 10", es: "lastimarse la espalda" }, { word: "twist your ankle", category: "Unit 10", es: "torcerse el tobillo" },
-        { word: "add someone as a friend", category: "Unit 11", es: "agregar a alguien como amigo" }, { word: "build a website", category: "Unit 11", es: "construir un sitio web" }, { word: "change your password", category: "Unit 11", es: "cambiar tu contraseña" }, { word: "check your messages", category: "Unit 11", es: "revisar tus mensajes" }, { word: "click on a link", category: "Unit 11", es: "hacer clic en un enlace" }, { word: "join a group", category: "Unit 11", es: "unirse a un grupo" }, { word: "make a video", category: "Unit 11", es: "hacer un video" }, { word: "message someone", category: "Unit 11", es: "enviar un mensaje a alguien" }, { word: "open a social media account", category: "Unit 11", es: "abrir una cuenta" }, { word: "swipe", category: "Unit 11", es: "deslizar" }, { word: "bookmark", category: "Unit 11", es: "marcar como favorito" }, { word: "download", category: "Unit 11", es: "descargar" }, { word: "follow", category: "Unit 11", es: "seguir" }, { word: "go viral", category: "Unit 11", es: "volverse viral" }, { word: "like", category: "Unit 11", es: "dar me gusta" }, { word: "log in", category: "Unit 11", es: "iniciar sesión" }, { word: "post", category: "Unit 11", es: "publicar" }, { word: "search for", category: "Unit 11", es: "buscar" }, { word: "share", category: "Unit 11", es: "compartir" }, { word: "stop following", category: "Unit 11", es: "dejar de seguir" }, { word: "upload", category: "Unit 11", es: "subir" },
+        { word: "backpack", category: "Unit 8", es: "mochila" }, { word: "bus station", category: "Unit 8", es: "estación de autobuses" }, { word: "check-in counter", category: "Unit 8", es: "mostrador de facturación" }, { word: "guidebook", category: "Unit 8", es: "guía de viaje" }, { word: "map", category: "Unit 8", es: "mapa" }, { word: "suitcase", category: "Unit 8", es: "maleta" }, { word: "tour bus", category: "Unit 8", es: "autobús turístico" }, { word: "tour guide", category: "Unit 8", es: "guía turístico" }, { word: "tourist", category: "Unit 8", es: "turista" }, { word: "catch", category: "Unit 8", es: "coger" }, { word: "change", category: "Unit 8", es: "cambiar" }, { word: "drop off", category: "Unit 8", es: "dejar" }, { word: "get into", category: "Unit 8", es: "subir (coche)" }, { word: "get out of", category: "Unit 8", es: "bajar (coche)" }, { word: "get on", category: "Unit 8", es: "subir (bus)" }, { word: "get off", category: "Unit 8", es: "bajar (bus)" }, { word: "miss", category: "Unit 8", es: "perder" }, { word: "pick up", category: "Unit 8", es: "recoger" },
+        { word: "belt", category: "Unit 9", es: "cinturón" }, { word: "bracelet", category: "Unit 9", es: "pulsera" }, { word: "earring", category: "Unit 9", es: "pendiente" }, { word: "glove", category: "Unit 9", es: "guante" }, { word: "necklace", category: "Unit 9", es: "collar" }, { word: "scarf", category: "Unit 9", es: "bufanda" }, { word: "sneakers", category: "Unit 9", es: "zapatillas" }, { word: "sunglasses", category: "Unit 9", es: "gafas de sol" }, { word: "tie", category: "Unit 9", es: "corbata" }, { word: "bald", category: "Unit 9", es: "calvo" }, { word: "beard", category: "Unit 9", es: "barba" }, { word: "curly", category: "Unit 9", es: "rizado" }, { word: "dark hair", category: "Unit 9", es: "pelo oscuro" }, { word: "gray hair", category: "Unit 9", es: "canoso" }, { word: "light hair", category: "Unit 9", es: "pelo claro" }, { word: "mustache", category: "Unit 9", es: "bigote" }, { word: "pierced ears", category: "Unit 9", es: "orejas perforadas" }, { word: "straight", category: "Unit 9", es: "liso" },
+        { word: "accountant", category: "Unit 10", es: "contable" }, { word: "architect", category: "Unit 10", es: "arquitecto/a" }, { word: "call center worker", category: "Unit 10", es: "trabajador de call center" }, { word: "dentist", category: "Unit 10", es: "dentista" }, { word: "engineer", category: "Unit 10", es: "ingeniero/a" }, { word: "IT specialist", category: "Unit 10", es: "especialista en TI" }, { word: "lawyer", category: "Unit 10", es: "abogado/a" }, { word: "mechanic", category: "Unit 10", es: "mecánico" }, { word: "nurse", category: "Unit 10", es: "enfermero/a" }, { word: "paramedic", category: "Unit 10", es: "paramédico" }, { word: "photographer", category: "Unit 10", es: "fotógrafo/a" }, { word: "physical therapist", category: "Unit 10", es: "fisioterapeuta" }, { word: "police officer", category: "Unit 10", es: "oficial de policía" }, { word: "project manager", category: "Unit 10", es: "jefe de proyecto" }, { word: "receptionist", category: "Unit 10", es: "recepcionista" }, { word: "break your leg", category: "Unit 10", es: "romperse la pierna" }, { word: "catch a cold", category: "Unit 10", es: "resfriarse" }, { word: "cut your finger", category: "Unit 10", es: "cortarse el dedo" }, { word: "feel a fever", category: "Unit 10", es: "tener fiebre" }, { word: "have a headache", category: "Unit 10", es: "dolor de cabeza" }, { word: "have a sore throat", category: "Unit 10", es: "dolor de garganta" }, { word: "have a stomachache", category: "Unit 10", es: "dolor de estómago" }, { word: "have a toothache", category: "Unit 10", es: "dolor de muelas" }, { word: "hurt your back", category: "Unit 10", es: "lastimarse la espalda" }, { word: "twist your ankle", category: "Unit 10", es: "torcerse el tobillo" },
+        { word: "add someone as a friend", category: "Unit 11", es: "agregar amigo" }, { word: "build a website", category: "Unit 11", es: "construir web" }, { word: "change your password", category: "Unit 11", es: "cambiar contraseña" }, { word: "check your messages", category: "Unit 11", es: "revisar mensajes" }, { word: "click on a link", category: "Unit 11", es: "hacer clic en enlace" }, { word: "join a group", category: "Unit 11", es: "unirse a grupo" }, { word: "make a video", category: "Unit 11", es: "hacer un video" }, { word: "message someone", category: "Unit 11", es: "enviar mensaje" }, { word: "open a social media account", category: "Unit 11", es: "abrir cuenta" }, { word: "swipe left", category: "Unit 11", es: "deslizar izq" }, { word: "swipe right", category: "Unit 11", es: "deslizar der" }, { word: "bookmark", category: "Unit 11", es: "marcar favorito" }, { word: "download", category: "Unit 11", es: "descargar" }, { word: "follow", category: "Unit 11", es: "seguir" }, { word: "go viral", category: "Unit 11", es: "volverse viral" }, { word: "like", category: "Unit 11", es: "dar me gusta" }, { word: "log in", category: "Unit 11", es: "iniciar sesión" }, { word: "post", category: "Unit 11", es: "publicar" }, { word: "search for", category: "Unit 11", es: "buscar" }, { word: "share", category: "Unit 11", es: "compartir" }, { word: "stop following", category: "Unit 11", es: "dejar de seguir" }, { word: "upload", category: "Unit 11", es: "subir" },
         { word: "blizzard", category: "Unit 12", es: "ventisca" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "cloudy", category: "Unit 12", es: "nublado" }, { word: "drought", category: "Unit 12", es: "sequía" }, { word: "flood", category: "Unit 12", es: "inundación" }, { word: "foggy", category: "Unit 12", es: "neblinoso" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "humid", category: "Unit 12", es: "húmedo" }, { word: "hurricane", category: "Unit 12", es: "huracán" }, { word: "rainy", category: "Unit 12", es: "lluvioso" }, { word: "snowstorm", category: "Unit 12", es: "tormenta de nieve" }, { word: "snowy", category: "Unit 12", es: "nevado" }, { word: "sunny", category: "Unit 12", es: "soleado" }, { word: "thunder and lightning", category: "Unit 12", es: "truenos y relámpagos" }, { word: "windy", category: "Unit 12", es: "ventoso" }, { word: "cave", category: "Unit 12", es: "cueva" }, { word: "cliff", category: "Unit 12", es: "acantilado" }, { word: "coast", category: "Unit 12", es: "costa" }, { word: "fountain", category: "Unit 12", es: "fuente" }, { word: "glacier", category: "Unit 12", es: "glaciar" }, { word: "hill", category: "Unit 12", es: "colina" }, { word: "rainforest", category: "Unit 12", es: "selva tropical" }, { word: "rocks", category: "Unit 12", es: "rocas" }, { word: "skyscraper", category: "Unit 12", es: "rascacielos" }, { word: "statue", category: "Unit 12", es: "estatua" }, { word: "tower", category: "Unit 12", es: "torre" }, { word: "valley", category: "Unit 12", es: "valle" }, { word: "waterfall", category: "Unit 12", es: "cascada" }, { word: "woods", category: "Unit 12", es: "bosque" }
     ];
 
-    // EVOLVE 3 (Course 9-12)
+    // EVOLVE 3
     const evolve3Raw = [
-        // Unit 1-3
         { word: "brave", category: "Unit 1", es: "valiente" }, { word: "cheerful", category: "Unit 1", es: "alegre" }, { word: "easygoing", category: "Unit 1", es: "tranquilo/a" }, { word: "generous", category: "Unit 1", es: "generoso/a" }, { word: "helpful", category: "Unit 1", es: "servicial" }, { word: "honest", category: "Unit 1", es: "honesto/a" }, { word: "intelligent", category: "Unit 1", es: "inteligente" }, { word: "nervous", category: "Unit 1", es: "nervioso/a" }, { word: "reliable", category: "Unit 1", es: "fiable" }, { word: "selfish", category: "Unit 1", es: "egoísta" }, { word: "serious", category: "Unit 1", es: "serio/a" }, { word: "sociable", category: "Unit 1", es: "sociable" }, { word: "be born", category: "Unit 1", es: "nacer" }, { word: "be into", category: "Unit 1", es: "gustar mucho" }, { word: "be married", category: "Unit 1", es: "estar casado/a" }, { word: "be raised", category: "Unit 1", es: "ser criado/a" }, { word: "be single", category: "Unit 1", es: "estar soltero/a" }, { word: "celebrate", category: "Unit 1", es: "celebrar" }, { word: "live alone", category: "Unit 1", es: "vivir solo/a" }, { word: "live with my family", category: "Unit 1", es: "vivir con mi familia" }, { word: "retire", category: "Unit 1", es: "jubilarse" },
         { word: "brand new", category: "Unit 2", es: "completamente nuevo" }, { word: "common", category: "Unit 2", es: "común" }, { word: "damaged", category: "Unit 2", es: "dañado" }, { word: "fancy", category: "Unit 2", es: "elegante" }, { word: "in good condition", category: "Unit 2", es: "en buen estado" }, { word: "modern", category: "Unit 2", es: "moderno" }, { word: "plain", category: "Unit 2", es: "sencillo" }, { word: "outdated", category: "Unit 2", es: "anticuado" }, { word: "special", category: "Unit 2", es: "especial" }, { word: "used", category: "Unit 2", es: "usado" }, { word: "useful", category: "Unit 2", es: "útil" }, { word: "useless", category: "Unit 2", es: "inútil" }, { word: "delete", category: "Unit 2", es: "eliminar" }, { word: "device", category: "Unit 2", es: "dispositivo" }, { word: "folder", category: "Unit 2", es: "carpeta" }, { word: "home screen", category: "Unit 2", es: "pantalla de inicio" }, { word: "model", category: "Unit 2", es: "modelo" }, { word: "set up", category: "Unit 2", es: "configurar" }, { word: "storage", category: "Unit 2", es: "almacenamiento" }, { word: "sync", category: "Unit 2", es: "sincronizar" }, { word: "try out", category: "Unit 2", es: "probar" }, { word: "work", category: "Unit 2", es: "funcionar" },
         { word: "bridge", category: "Unit 3", es: "puente" }, { word: "clinic", category: "Unit 3", es: "clínica" }, { word: "embassy", category: "Unit 3", es: "embajada" }, { word: "ferry", category: "Unit 3", es: "ferry" }, { word: "fire station", category: "Unit 3", es: "estación de bomberos" }, { word: "highway", category: "Unit 3", es: "autopista" }, { word: "hostel", category: "Unit 3", es: "hostal" }, { word: "monument", category: "Unit 3", es: "monumento" }, { word: "parking lot", category: "Unit 3", es: "estacionamiento" }, { word: "sculpture", category: "Unit 3", es: "escultura" }, { word: "sidewalk", category: "Unit 3", es: "acera" }, { word: "tunnel", category: "Unit 3", es: "túnel" }, { word: "arrival", category: "Unit 3", es: "llegada" }, { word: "book", category: "Unit 3", es: "reservar" }, { word: "departure", category: "Unit 3", es: "salida" }, { word: "direct", category: "Unit 3", es: "directo" }, { word: "fare", category: "Unit 3", es: "tarifa" }, { word: "line", category: "Unit 3", es: "línea" }, { word: "reservation", category: "Unit 3", es: "reserva" }, { word: "route", category: "Unit 3", es: "ruta" }, { word: "schedule", category: "Unit 3", es: "horario" }, { word: "terminal", category: "Unit 3", es: "terminal" },
-        // Unit 4-6
-        { word: "annoyed", category: "Unit 4", es: "molesto" }, { word: "annoying", category: "Unit 4", es: "molesto (causa)" }, { word: "disappointed", category: "Unit 4", es: "decepcionado" }, { word: "disappointing", category: "Unit 4", es: "decepcionante" }, { word: "embarrassed", category: "Unit 4", es: "avergonzado" }, { word: "embarrassing", category: "Unit 4", es: "embarazoso" }, { word: "fascinated", category: "Unit 4", es: "fascinado" }, { word: "fascinating", category: "Unit 4", es: "fascinante" }, { word: "frightened", category: "Unit 4", es: "asustado" }, { word: "frightening", category: "Unit 4", es: "aterrador" }, { word: "shocked", category: "Unit 4", es: "conmocionado" }, { word: "shocking", category: "Unit 4", es: "impactante" }, { word: "surprised", category: "Unit 4", es: "sorprendido" }, { word: "surprising", category: "Unit 4", es: "sorprendente" }, { word: "amused", category: "Unit 4", es: "divertido" }, { word: "amusing", category: "Unit 4", es: "divertido (causa)" }, { word: "arrange", category: "Unit 4", es: "organizar" }, { word: "check", category: "Unit 4", es: "comprobar" }, { word: "deal with", category: "Unit 4", es: "ocuparse de" }, { word: "forget", category: "Unit 4", es: "olvidar" }, { word: "get in touch with", category: "Unit 4", es: "ponerse en contacto con" }, { word: "let someone know", category: "Unit 4", es: "hacer saber a alguien" }, { word: "look into", category: "Unit 4", es: "investigar" }, { word: "meet up", category: "Unit 4", es: "quedar" }, { word: "remind", category: "Unit 4", es: "recordar" }, { word: "think about", category: "Unit 4", es: "pensar en" },
+        { word: "annoyed", category: "Unit 4", es: "molesto" }, { word: "annoying", category: "Unit 4", es: "molesto (causa)" }, { word: "disappointed", category: "Unit 4", es: "decepcionado" }, { word: "disappointing", category: "Unit 4", es: "decepcionante" }, { word: "embarrassed", category: "Unit 4", es: "avergonzado" }, { word: "embarrassing", category: "Unit 4", es: "embarazoso" }, { word: "fascinated", category: "Unit 4", es: "fascinado" }, { word: "fascinating", category: "Unit 4", es: "fascinante" }, { word: "frightened", category: "Unit 4", es: "asustado" }, { word: "frightening", category: "Unit 4", es: "aterrador" }, { word: "shocked", category: "Unit 4", es: "conmocionado" }, { word: "shocking", category: "Unit 4", es: "impactante" }, { word: "surprised", category: "Unit 4", es: "sorprendido" }, { word: "surprising", category: "Unit 4", es: "sorprendente" }, { word: "amused", category: "Unit 4", es: "divertido" }, { word: "amusing", category: "Unit 4", es: "divertido (causa)" }, { word: "arrange", category: "Unit 4", es: "organizar" }, { word: "check", category: "Unit 4", es: "comprobar" }, { word: "deal with", category: "Unit 4", es: "ocuparse de" }, { word: "forget", category: "Unit 4", es: "olvidar" }, { word: "get in touch with", category: "Unit 4", es: "ponerse en contacto" }, { word: "let know", category: "Unit 4", es: "hacer saber" }, { word: "look into", category: "Unit 4", es: "investigar" }, { word: "meet up", category: "Unit 4", es: "quedar" }, { word: "remind", category: "Unit 4", es: "recordar" }, { word: "think about", category: "Unit 4", es: "pensar en" },
         { word: "appear", category: "Unit 5", es: "aparecer" }, { word: "disappear", category: "Unit 5", es: "desaparecer" }, { word: "discover", category: "Unit 5", es: "descubrir" }, { word: "drop", category: "Unit 5", es: "dejar caer" }, { word: "fall off", category: "Unit 5", es: "caerse de" }, { word: "get back", category: "Unit 5", es: "recuperar" }, { word: "leave behind", category: "Unit 5", es: "dejar olvidado" }, { word: "locate", category: "Unit 5", es: "localizar" }, { word: "return", category: "Unit 5", es: "devolver" }, { word: "search for", category: "Unit 5", es: "buscar" }, { word: "be in trouble", category: "Unit 5", es: "estar en problemas" }, { word: "break down", category: "Unit 5", es: "averiarse" }, { word: "feel sorry for", category: "Unit 5", es: "sentir lástima por" }, { word: "figure out", category: "Unit 5", es: "resolver" }, { word: "get lost", category: "Unit 5", es: "perderse" }, { word: "give a ride", category: "Unit 5", es: "llevar en coche" }, { word: "grateful", category: "Unit 5", es: "agradecido" }, { word: "show where to go", category: "Unit 5", es: "mostrar a dónde ir" }, { word: "take care of", category: "Unit 5", es: "cuidar de" }, { word: "warn", category: "Unit 5", es: "advertir" },
         { word: "air", category: "Unit 6", es: "aire" }, { word: "concrete", category: "Unit 6", es: "hormigón" }, { word: "graffiti", category: "Unit 6", es: "grafiti" }, { word: "land", category: "Unit 6", es: "terreno" }, { word: "noise", category: "Unit 6", es: "ruido" }, { word: "pollution", category: "Unit 6", es: "contaminación" }, { word: "smoke", category: "Unit 6", es: "humo" }, { word: "space", category: "Unit 6", es: "espacio" }, { word: "traffic", category: "Unit 6", es: "tráfico" }, { word: "traffic jam", category: "Unit 6", es: "atasco" }, { word: "trash", category: "Unit 6", es: "basura" }, { word: "angrily", category: "Unit 6", es: "con enfado" }, { word: "beautifully", category: "Unit 6", es: "hermosamente" }, { word: "calmly", category: "Unit 6", es: "con calma" }, { word: "clearly", category: "Unit 6", es: "claramente" }, { word: "completely", category: "Unit 6", es: "completamente" }, { word: "correctly", category: "Unit 6", es: "correctamente" }, { word: "dangerously", category: "Unit 6", es: "peligrosamente" }, { word: "loudly", category: "Unit 6", es: "ruidosamente" }, { word: "politely", category: "Unit 6", es: "educadamente" }, { word: "quietly", category: "Unit 6", es: "silenciosamente" }, { word: "safely", category: "Unit 6", es: "de forma segura" },
-        // Unit 7-9
-        { word: "classical", category: "Unit 7", es: "música clásica" }, { word: "country", category: "Unit 7", es: "música country" }, { word: "EDM", category: "Unit 7", es: "música electrónica" }, { word: "folk", category: "Unit 7", es: "música folk" }, { word: "heavy metal", category: "Unit 7", es: "heavy metal" }, { word: "hip-hop", category: "Unit 7", es: "hip-hop" }, { word: "jazz", category: "Unit 7", es: "jazz" }, { word: "pop", category: "Unit 7", es: "pop" }, { word: "reggae", category: "Unit 7", es: "reggae" }, { word: "rock", category: "Unit 7", es: "rock" }, { word: "animated movie", category: "Unit 7", es: "película animada" }, { word: "comedy", category: "Unit 7", es: "comedia" }, { word: "documentary", category: "Unit 7", es: "documental" }, { word: "drama", category: "Unit 7", es: "drama" }, { word: "game show", category: "Unit 7", es: "concurso televisivo" }, { word: "horror", category: "Unit 7", es: "terror" }, { word: "musical", category: "Unit 7", es: "musical" }, { word: "reality show", category: "Unit 7", es: "reality show" }, { word: "romantic comedy", category: "Unit 7", es: "comedia romántica" }, { word: "science fiction", category: "Unit 7", es: "ciencia ficción" }, { word: "soap opera", category: "Unit 7", es: "telenovela" }, { word: "talk show", category: "Unit 7", es: "programa de entrevistas" }, { word: "thriller", category: "Unit 7", es: "thriller" }, { word: "episode", category: "Unit 7", es: "episodio" }, { word: "series", category: "Unit 7", es: "serie" }, { word: "binge-watch", category: "Unit 7", es: "maratonear" }, { word: "viewers", category: "Unit 7", es: "espectadores" }, { word: "genre", category: "Unit 7", es: "género" },
-        { word: "achievement", category: "Unit 8", es: "logro" }, { word: "challenge", category: "Unit 8", es: "desafío" }, { word: "change", category: "Unit 8", es: "cambio" }, { word: "chore", category: "Unit 8", es: "tarea doméstica" }, { word: "job", category: "Unit 8", es: "trabajo" }, { word: "opportunity", category: "Unit 8", es: "oportunidad" }, { word: "process", category: "Unit 8", es: "proceso" }, { word: "project", category: "Unit 8", es: "proyecto" }, { word: "success", category: "Unit 8", es: "éxito" }, { word: "make good progress", category: "Unit 8", es: "progresar" }, { word: "get nowhere", category: "Unit 8", es: "no avanzar" }, { word: "have trouble", category: "Unit 8", es: "tener problemas" }, { word: "not have time", category: "Unit 8", es: "no tener tiempo" }, { word: "do one's best", category: "Unit 8", es: "hacerlo lo mejor posible" }, { word: "take it easy", category: "Unit 8", es: "tomárselo con calma" }, { word: "spend a lot of time", category: "Unit 8", es: "pasar mucho tiempo" }, { word: "concentrate on", category: "Unit 8", es: "concentrarse en" }, { word: "waste time", category: "Unit 8", es: "perder el tiempo" }, { word: "save time", category: "Unit 8", es: "ahorrar tiempo" },
-        { word: "architecture", category: "Unit 9", es: "arquitectura" }, { word: "biology", category: "Unit 9", es: "biología" }, { word: "business", category: "Unit 9", es: "negocios" }, { word: "chemistry", category: "Unit 9", es: "química" }, { word: "computer science", category: "Unit 9", es: "informática" }, { word: "economics", category: "Unit 9", es: "economía" }, { word: "education", category: "Unit 9", es: "educación" }, { word: "engineering", category: "Unit 9", es: "ingeniería" }, { word: "law", category: "Unit 9", es: "derecho" }, { word: "medicine", category: "Unit 9", es: "medicina" }, { word: "physics", category: "Unit 9", es: "física" }, { word: "political science", category: "Unit 9", es: "ciencias políticas" }, { word: "apply", category: "Unit 9", es: "solicitar" }, { word: "career", category: "Unit 9", es: "carrera profesional" }, { word: "contract", category: "Unit 9", es: "contrato" }, { word: "employer", category: "Unit 9", es: "empleador" }, { word: "fire", category: "Unit 9", es: "despedir" }, { word: "hire", category: "Unit 9", es: "contratar" }, { word: "manage", category: "Unit 9", es: "gestionar" }, { word: "profession", category: "Unit 9", es: "profesión" }, { word: "retire", category: "Unit 9", es: "jubilarse" }, { word: "salary", category: "Unit 9", es: "salario (mensual)" }, { word: "self-employed", category: "Unit 9", es: "autónomo" }, { word: "wage", category: "Unit 9", es: "salario (hora)" }, { word: "working hours", category: "Unit 9", es: "horas de trabajo" },
-        // Unit 10-12
+        { word: "classical", category: "Unit 7", es: "música clásica" }, { word: "country", category: "Unit 7", es: "música country" }, { word: "EDM", category: "Unit 7", es: "música electrónica" }, { word: "folk", category: "Unit 7", es: "música folk" }, { word: "heavy metal", category: "Unit 7", es: "heavy metal" }, { word: "hiphop", category: "Unit 7", es: "hip-hop" }, { word: "jazz", category: "Unit 7", es: "jazz" }, { word: "pop", category: "Unit 7", es: "pop" }, { word: "reggae", category: "Unit 7", es: "reggae" }, { word: "rock", category: "Unit 7", es: "rock" }, { word: "animated movie", category: "Unit 7", es: "película animada" }, { word: "comedy", category: "Unit 7", es: "comedia" }, { word: "documentary", category: "Unit 7", es: "documental" }, { word: "drama", category: "Unit 7", es: "drama" }, { word: "game show", category: "Unit 7", es: "concurso televisivo" }, { word: "horror", category: "Unit 7", es: "terror" }, { word: "musical", category: "Unit 7", es: "musical" }, { word: "reality show", category: "Unit 7", es: "reality show" }, { word: "romantic comedy", category: "Unit 7", es: "comedia romántica" }, { word: "science fiction", category: "Unit 7", es: "ciencia ficción" }, { word: "soap opera", category: "Unit 7", es: "telenovela" }, { word: "talk show", category: "Unit 7", es: "programa de entrevistas" }, { word: "thriller", category: "Unit 7", es: "thriller" }, { word: "episode", category: "Unit 7", es: "episodio" }, { word: "series", category: "Unit 7", es: "serie" }, { word: "binge watch", category: "Unit 7", es: "maratonear" }, { word: "viewers", category: "Unit 7", es: "espectadores" }, { word: "genre", category: "Unit 7", es: "género" },
+        { word: "achievement", category: "Unit 8", es: "logro" }, { word: "challenge", category: "Unit 8", es: "desafío" }, { word: "change", category: "Unit 8", es: "cambio" }, { word: "chore", category: "Unit 8", es: "tarea doméstica" }, { word: "job", category: "Unit 8", es: "trabajo" }, { word: "opportunity", category: "Unit 8", es: "oportunidad" }, { word: "process", category: "Unit 8", es: "proceso" }, { word: "project", category: "Unit 8", es: "proyecto" }, { word: "success", category: "Unit 8", es: "éxito" }, { word: "make progress", category: "Unit 8", es: "progresar" }, { word: "get nowhere", category: "Unit 8", es: "no avanzar" }, { word: "have trouble", category: "Unit 8", es: "tener problemas" }, { word: "not have time", category: "Unit 8", es: "no tener tiempo" }, { word: "do one's best", category: "Unit 8", es: "hacerlo lo mejor posible" }, { word: "take it easy", category: "Unit 8", es: "tomárselo con calma" }, { word: "spend time", category: "Unit 8", es: "pasar tiempo" }, { word: "concentrate on", category: "Unit 8", es: "concentrarse en" }, { word: "waste time", category: "Unit 8", es: "perder el tiempo" }, { word: "save time", category: "Unit 8", es: "ahorrar tiempo" },
+        { word: "architecture", category: "Unit 9", es: "arquitectura" }, { word: "biology", category: "Unit 9", es: "biología" }, { word: "business", category: "Unit 9", es: "negocios" }, { word: "chemistry", category: "Unit 9", es: "química" }, { word: "computer science", category: "Unit 9", es: "informática" }, { word: "economics", category: "Unit 9", es: "economía" }, { word: "education", category: "Unit 9", es: "educación" }, { word: "engineering", category: "Unit 9", es: "ingeniería" }, { word: "law", category: "Unit 9", es: "derecho" }, { word: "medicine", category: "Unit 9", es: "medicina" }, { word: "physics", category: "Unit 9", es: "física" }, { word: "political science", category: "Unit 9", es: "ciencias políticas" }, { word: "apply", category: "Unit 9", es: "solicitar" }, { word: "career", category: "Unit 9", es: "carrera profesional" }, { word: "contract", category: "Unit 9", es: "contrato" }, { word: "employer", category: "Unit 9", es: "empleador" }, { word: "fire", category: "Unit 9", es: "despedir" }, { word: "hire", category: "Unit 9", es: "contratar" }, { word: "manage", category: "Unit 9", es: "gestionar" }, { word: "profession", category: "Unit 9", es: "profesión" }, { word: "retire", category: "Unit 9", es: "jubilarse" }, { word: "salary", category: "Unit 9", es: "salario (mensual)" }, { word: "self employed", category: "Unit 9", es: "autónomo" }, { word: "wage", category: "Unit 9", es: "salario (hora)" }, { word: "working hours", category: "Unit 9", es: "horas de trabajo" },
         { word: "cotton", category: "Unit 10", es: "algodón" }, { word: "glass", category: "Unit 10", es: "vidrio" }, { word: "leather", category: "Unit 10", es: "cuero" }, { word: "metal", category: "Unit 10", es: "metal" }, { word: "plastic", category: "Unit 10", es: "plástico" }, { word: "polyester", category: "Unit 10", es: "poliéster" }, { word: "stone", category: "Unit 10", es: "piedra" }, { word: "wood", category: "Unit 10", es: "madera" }, { word: "wool", category: "Unit 10", es: "lana" }, { word: "artificial", category: "Unit 10", es: "artificial" }, { word: "fragile", category: "Unit 10", es: "frágil" }, { word: "hard", category: "Unit 10", es: "duro" }, { word: "heavy", category: "Unit 10", es: "pesado" }, { word: "light", category: "Unit 10", es: "ligero" }, { word: "natural", category: "Unit 10", es: "natural" }, { word: "soft", category: "Unit 10", es: "suave" }, { word: "strong", category: "Unit 10", es: "fuerte" }, { word: "warm", category: "Unit 10", es: "cálido" }, { word: "waterproof", category: "Unit 10", es: "impermeable" }, { word: "catch", category: "Unit 10", es: "atrapar" }, { word: "deliver", category: "Unit 10", es: "entregar" }, { word: "design", category: "Unit 10", es: "diseñar" }, { word: "export", category: "Unit 10", es: "exportar" }, { word: "freeze", category: "Unit 10", es: "congelar" }, { word: "grow", category: "Unit 10", es: "cultivar" }, { word: "import", category: "Unit 10", es: "importar" }, { word: "manufacture", category: "Unit 10", es: "fabricar" }, { word: "pick", category: "Unit 10", es: "recoger" }, { word: "produce", category: "Unit 10", es: "producir" }, { word: "ship", category: "Unit 10", es: "enviar" }, { word: "store", category: "Unit 10", es: "almacenar" }, { word: "transport", category: "Unit 10", es: "transportar" },
         { word: "figure out", category: "Unit 11", es: "resolver" }, { word: "set up", category: "Unit 11", es: "establecer" }, { word: "get over", category: "Unit 11", es: "superar" }, { word: "give up", category: "Unit 11", es: "rendirse" }, { word: "stand out", category: "Unit 11", es: "destacar" }, { word: "keep up", category: "Unit 11", es: "mantener el ritmo" }, { word: "work at", category: "Unit 11", es: "esforzarse" }, { word: "work out", category: "Unit 11", es: "funcionar" }, { word: "advantage", category: "Unit 11", es: "ventaja" }, { word: "consider", category: "Unit 11", es: "considerar" }, { word: "disadvantage", category: "Unit 11", es: "desventaja" }, { word: "effect", category: "Unit 11", es: "efecto" }, { word: "goal", category: "Unit 11", es: "meta" }, { word: "option", category: "Unit 11", es: "opción" }, { word: "purpose", category: "Unit 11", es: "propósito" }, { word: "research", category: "Unit 11", es: "investigación" }, { word: "result", category: "Unit 11", es: "resultado" }, { word: "reward", category: "Unit 11", es: "recompensa" }, { word: "risk", category: "Unit 11", es: "riesgo" }, { word: "situation", category: "Unit 11", es: "situación" },
         { word: "be mad at", category: "Unit 12", es: "estar enfadado con" }, { word: "blame", category: "Unit 12", es: "culpar" }, { word: "damage", category: "Unit 12", es: "dañar" }, { word: "destroy", category: "Unit 12", es: "destruir" }, { word: "fall out", category: "Unit 12", es: "caerse" }, { word: "feel bad", category: "Unit 12", es: "sentirse mal" }, { word: "knock off", category: "Unit 12", es: "tirar" }, { word: "leave on", category: "Unit 12", es: "dejar encendido" }, { word: "leave open", category: "Unit 12", es: "dejar abierto" }, { word: "pick up", category: "Unit 12", es: "recoger" }, { word: "pull out", category: "Unit 12", es: "sacar" }, { word: "shake", category: "Unit 12", es: "agitar" }, { word: "slip", category: "Unit 12", es: "resbalar" }, { word: "spill", category: "Unit 12", es: "derramar" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "enormous", category: "Unit 12", es: "enorme" }, { word: "exhausted", category: "Unit 12", es: "agotado" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "huge", category: "Unit 12", es: "enorme" }, { word: "magnificent", category: "Unit 12", es: "magnífico" }, { word: "miserable", category: "Unit 12", es: "miserable" }, { word: "starving", category: "Unit 12", es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", es: "estupendo" }, { word: "thrilled", category: "Unit 12", es: "emocionado" }, { word: "tiny", category: "Unit 12", es: "diminuto" }
     ];
 
-    // Asignación mágica de Cursos (Course 1-12)
-    function assignCourse(wordsArray, baseCourse) {
+    // Asignación de Bloques Dinámica
+    // blockValue = "1_1" (Evolve 1, Block 1), "2_3" (Evolve 2, Block 3)
+    function assignBlocks(wordsArray, bookId) {
         return wordsArray.map(w => {
             let unitMatch = w.category.match(/Unit (\d+)/);
+            let blockNum = 1;
             if (unitMatch) {
                 let unitNum = parseInt(unitMatch[1]);
-                let courseOffset = Math.ceil(unitNum / 3) - 1; 
-                w.course = baseCourse + courseOffset;
-            } else {
-                w.course = baseCourse; // Fallback
+                blockNum = Math.ceil(unitNum / 3); // Unidades 1-3 = bloque 1; 4-6 = bloque 2; etc.
             }
+            w.book = bookId;
+            w.blockId = `${bookId}_${blockNum}`; // Ej: "1_1"
             return w;
         });
     }
 
-    const fullDB = [...assignCourse(evolve1Raw, 1), ...assignCourse(evolve2Raw, 5), ...assignCourse(evolve3Raw, 9)];
+    const fullDB = [
+        ...assignBlocks(evolve1Raw, 1), 
+        ...assignBlocks(evolve2Raw, 2), 
+        ...assignBlocks(evolve3Raw, 3)
+    ];
 
     // ========== ESTADO GLOBAL ==========
-    let currentCourse = 1;
+    let currentBlockId = "1_1"; // ID del selector
     let currentMode = "rapid";
     let audioPlayer = new Audio();
     const AUDIO_BASE_PATH = './audios_cambridge/';
@@ -564,27 +540,29 @@
         document.getElementById('teamGreenScore').textContent = teamScores.green;
     }
 
-    function getWordsByCourse() { return fullDB.filter(w => w.course === currentCourse); }
+    function getWordsByBlock() { 
+        return fullDB.filter(w => w.blockId === currentBlockId); 
+    }
 
     // ========== CAMBIO DE TEMA Y SELECTORES ==========
     function updateThemeAndCategories() {
         const root = document.documentElement;
         const mainTitle = document.getElementById('mainBookTitle');
-        let currentBook = Math.ceil(currentCourse / 4);
+        const bookId = parseInt(currentBlockId.split('_')[0]); // 1, 2 o 3
 
-        if (currentBook === 1) {
+        if (bookId === 1) {
             root.style.setProperty('--theme-primary', '#891752');
             root.style.setProperty('--theme-bg', '#1c0511');
             root.style.setProperty('--theme-panel', '#2d0d1e');
             root.style.setProperty('--theme-border', '#4a1530');
             mainTitle.textContent = 'EVOLVE 1';
-        } else if (currentBook === 2) {
+        } else if (bookId === 2) {
             root.style.setProperty('--theme-primary', '#64b54c');
             root.style.setProperty('--theme-bg', '#11220c');
             root.style.setProperty('--theme-panel', '#1b3613');
             root.style.setProperty('--theme-border', '#2a541d');
             mainTitle.textContent = 'EVOLVE 2';
-        } else if (currentBook === 3) {
+        } else if (bookId === 3) {
             root.style.setProperty('--theme-primary', '#eb515b');
             root.style.setProperty('--theme-bg', '#2e0a0c');
             root.style.setProperty('--theme-panel', '#4d1014');
@@ -592,10 +570,13 @@
             mainTitle.textContent = 'EVOLVE 3';
         }
 
-        const words = getWordsByCourse();
-        const categories = [...new Set(words.map(w => w.category))].sort();
+        const words = getWordsByBlock();
+        // Extraemos solo las "Units" únicas
+        const categories = [...new Set(words.map(w => w.category))].sort((a,b) => {
+            return parseInt(a.replace('Unit ','')) - parseInt(b.replace('Unit ',''));
+        });
         
-        let optionsHtml = `<option value="all">📚 ALL CATEGORIES</option>`;
+        let optionsHtml = `<option value="all">📚 ALL UNITS IN BLOCK</option>`;
         categories.forEach(cat => { optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`; });
         document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
         rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all';
@@ -605,70 +586,70 @@
     function updateGrammarPanel() {
         const grid = document.getElementById('grammarGrid');
         const label = document.getElementById('grammarCourseLabel');
-        label.textContent = `Course ${currentCourse}`;
+        const sel = document.getElementById('blockSelect');
+        label.textContent = sel.options[sel.selectedIndex].text;
         let html = '';
         
-        switch(currentCourse) {
+        switch(currentBlockId) {
             // EVOLVE 1
-            case 1: html = `
-                <div class="grammar-card"><h4>🔹 be (aff, neg, q)</h4><ul><li><code>I'm from Brazil.</code></li><li><code>Are you American?</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Possessives & Whose</h4><ul><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li><code>I like coffee.</code></li><li><code>Do you play games?</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 This / these</h4><ul><li><code>This ticket</code> / <code>These birds</code></li><li>Present continuous basics</li></ul></div>`; break;
-            case 2: html = `
-                <div class="grammar-card"><h4>🔹 Present continuous (future)</h4><ul><li><code>I'm going to the mall tomorrow.</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Object pronouns</h4><ul><li><code>me, you, him, her, it, us, them</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Simple past</h4><ul><li><code>He worked</code> / <code>She didn't play</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 be going to & Determiners</h4><ul><li><code>all, most, many, some, no, none</code></li></ul></div>`; break;
-            case 3: html = `
-                <div class="grammar-card"><h4>🔹 Quantifiers</h4><ul><li><code>a lot of, some, a few, too much</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Verb patterns</h4><ul><li><code>want to try</code> / <code>can't stand waiting</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 if and when</h4><ul><li>Giving reasons: <code>to + verb, for + noun</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Comparatives / Superlatives</h4><ul><li><code>taller than</code> / <code>the best</code></li></ul></div>`; break;
-            case 4: html = `
-                <div class="grammar-card"><h4>🔹 have to (obligation)</h4><ul><li><code>I have to work</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Predictions</h4><ul><li><code>will, might, may, won't</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Present perfect</h4><ul><li>For experience vs. Simple past</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Questions with 'be like'</h4><ul><li>Relative pronouns: <code>who, which, that</code></li></ul></div>`; break;
+            case "1_1": html = `
+                <div class="grammar-card"><h4>🔹 Unit 1: be (aff, neg, q)</h4><ul><li><code>I'm from Brazil.</code></li><li><code>Are you American?</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 2: Possessives</h4><ul><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 3: Simple present</h4><ul><li><code>I like coffee.</code></li><li><code>Do you play games?</code></li></ul></div>`; break;
+            case "1_2": html = `
+                <div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li><code>I'm going to the mall.</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 5: Object pronouns</h4><ul><li><code>me, you, him, her, it, us, them</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li><code>He worked</code> / <code>She didn't play</code></li></ul></div>`; break;
+            case "1_3": html = `
+                <div class="grammar-card"><h4>🔹 Unit 7: Quantifiers</h4><ul><li><code>a lot of, some, a few, too much</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 8: Verb patterns</h4><ul><li><code>want to try</code> / <code>can't stand waiting</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 9: if and when</h4><ul><li>Giving reasons: <code>to + verb, for + noun</code></li></ul></div>`; break;
+            case "1_4": html = `
+                <div class="grammar-card"><h4>🔹 Unit 10: Comparatives & Superlatives</h4><ul><li><code>taller than</code> / <code>the best</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 11: have to & Predictions</h4><ul><li><code>have to</code> / <code>will, might, may</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 12: Present perfect</h4><ul><li>For experience vs. Simple past</li></ul></div>`; break;
+            
             // EVOLVE 2
-            case 5: html = `
-                <div class="grammar-card"><h4>🔹 be & Possessives</h4><ul><li>Review: affirmative, negative, questions</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Simple present</h4><ul><li>Habits and routines</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Demonstratives</h4><ul><li><code>This / that one; these / those ones</code></li></ul></div>`; break;
-            case 6: html = `
-                <div class="grammar-card"><h4>🔹 Present continuous</h4><ul><li>Simple present vs. present continuous</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Future plans</h4><ul><li>Present continuous for future</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Simple past</h4><ul><li>Affirmative, negative and questions</li></ul></div>`; break;
-            case 7: html = `
-                <div class="grammar-card"><h4>🔹 be going to & Determiners</h4><ul><li><code>all, most, many, some, no, none</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Verb patterns</h4><ul><li><code>verb + to + verb</code> / <code>verb + -ing</code></li></ul></div>`; break;
-            case 8: html = `
-                <div class="grammar-card"><h4>🔹 if and when</h4><ul><li>Giving reasons using <code>to</code> and <code>for</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Modals & Adjectives</h4><ul><li>have to, will, might, comparative, superlative</li></ul></div>`; break;
+            case "2_1": html = `
+                <div class="grammar-card"><h4>🔹 Unit 1: be & Possessives</h4><ul><li>Review: affirmative, negative, questions</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 3: Demonstratives</h4><ul><li><code>This / that one; these / those ones</code></li></ul></div>`; break;
+            case "2_2": html = `
+                <div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li>Simple present vs. present continuous</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 5: Future plans</h4><ul><li>Present continuous for future</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li>Affirmative, negative and questions</li></ul></div>`; break;
+            case "2_3": html = `
+                <div class="grammar-card"><h4>🔹 Unit 7: be going to</h4><ul><li><code>all, most, many, some, no, none</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 8: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 9: Verb patterns</h4><ul><li><code>verb + to + verb</code> / <code>verb + -ing</code></li></ul></div>`; break;
+            case "2_4": html = `
+                <div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li>have to, will, might</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect vs simple past</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 12: Relative Pronouns</h4><ul><li><code>who, which, that</code></li></ul></div>`; break;
+            
             // EVOLVE 3
-            case 9: html = `
-                <div class="grammar-card"><h4>🔹 Information questions</h4><ul><li><code>What, Which, Whose, How...</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Indirect questions</h4><ul><li><code>Do you know where…?</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Present perfect</h4><ul><li>with <code>ever, never, for, since</code></li><li>with <code>already, yet</code></li></ul></div>`; break;
-            case 10: html = `
-                <div class="grammar-card"><h4>🔹 Articles & Modals</h4><ul><li><code>a, an, the</code> / <code>should, could</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 be going to vs will</h4><ul><li>will for sudden decisions</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Past tenses</h4><ul><li>Past continuous vs. simple past</li></ul></div>`; break;
-            case 11: html = `
-                <div class="grammar-card"><h4>🔹 Quantifiers & Conditionals</h4><ul><li><code>almost all, several</code> / Real conditionals</li></ul></div>
-                <div class="grammar-card"><h4>🔹 used to & Comparisons</h4><ul><li>Comparisons with <code>(not) as… as</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Present perfect continuous</h4><ul><li>vs. Present perfect</li></ul></div>`; break;
-            case 12: html = `
-                <div class="grammar-card"><h4>🔹 Modals of necessity/prohibition</h4><ul><li><code>have to, must, can't</code></li></ul></div>
-                <div class="grammar-card"><h4>🔹 Passive Voice</h4><ul><li>Simple present & Simple past passive</li></ul></div>
-                <div class="grammar-card"><h4>🔹 Conditionals & Reported Speech</h4><ul><li>Unreal conditionals: <code>If I had…</code></li><li>Indefinite pronouns</li></ul></div>`; break;
+            case "3_1": html = `
+                <div class="grammar-card"><h4>🔹 Unit 1: Info questions</h4><ul><li><code>What, Which, Whose, How...</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 2: Indirect questions</h4><ul><li><code>Do you know where…?</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 3: Present perfect</h4><ul><li>with <code>ever, never, for, since</code></li></ul></div>`; break;
+            case "3_2": html = `
+                <div class="grammar-card"><h4>🔹 Unit 4: Articles & Modals</h4><ul><li><code>a, an, the</code> / <code>should, could</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 5: be going to vs will</h4><ul><li>will for sudden decisions</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 6: Past tenses</h4><ul><li>Past continuous vs. simple past</li></ul></div>`; break;
+            case "3_3": html = `
+                <div class="grammar-card"><h4>🔹 Unit 7: Conditionals</h4><ul><li><code>almost all, several</code> / Real conditionals</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 8: used to & Comparisons</h4><ul><li>Comparisons with <code>(not) as… as</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 9: Pres. perfect continuous</h4><ul><li>vs. Present perfect</li></ul></div>`; break;
+            case "3_4": html = `
+                <div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li><code>have to, must, can't</code></li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 11: Passive Voice</h4><ul><li>Simple present & Simple past passive</li></ul></div>
+                <div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li>Unreal conditionals: <code>If I had…</code></li></ul></div>`; break;
         }
         grid.innerHTML = html;
     }
 
-    document.getElementById('courseSelect').addEventListener('change', (e) => {
-        currentCourse = parseInt(e.target.value);
+    document.getElementById('blockSelect').addEventListener('change', (e) => {
+        currentBlockId = e.target.value;
         updateThemeAndCategories();
         updateGrammarPanel();
         if (currentMode === 'rapid') rapidRefreshWordList();
@@ -680,7 +661,8 @@
     function formatCategory(cat) { return cat.toUpperCase(); }
 
     function getAudioFilename(word) {
-        return word.replace(/[<>:"/\\|?*]/g, '').replace(/\s+/g, '_') + '.mp3';
+        // Convierte todo espacio o apóstrofe en guiones bajos según lo proveído en wordlist
+        return word.replace(/[<>:"/\\|?*']/g, '').replace(/\s+/g, '_') + '.mp3';
     }
 
     function playWordAudio(word) {
@@ -719,14 +701,14 @@
     const MIN_SPEED=0.5;
 
     function rapidGetFilteredList() {
-        let list = getWordsByCourse();
+        let list = getWordsByBlock();
         if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory);
         return list;
     }
 
     function rapidPickWord() {
         const list = rapidGetFilteredList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByCourse()[0] || {word: "N/A", category: "N/A"};
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A"};
     }
 
     function rapidUpdateDisplay(word) {
@@ -823,14 +805,14 @@
     let spellingTotalTime = 10, spellingWaiting = false, spellingCategory = 'all';
 
     function spellingGetList() {
-        let list = getWordsByCourse();
+        let list = getWordsByBlock();
         if (spellingCategory !== 'all') list = list.filter(w => w.category === spellingCategory);
         return list;
     }
 
     function spellingPickWord() {
         const list = spellingGetList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByCourse()[0] || {word: "N/A", category: "N/A", es: "N/A"};
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A", es: "N/A"};
     }
 
     function spellingUpdateUI() {
@@ -960,14 +942,14 @@
     let missingTotalTime = 15, missingWaiting = false, missingCategory = 'all';
 
     function missingGetList() {
-        let list = getWordsByCourse();
+        let list = getWordsByBlock();
         if (missingCategory !== 'all') list = list.filter(w => w.category === missingCategory);
         return list;
     }
 
     function missingPickWord() {
         const list = missingGetList();
-        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByCourse()[0] || {word: "N/A", category: "N/A", es: "N/A"};
+        return list.length ? list[Math.floor(Math.random()*list.length)] : getWordsByBlock()[0] || {word: "N/A", category: "N/A", es: "N/A"};
     }
 
     function generateMissingWord(word) {
@@ -975,13 +957,13 @@
         const chars = word.split('');
         const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1);
         const indices = [];
-        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ') indices.push(i);
+        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ' && chars[i] !== "'") indices.push(i);
         for (let i = indices.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [indices[i], indices[j]] = [indices[j], indices[i]];
         }
         const toHide = indices.slice(0, Math.min(numToHide, indices.length));
-        return chars.map((c, i) => (i === 0 || c === ' ') ? c : (toHide.includes(i) ? '_' : c)).join('');
+        return chars.map((c, i) => (i === 0 || c === ' ' || c === "'") ? c : (toHide.includes(i) ? '_' : c)).join('');
     }
 
     function missingUpdateUI() {
