@@ -107,7 +107,7 @@
         .grammar-card li { color: #e0d5c1; padding: 6px 0; font-size: 1.1rem; }
         .grammar-card code { background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 6px; color: #fff; font-family: monospace; font-size: 1.05rem; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
         
-        .hint-text { font-size: 2.2rem; color: #b7aa9a; margin: 0 0 15px 0; font-weight: 600; }
+        .hint-text { font-size: 2.2rem; color: #fff; margin: 0 0 15px 0; font-weight: 600; text-shadow: 1px 1px 5px black;}
         .timer-display { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); transition: color 0.3s; }
         .timer-display.danger { color: #ff4500; animation: shake 0.5s infinite; }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
@@ -122,7 +122,7 @@
         .answer-reveal { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); margin-top: 15px; min-height: 50px; }
         .random-btn { background: var(--theme-primary); padding: 8px 16px; border-radius: 30px; font-size: 1.2rem; }
 
-        /* ================= FLASHCARD CSS ================= */
+        /* MODO FLASHCARD CSS */
         .flashcard-container { perspective: 1000px; width: 100%; max-width: 600px; margin: 0 auto 20px; }
         .flashcard-inner { position: relative; width: 100%; min-height: 350px; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; border-radius: 40px;}
         .flashcard-inner.flipped { transform: rotateY(180deg); }
@@ -132,10 +132,10 @@
         .fc-translation { font-size: 4rem; font-weight: 700; color: var(--theme-accent); text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
         .fc-hint { font-size: 1.2rem; color: #888; margin-top: 25px; font-weight: 600; letter-spacing: 2px;}
 
-        /* ESTILOS DEL CONTADOR DE PALABRAS EN BLANCO */
+        /* Contador en blanco */
         .counter { color: #ffffff !important; font-weight: 800; font-size: 1.1rem; }
 
-        /* ================= MEDIA QUERIES ================= */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .game-container { padding: 15px 12px; border-radius: 20px; }
             h1 { font-size: 1.8rem; justify-content: center; width: 100%; margin-bottom: 10px; text-align: center;}
@@ -366,7 +366,7 @@
 (function(){
     "use strict";
 
-    // 1. BASE DE DATOS MASIVA
+    // ========== BASES DE DATOS ==========
     const evolve1DB = [
         { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" },
         { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "hungry", category: "Unit 2", es: "hambriento" },
@@ -412,21 +412,26 @@
         { word: "be mad at", category: "Unit 12", es: "estar enojado con" }, { word: "blame", category: "Unit 12", es: "culpar" }, { word: "damage", category: "Unit 12", es: "daño" }, { word: "destroy", category: "Unit 12", es: "destruir" }, { word: "fall out", category: "Unit 12", es: "caerse" }, { word: "feel bad", category: "Unit 12", es: "sentirse mal" }, { word: "knock off", category: "Unit 12", es: "tirar" }, { word: "leave on", category: "Unit 12", es: "dejar prendido" }, { word: "leave open", category: "Unit 12", es: "dejar abierto" }, { word: "pick up", category: "Unit 12", es: "recoger" }, { word: "pull out", category: "Unit 12", es: "sacar" }, { word: "shake", category: "Unit 12", es: "agitar" }, { word: "slip", category: "Unit 12", es: "resbalar" }, { word: "spill", category: "Unit 12", es: "derramar" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "enormous", category: "Unit 12", es: "enorme" }, { word: "exhausted", category: "Unit 12", es: "exhausto" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "huge", category: "Unit 12", es: "enorme" }, { word: "magnificent", category: "Unit 12", es: "magnífico" }, { word: "miserable", category: "Unit 12", es: "miserable" }, { word: "starving", category: "Unit 12", es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", es: "estupendo" }, { word: "thrilled", category: "Unit 12", es: "emocionado" }, { word: "tiny", category: "Unit 12", es: "diminuto" }
     ];
 
-    // Mapeo de bloques seguro
+    // Asignar bloques dinámicamente
     function assignBlocks(wordsArray, bookId) {
         return wordsArray.map(w => {
             let unitMatch = w.category.match(/Unit (\d+)/i);
             let blockNum = 1;
             if (unitMatch) blockNum = Math.ceil(parseInt(unitMatch[1]) / 3); 
-            w.book = bookId; w.blockId = `${bookId}_${blockNum}`;
+            w.book = bookId; 
+            w.blockId = `${bookId}_${blockNum}`;
             return w;
         });
     }
 
-    const fullDB = [...assignBlocks(evolve1DB, 1), ...assignBlocks(evolve2DB, 2), ...assignBlocks(evolve3DB, 3)];
+    const fullDB = [
+        ...assignBlocks(evolve1DB, 1), 
+        ...assignBlocks(evolve2DB, 2), 
+        ...assignBlocks(evolve3DB, 3)
+    ];
 
-    // ========== SHUFFLE BAG ALGORITHM (Sin repeticiones) ==========
-    let rapidBag = [], spellingBag = [], missingBag = [], fcList = [];
+    // ========== SHUFFLE BAG ENGINE (Sin Repeticiones) ==========
+    let rapidBag = [], spellingBag = [], missingBag = [], fcBag = [];
     
     function shuffleArray(arr) {
         let array = [...arr];
@@ -580,9 +585,8 @@
         categories.forEach(cat => { optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`; });
         document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
         
-        // Reset state
         rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all'; fcCategory = 'all';
-        rapidBag = []; spellingBag = []; missingBag = []; fcList = [];
+        rapidBag = []; spellingBag = []; missingBag = []; fcBag = []; // Reinicia las bolsas al cambiar de libro
     }
 
     function updateGrammarPanel() {
@@ -617,6 +621,8 @@
         else if (currentMode === 'missing') missingRefreshWordList();
         else if (currentMode === 'flashcard') fcRefreshList();
     });
+
+    function formatCategory(cat) { return cat.toUpperCase(); }
 
     // ========== MODO RAPID ==========
     let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
@@ -653,7 +659,6 @@
         rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
         if (rapidIsPlaying) rapidStartInterval();
     }
-    
     function rapidStartInterval() {
         if (rapidInterval) clearInterval(rapidInterval);
         rapidInterval = setInterval(() => {
@@ -662,27 +667,23 @@
             rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
         }, rapidDynamicSpeed*1000);
     }
-    
     function rapidFinish() {
         rapidSessionActive = false; if (rapidInterval) clearInterval(rapidInterval); rapidInterval = null;
         document.getElementById('playPauseBtn').innerHTML = '🔄 RESTART'; rapidIsPlaying = false;
         document.getElementById('currentWord').textContent = '✔️ DONE!'; document.getElementById('categoryTag').textContent = 'SESSION COMPLETE';
         shootConfetti(); playDing();
     }
-    
     function rapidReset() {
         rapidRoundCounter = 0; rapidSessionActive = true; rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
         rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value); rapidDynamicSpeed = rapidBaseSpeed;
         rapidBag = []; // Reinicia bolsa
         initAudioAPI(); rapidUpdateDisplay(rapidPickWord());
     }
-    
     function rapidTogglePlay() {
         initAudioAPI();
         if (!rapidSessionActive) { rapidReset(); rapidIsPlaying = true; rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; } 
         else { if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; } }
     }
-    
     function rapidRefreshWordList() {
         rapidBag = []; // Limpia bolsa si cambia categoría
         rapidCurrentWord = rapidPickWord();
@@ -709,7 +710,7 @@
     }
     
     function spellingUpdateUI() {
-        // Traducción Oculta según lo pedido
+        // Traducción oculta. Solo aparece "Listen and spell"
         document.getElementById('spellingHint').textContent = `🎧 Listen and spell!`; 
         document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
         document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`; document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
@@ -801,7 +802,8 @@
     }
     
     function missingUpdateUI() {
-        document.getElementById('missingHint').textContent = `🧩 Complete the word!`; // Traducción oculta
+        // Traducción Oculta. Solo instrucción.
+        document.getElementById('missingHint').textContent = `🧩 Complete the word!`; 
         document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
         document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category); document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
         document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`; document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWrong').textContent = missingWrong;
@@ -872,8 +874,7 @@
     document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; missingRefreshWordList(); });
     document.getElementById('missingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#missingCategorySelect option'); if(opts.length > 1) { missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('missingCategorySelect').value = missingCategory; missingRefreshWordList(); }});
 
-    // ========== MODO FLASHCARD (ESPAÑOL ACTIVO AQUI) ==========
-    let fcList = [];
+    // ========== MODO FLASHCARD (ESPAÑOL VISIBLE AQUI) ==========
     let fcIndex = 0;
     let fcCategory = 'all';
     let fcCurrentWord = null;
@@ -885,14 +886,15 @@
     }
 
     function fcRefreshList() {
-        fcList = fcGetList();
+        const rawList = fcGetList();
+        fcBag = shuffleArray(rawList); // Mezcla la lista para la sesión
         fcIndex = 0;
         fcUpdateUI();
     }
 
     function fcUpdateUI() {
-        if(fcList.length === 0) return;
-        fcCurrentWord = fcList[fcIndex];
+        if(fcBag.length === 0) return;
+        fcCurrentWord = fcBag[fcIndex];
         const cardInner = document.getElementById('fcInner');
         cardInner.classList.remove('flipped');
         
@@ -900,19 +902,19 @@
             document.getElementById('fcFrontText').textContent = fcCurrentWord.word;
             document.getElementById('fcBackText').textContent = fcCurrentWord.es;
             document.getElementById('fcCategory').textContent = formatCategory(fcCurrentWord.category);
-            document.getElementById('fcWordCounter').textContent = `📋 ${fcIndex + 1} / ${fcList.length}`;
+            document.getElementById('fcWordCounter').textContent = `📋 ${fcIndex + 1} / ${fcBag.length}`;
         }, 150);
     }
 
     function fcNext() {
-        if(fcList.length === 0) return;
-        fcIndex = (fcIndex + 1) % fcList.length;
+        if(fcBag.length === 0) return;
+        fcIndex = (fcIndex + 1) % fcBag.length;
         fcUpdateUI();
     }
 
     function fcPrev() {
-        if(fcList.length === 0) return;
-        fcIndex = (fcIndex - 1 + fcList.length) % fcList.length;
+        if(fcBag.length === 0) return;
+        fcIndex = (fcIndex - 1 + fcBag.length) % fcBag.length;
         fcUpdateUI();
     }
 
