@@ -81,7 +81,6 @@
         .btn.danger { background: var(--theme-danger); color: white; }
         .btn.audio.active { background: var(--theme-primary); border-color: var(--theme-accent); color: white; }
         .btn.fullscreen { background: #3b5998; border-color: #2d4373; }
-        .btn.emergency-stop { background: #d92027; color: white; border-color: #a8191e; box-shadow: 0 4px 0 #851216; font-weight: 800;}
         
         .team-scoreboard { display: flex; justify-content: center; gap: 25px; margin: 10px 0 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 20px; border: 1px solid var(--theme-border); flex-wrap: wrap; }
         .team { background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--theme-border); position: relative; }
@@ -94,7 +93,7 @@
 
         .speed-control, .round-selector, .timer-control { display: flex; align-items: center; gap: 8px; color: var(--theme-text); font-weight: 600; flex-wrap: wrap; justify-content: center;}
         #speedSlider { width: 120px; accent-color: var(--theme-accent); }
-        select.diff-select, input[type="number"] { width: auto; padding: 8px 12px; border-radius: 40px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--theme-border); font-weight: 700; text-align: center; }
+        input[type="number"] { width: 70px; padding: 8px; border-radius: 40px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--theme-border); font-weight: 700; text-align: center; }
         
         .filter-area { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
         select.category-select { padding: 12px 22px; border-radius: 60px; background: rgba(0,0,0,0.4); color: var(--theme-text); font-weight: 700; border: 1px solid var(--theme-border); max-width: 250px; }
@@ -123,7 +122,7 @@
         .answer-reveal { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); margin-top: 15px; min-height: 50px; }
         .random-btn { background: var(--theme-primary); padding: 8px 16px; border-radius: 30px; font-size: 1.2rem; }
 
-        /* ================= FLASHCARD CSS ================= */
+        /* ================= FLASHCARD CSS (Mobile focus) ================= */
         .flashcard-container { perspective: 1000px; width: 100%; max-width: 600px; margin: 0 auto 20px; }
         .flashcard-inner { position: relative; width: 100%; min-height: 350px; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; border-radius: 40px;}
         .flashcard-inner.flipped { transform: rotateY(180deg); }
@@ -133,10 +132,7 @@
         .fc-translation { font-size: 4rem; font-weight: 700; color: var(--theme-accent); text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
         .fc-hint { font-size: 1.2rem; color: #888; margin-top: 25px; font-weight: 600; letter-spacing: 2px;}
 
-        /* Contador en blanco brillante */
-        .counter { color: #ffffff !important; font-weight: 800; font-size: 1.2rem; }
-
-        /* ================= MEDIA QUERIES ================= */
+        /* ================= MEDIA QUERIES (Mobile Responsive) ================= */
         @media (max-width: 768px) {
             .game-container { padding: 15px 12px; border-radius: 20px; }
             h1 { font-size: 1.8rem; justify-content: center; width: 100%; margin-bottom: 10px; text-align: center;}
@@ -172,7 +168,6 @@
         
         <div class="top-controls">
             <button class="btn fullscreen" id="fullscreenBtn">📺 Fullscreen</button>
-            <button class="btn emergency-stop" id="globalResetBtn">🛑 RESET / STOP</button>
             <div class="book-selector">
                 <label>📚 COURSE:</label>
                 <select id="blockSelect">
@@ -247,7 +242,7 @@
     </div>
 
     <div id="spellingMode" class="hidden">
-        <div class="subhead">🔤 SPELLING CHALLENGE · Translate & spell the word</div>
+        <div class="subhead">🔤 SPELLING CHALLENGE · Say the word aloud</div>
         <div class="word-card-container">
             <div id="spellingStreakFire" class="streak-fire hidden">🔥 STREAK x3!</div>
             <div class="word-card" id="spellingWordCard">
@@ -291,7 +286,7 @@
         <div class="word-card-container">
             <div id="missingStreakFire" class="streak-fire hidden">🔥 STREAK x3!</div>
             <div class="word-card" id="missingWordCard">
-                <div class="hint-text" id="missingHint">🧩 Complete the word!</div>
+                <div class="hint-text" id="missingHint">🇪🇸 Hint</div>
                 <div class="missing-word" id="missingWordDisplay">- - -</div>
                 <div class="timer-display" id="missingTimerDisplay">15</div>
                 <div class="timer-bar"><div class="timer-bar-fill" id="missingTimerBar"></div></div>
@@ -308,14 +303,6 @@
             <div class="timer-control">
                 <label>⏱️ TIME (s)</label>
                 <input type="number" id="missingTimer" min="5" max="60" value="15">
-            </div>
-            <div class="timer-control">
-                <label>⚙️ DIFF.</label>
-                <select id="missingDifficulty" class="diff-select">
-                    <option value="easy">Easy</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
             </div>
             <div class="round-selector">
                 <label>🔁 ROUNDS</label>
@@ -373,25 +360,11 @@
 </div>
 
 <script>
-// ==========================================
-// CÓDIGO JS PRINCIPAL (ENCAPSULADO SEGURO)
-// ==========================================
+// Todo el código JS está encapsulado de forma segura
 (function(){
     "use strict";
 
-    // 1. FUNCIONES AUXILIARES (Definidas antes de usarse)
-    function assignBlocks(wordsArray, bookId) {
-        return wordsArray.map(w => {
-            let unitMatch = w.category.match(/Unit (\d+)/i);
-            let blockNum = 1;
-            if (unitMatch) blockNum = Math.ceil(parseInt(unitMatch[1]) / 3); 
-            w.book = bookId; 
-            w.blockId = `${bookId}_${blockNum}`;
-            return w;
-        });
-    }
-
-    // 2. BASE DE DATOS
+    // 1. BASE DE DATOS ÚNICA Y VERIFICADA
     const evolve1DB = [
         { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" },
         { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "hungry", category: "Unit 2", es: "hambriento" },
@@ -437,62 +410,34 @@
         { word: "be mad at", category: "Unit 12", es: "estar enojado con" }, { word: "blame", category: "Unit 12", es: "culpar" }, { word: "damage", category: "Unit 12", es: "daño" }, { word: "destroy", category: "Unit 12", es: "destruir" }, { word: "fall out", category: "Unit 12", es: "caerse" }, { word: "feel bad", category: "Unit 12", es: "sentirse mal" }, { word: "knock off", category: "Unit 12", es: "tirar" }, { word: "leave on", category: "Unit 12", es: "dejar prendido" }, { word: "leave open", category: "Unit 12", es: "dejar abierto" }, { word: "pick up", category: "Unit 12", es: "recoger" }, { word: "pull out", category: "Unit 12", es: "sacar" }, { word: "shake", category: "Unit 12", es: "agitar" }, { word: "slip", category: "Unit 12", es: "resbalar" }, { word: "spill", category: "Unit 12", es: "derramar" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "enormous", category: "Unit 12", es: "enorme" }, { word: "exhausted", category: "Unit 12", es: "exhausto" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "huge", category: "Unit 12", es: "enorme" }, { word: "magnificent", category: "Unit 12", es: "magnífico" }, { word: "miserable", category: "Unit 12", es: "miserable" }, { word: "starving", category: "Unit 12", es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", es: "estupendo" }, { word: "thrilled", category: "Unit 12", es: "emocionado" }, { word: "tiny", category: "Unit 12", es: "diminuto" }
     ];
 
+    // Mapeo seguro a los 12 bloques (Cursos)
+    function assignBlocks(wordsArray, bookId) {
+        return wordsArray.map(w => {
+            let unitMatch = w.category.match(/Unit (\d+)/i);
+            let blockNum = 1;
+            if (unitMatch) blockNum = Math.ceil(parseInt(unitMatch[1]) / 3); 
+            w.book = bookId; 
+            w.blockId = `${bookId}_${blockNum}`;
+            return w;
+        });
+    }
+
     const fullDB = [
         ...assignBlocks(evolve1DB, 1), 
         ...assignBlocks(evolve2DB, 2), 
         ...assignBlocks(evolve3DB, 3)
     ];
 
-    // ========== SHUFFLE BAG ENGINE (Sin repeticiones) ==========
-    let rapidBag = [], spellingBag = [], missingBag = [], fcBag = [];
-    
-    function shuffleArray(arr) {
-        let array = [...arr];
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    // ========== CONTROL MAESTRO Y AUDIO ==========
+    // ========== ESTADO GLOBAL Y AUDIO API ==========
     let currentBlockId = "1_1"; 
     let currentMode = "rapid";
+    let audioPlayer = new Audio();
+    const AUDIO_BASE_PATH = './audios_cambridge/';
     let audioEnabled = true;
     let audioCtx;
+    
     let currentStreak = 0;
     const STREAK_THRESHOLD = 3;
-    
-    // Timeouts globales para evitar ghosting
-    let rapidTimeout, spellingTimeout, missingTimeout;
-
-    function stopAllGames() {
-        rapidSessionActive = false; rapidIsPlaying = false;
-        spellingSessionActive = false; spellingWaiting = false;
-        missingSessionActive = false; missingWaiting = false;
-        
-        clearInterval(rapidInterval);
-        clearInterval(spellingTimerInterval);
-        clearInterval(missingTimerInterval);
-        
-        clearTimeout(rapidTimeout);
-        clearTimeout(spellingTimeout);
-        clearTimeout(missingTimeout);
-        
-        document.getElementById('playPauseBtn').innerHTML = '▶️ START';
-        document.getElementById('spellingStartBtn').innerHTML = '▶️ START';
-        document.getElementById('missingStartBtn').innerHTML = '▶️ START';
-        
-        document.querySelectorAll('.danger').forEach(el => el.classList.remove('danger'));
-    }
-
-    document.getElementById('globalResetBtn').addEventListener('click', () => {
-        stopAllGames(); currentStreak = 0; updateStreak(false);
-        if (currentMode==='rapid') rapidRefreshWordList(); 
-        else if (currentMode==='spelling') spellingRefreshWordList(); 
-        else if (currentMode==='missing') missingRefreshWordList();
-        else if (currentMode==='flashcard') fcRefreshList();
-    });
 
     function initAudioAPI() {
         if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -501,10 +446,14 @@
 
     function playTone(freq, type, duration, vol=0.1) {
         if (!audioEnabled || !audioCtx) return;
-        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-        osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
     function playDing() { initAudioAPI(); playTone(600, 'sine', 0.2, 0.2); setTimeout(()=>playTone(800, 'sine', 0.4, 0.2), 100); }
@@ -513,19 +462,22 @@
 
     function getAudioFilename(word) { 
         if(!word) return '';
+        // Limpia caracteres especiales y reemplaza espacios con guiones bajos para empatar con wordlist.txt
         return word.trim().replace(/[<>:"/\\|?*']/g, '').replace(/\s+/g, '_') + '.mp3'; 
     }
     
     function playWordAudio(word) {
         if (!audioEnabled || !word || word === "Welcome" || word === "N/A") return;
-        const audioPath = AUDIO_BASE_PATH + getAudioFilename(word);
-        const tempAudio = new Audio(audioPath);
-        tempAudio.play().catch(e => console.warn("Audio no encontrado:", audioPath));
+        audioPlayer.src = AUDIO_BASE_PATH + getAudioFilename(word);
+        audioPlayer.play().catch(e => console.warn("Audio no encontrado:", getAudioFilename(word)));
     }
 
     window.toggleAudio = function() {
         audioEnabled = !audioEnabled;
-        document.querySelectorAll('.audio').forEach(b => { b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF'; b.classList.toggle('active', audioEnabled); });
+        document.querySelectorAll('.audio').forEach(b => { 
+            b.textContent = audioEnabled ? '🔊 ON' : '🔇 OFF'; 
+            b.classList.toggle('active', audioEnabled); 
+        });
     };
     
     window.replayCurrentWord = function() {
@@ -539,6 +491,7 @@
     const confCanvas = document.getElementById('confettiCanvas');
     const confCtx = confCanvas.getContext('2d');
     let confettiParticles = [];
+
     function resizeCanvas() { confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight; }
     window.addEventListener('resize', resizeCanvas); resizeCanvas();
 
@@ -546,18 +499,25 @@
         confettiParticles = [];
         for(let i=0; i<120; i++) {
             confettiParticles.push({
-                x: confCanvas.width / 2, y: confCanvas.height / 2, r: Math.random() * 6 + 4, dx: Math.random() * 20 - 10, dy: Math.random() * -15 - 5,
-                color: `hsl(${Math.random() * 360}, 100%, 50%)`, tilt: Math.floor(Math.random() * 10) - 10, tiltAngleIncrement: (Math.random() * 0.07) + 0.05, tiltAngle: 0
+                x: confCanvas.width / 2, y: confCanvas.height / 2,
+                r: Math.random() * 6 + 4, dx: Math.random() * 20 - 10, dy: Math.random() * -15 - 5,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                tilt: Math.floor(Math.random() * 10) - 10, tiltAngleIncrement: (Math.random() * 0.07) + 0.05, tiltAngle: 0
             });
         }
         requestAnimationFrame(renderConfetti);
     }
+
     function renderConfetti() {
         if(confettiParticles.length === 0) return;
         confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
         confettiParticles.forEach((p, index) => {
-            p.tiltAngle += p.tiltAngleIncrement; p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2; p.x += Math.sin(p.tiltAngle) * 2 + p.dx; p.dy += 0.1; p.y += p.dy;
-            confCtx.beginPath(); confCtx.lineWidth = p.r; confCtx.strokeStyle = p.color; confCtx.moveTo(p.x + p.tilt + p.r, p.y); confCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r); confCtx.stroke();
+            p.tiltAngle += p.tiltAngleIncrement;
+            p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
+            p.x += Math.sin(p.tiltAngle) * 2 + p.dx;
+            p.dy += 0.1; p.y += p.dy;
+            confCtx.beginPath(); confCtx.lineWidth = p.r; confCtx.strokeStyle = p.color;
+            confCtx.moveTo(p.x + p.tilt + p.r, p.y); confCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r); confCtx.stroke();
             if (p.y > confCanvas.height) confettiParticles.splice(index, 1);
         });
         requestAnimationFrame(renderConfetti);
@@ -569,16 +529,21 @@
         const isFire = currentStreak >= STREAK_THRESHOLD;
         document.querySelectorAll('.word-card').forEach(card => isFire ? card.classList.add('on-fire') : card.classList.remove('on-fire'));
         document.querySelectorAll('.streak-fire').forEach(f => {
-            if(isFire) { f.classList.remove('hidden'); f.textContent = `🔥 STREAK x${currentStreak}!`; } else { f.classList.add('hidden'); }
+            if(isFire) { f.classList.remove('hidden'); f.textContent = `🔥 STREAK x${currentStreak}!`; }
+            else { f.classList.add('hidden'); }
         });
         document.querySelectorAll('.btn.team').forEach(btn => {
-            btn.textContent = isFire ? '+2' : '+1'; isFire ? btn.classList.add('fire-btn') : btn.classList.remove('fire-btn');
+            btn.textContent = isFire ? '+2' : '+1';
+            isFire ? btn.classList.add('fire-btn') : btn.classList.remove('fire-btn');
         });
     }
 
     function showFloatingNumber(element, amount) {
-        const floater = document.createElement('div'); floater.classList.add('floating-number');
-        floater.textContent = `+${amount}`; element.appendChild(floater); setTimeout(() => floater.remove(), 1000);
+        const floater = document.createElement('div');
+        floater.classList.add('floating-number');
+        floater.textContent = `+${amount}`;
+        element.appendChild(floater);
+        setTimeout(() => floater.remove(), 1000);
     }
 
     let teamScores = { red: 0, blue: 0, green: 0 };
@@ -587,15 +552,26 @@
         document.getElementById('teamBlueScore').textContent = teamScores.blue;
         document.getElementById('teamGreenScore').textContent = teamScores.green;
     }
+
     document.querySelectorAll('.btn.team').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const team = e.target.dataset.team; const points = currentStreak >= STREAK_THRESHOLD ? 2 : 1;
-            if (team === 'red') teamScores.red += points; else if (team === 'blue') teamScores.blue += points; else if (team === 'green') teamScores.green += points;
-            updateTeamUI(); showFloatingNumber(e.target.parentElement, points);
+            const team = e.target.dataset.team;
+            const points = currentStreak >= STREAK_THRESHOLD ? 2 : 1;
+            if (team === 'red') teamScores.red += points; 
+            else if (team === 'blue') teamScores.blue += points; 
+            else if (team === 'green') teamScores.green += points;
+            updateTeamUI();
+            showFloatingNumber(e.target.parentElement, points);
         });
     });
     document.getElementById('resetTeamsBtn').addEventListener('click', () => { teamScores = { red: 0, blue: 0, green: 0 }; updateTeamUI(); });
-    
+
+    // ========== FULLSCREEN ==========
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+        if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } 
+        else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+    });
+
     // ========== LOGICA DE LIBROS Y CATEGORIAS ==========
     function getWordsByBlock() { 
         const result = fullDB.filter(w => w.blockId === currentBlockId);
@@ -617,37 +593,81 @@
         let optionsHtml = `<option value="all">📚 ALL UNITS IN BLOCK</option>`;
         categories.forEach(cat => { optionsHtml += `<option value="${cat}">${cat.toUpperCase()}</option>`; });
         document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
-        
         rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all'; fcCategory = 'all';
-        rapidBag = []; spellingBag = []; missingBag = []; fcBag = []; 
     }
+
+    // ========== GRAMMAR PANEL ENRIQUECIDO ==========
+    function updateGrammarPanel() {
+        const grid = document.getElementById('grammarGrid');
+        const sel = document.getElementById('blockSelect');
+        document.getElementById('grammarCourseLabel').textContent = sel.options[sel.selectedIndex].text;
+        let html = '';
+        switch(currentBlockId) {
+            // EVOLVE 1
+            case "1_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Possessives</h4><ul><li><code>I am from Brazil.</code></li><li><code>Are you American?</code></li><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple Present</h4><ul><li><code>I like coffee.</code></li><li><code>He works every day.</code></li><li><code>Do you play games?</code></li><li><code>This / that one</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Present Continuous</h4><ul><li><code>I am reading right now.</code></li><li><code>She isn't eating.</code></li><li><strong>VS Simple Present:</strong> Routine vs Now.</li></ul></div>`; break;
+            case "1_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Future Plans</h4><ul><li>Present continuous for future:</li><li><code>I'm going to the mall tomorrow.</code></li><li><strong>Object pronouns:</strong> <code>me, you, him, her, it, us, them</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Simple Past</h4><ul><li><code>I worked late.</code> (Regular)</li><li><code>She didn't play.</code> (Negative)</li><li><code>Did they go?</code> (Question)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: 'be going to'</h4><ul><li><code>We are going to travel.</code></li><li><strong>Determiners:</strong> <code>all, most, many, some, no, none</code></li></ul></div>`; break;
+            case "1_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Quantifiers & Verb Patterns</h4><ul><li><code>a lot of, some, a few, too much</code></li><li><code>verb + to + verb</code> (want to try)</li><li><code>verb + -ing</code> (can't stand waiting)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: 'if' & 'when'</h4><ul><li><code>If I have time, I'll go.</code></li><li><strong>Giving reasons:</strong> <code>to + verb</code> (to learn) / <code>for + noun</code> (for school)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Comparatives</h4><ul><li><code>taller than</code> / <code>more beautiful</code></li><li><code>the tallest</code> / <code>the best</code></li></ul></div>`; break;
+            case "1_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: 'have to' & Predictions</h4><ul><li><strong>Obligation:</strong> <code>I have to work.</code></li><li><strong>Predictions:</strong> <code>will, might, may, won't</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Experience: <code>I have been there.</code></li><li><strong>VS Simple Past:</strong> (Specific past time)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: 'be like' & Relatives</h4><ul><li><code>What's the weather like?</code></li><li><strong>Relative:</strong> <code>who, which, that</code></li></ul></div>`; break;
+            
+            // EVOLVE 2
+            case "2_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Possessives</h4><ul><li>Review: affirmative, negative, questions</li><li>Possessive adjectives & pronouns</li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li><li><code>Do/Does</code> in questions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Demonstratives</h4><ul><li><code>This / that one</code></li><li><code>These / those ones</code></li></ul></div>`; break;
+            case "2_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li>Simple present vs. present continuous</li><li>Action vs State verbs</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Future plans</h4><ul><li>Present continuous for future arrangements</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li>Affirmative, negative and questions</li><li>Irregular verbs</li></ul></div>`; break;
+            case "2_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: 'be going to'</h4><ul><li>Intentions and plans</li><li><code>all, most, many, some, none</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Verb patterns</h4><ul><li><code>verb + to + verb</code></li><li><code>verb + -ing</code></li></ul></div>`; break;
+            case "2_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li><strong>Advice:</strong> <code>should</code></li><li><strong>Obligation:</strong> <code>have to, must</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect vs simple past</li><li>Experiences in life</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Relative Pronouns</h4><ul><li><code>who</code> (people), <code>which</code> (things), <code>that</code></li></ul></div>`; break;
+            
+            // EVOLVE 3
+            case "3_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: Information Questions</h4><ul><li><code>What, Which, Whose, How...</code></li><li><strong>Indirect:</strong> <code>Do you know where…?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Present Perfect</h4><ul><li>with <code>ever, never, for, since</code></li><li>with <code>already, yet</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Articles & Modals</h4><ul><li><code>a, an, the, (no article)</code></li><li><strong>Advice:</strong> <code>should, could, I'd</code></li></ul></div>`; break;
+            case "3_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Future Forms</h4><ul><li><code>be going to</code> vs <code>will</code></li><li><code>will</code> for sudden decisions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Past Tenses</h4><ul><li><strong>Past Continuous:</strong> <code>I was walking</code></li><li><strong>VS Simple Past:</strong> Interrupted actions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Quantifiers & Conditionals</h4><ul><li><code>almost all, several, very few</code></li><li><strong>Real Conditionals:</strong> If + Pres, Will</li></ul></div>`; break;
+            case "3_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: 'used to' & Comparisons</h4><ul><li><code>I used to play.</code></li><li>Comparisons: <code>(not) as… as</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Pres. Perfect Cont.</h4><ul><li><code>I have been studying.</code></li><li><strong>VS Present Perfect:</strong> (Duration vs Result)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Modals</h4><ul><li><strong>Necessity:</strong> <code>have to, need to, must</code></li><li><strong>Prohibition:</strong> <code>can't, must not</code></li></ul></div>`; break;
+            case "3_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Passive Voice</h4><ul><li>Simple present & past passive</li><li><code>The car was washed.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Phrasal Verbs</h4><ul><li>Separable vs Inseparable</li><li><strong>Unreal Conditionals:</strong> <code>If I had…, I would…</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li><strong>Indefinite pronouns:</strong> everyone, nothing</li><li><code>He said that he was late.</code></li></ul></div>`; break;
+        }
+        grid.innerHTML = html;
+    }
+
+    document.getElementById('blockSelect').addEventListener('change', (e) => {
+        currentBlockId = e.target.value; 
+        updateThemeAndCategories(); 
+        updateGrammarPanel(); 
+        currentStreak=0; updateStreak(false);
+        if (currentMode === 'rapid') rapidRefreshWordList(); 
+        else if (currentMode === 'spelling') spellingRefreshWordList(); 
+        else if (currentMode === 'missing') missingRefreshWordList();
+        else if (currentMode === 'flashcard') fcRefreshList();
+    });
+
+    function formatCategory(cat) { return cat.toUpperCase(); }
 
     // ========== MODO RAPID ==========
     let rapidCurrentWord, rapidInterval, rapidIsPlaying=false, rapidBaseSpeed=1.8, rapidDynamicSpeed=1.8;
     let rapidCategory='all', rapidRoundLimit=10, rapidRoundCounter=0, rapidSessionActive=false;
+    const MIN_SPEED=0.5;
 
     function rapidGetFilteredList() { let list = getWordsByBlock(); if (rapidCategory !== 'all') list = list.filter(w => w.category === rapidCategory); return list; }
-    function rapidPickWord() { 
-        const list = rapidGetFilteredList();
-        if(list.length === 0) return {word: "N/A", category: "N/A"};
-        if(rapidBag.length === 0) rapidBag = shuffleArray(list);
-        return rapidBag.pop();
-    }
+    function rapidPickWord() { const list = rapidGetFilteredList(); return list[Math.floor(Math.random()*list.length)] || {word: "N/A", category: "N/A"}; }
+    
     function rapidUpdateDisplay(word) {
-        rapidCurrentWord = word; document.getElementById('currentWord').textContent = word.word; document.getElementById('categoryTag').textContent = word.category.toUpperCase();
-        document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`; document.getElementById('roundsInfo').textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
+        rapidCurrentWord = word;
+        document.getElementById('currentWord').textContent = word.word;
+        document.getElementById('categoryTag').textContent = formatCategory(word.category);
+        document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`;
+        document.getElementById('roundsInfo').textContent = `🎯 ${rapidRoundCounter} / ${rapidRoundLimit}`;
         rapidDynamicSpeed = rapidSessionActive ? Math.max(MIN_SPEED, rapidBaseSpeed - Math.floor(rapidRoundCounter/10)*0.2) : rapidBaseSpeed;
-        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s'; document.getElementById('currentSpeedDisplay').textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
+        document.getElementById('speedValue').textContent = rapidDynamicSpeed.toFixed(1)+'s';
+        document.getElementById('currentSpeedDisplay').textContent = `⚡ ${rapidDynamicSpeed.toFixed(1)}s`;
         playWordAudio(word.word);
     }
+    
     function rapidNext() {
-        if (!rapidSessionActive) return; if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
-        rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord()); if (rapidIsPlaying) rapidStartInterval();
+        if (!rapidSessionActive) return;
+        if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
+        rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
+        if (rapidIsPlaying) rapidStartInterval();
     }
     function rapidStartInterval() {
         if (rapidInterval) clearInterval(rapidInterval);
         rapidInterval = setInterval(() => {
-            if (!rapidSessionActive) return; if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
+            if (!rapidSessionActive) return;
+            if (rapidRoundCounter >= rapidRoundLimit) { rapidFinish(); return; }
             rapidRoundCounter++; rapidUpdateDisplay(rapidPickWord());
         }, rapidDynamicSpeed*1000);
     }
@@ -660,7 +680,7 @@
     function rapidReset() {
         rapidRoundCounter = 0; rapidSessionActive = true; rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
         rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value); rapidDynamicSpeed = rapidBaseSpeed;
-        rapidBag = []; initAudioAPI(); rapidUpdateDisplay(rapidPickWord());
+        initAudioAPI(); rapidUpdateDisplay(rapidPickWord());
     }
     function rapidTogglePlay() {
         initAudioAPI();
@@ -668,8 +688,8 @@
         else { if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; } }
     }
     function rapidRefreshWordList() {
-        rapidBag = []; rapidCurrentWord = rapidPickWord();
-        if (!rapidSessionActive) { document.getElementById('currentWord').textContent = rapidCurrentWord.word; document.getElementById('categoryTag').textContent = rapidCurrentWord.category.toUpperCase(); document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`; } 
+        rapidCurrentWord = rapidPickWord();
+        if (!rapidSessionActive) { document.getElementById('currentWord').textContent = rapidCurrentWord.word; document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category); document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`; } 
         else { rapidUpdateDisplay(rapidCurrentWord); }
     }
 
@@ -684,16 +704,9 @@
     let spellingCorrect=0, spellingWrong=0, spellingTimerInterval=null, spellingTimeLeft=10, spellingTotalTime=10, spellingWaiting=false, spellingCategory='all';
 
     function spellingGetList() { let list = getWordsByBlock(); if (spellingCategory !== 'all') list = list.filter(w => w.category === spellingCategory); return list; }
-    function spellingPickWord() { 
-        const list = spellingGetList(); 
-        if(list.length === 0) return {word: "N/A", category: "N/A", es: "N/A"};
-        if(spellingBag.length === 0) spellingBag = shuffleArray(list);
-        return spellingBag.pop();
-    }
-    
+    function spellingPickWord() { const list = spellingGetList(); return list[Math.floor(Math.random()*list.length)] || {word: "N/A", category: "N/A", es: "N/A"}; }
     function spellingUpdateUI() {
-        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es || ''}`; // Español Activado
-        document.getElementById('spellingCategory').textContent = spellingCurrentWord.category.toUpperCase();
+        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es || ''}`; document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
         document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`; document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
         document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('wrongCount').textContent = spellingWrong;
         document.getElementById('spellingAnswerReveal').innerHTML = ''; document.getElementById('timerDisplay').classList.remove('danger'); document.getElementById('spellingTimerBar').classList.remove('danger');
@@ -719,7 +732,7 @@
                 document.getElementById('spellingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
                 spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong;
                 updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word);
-                spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
+                setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
         }, 1000);
     }
@@ -730,35 +743,34 @@
     }
     function spellingReset() {
         clearInterval(spellingTimerInterval); initAudioAPI(); spellingSessionActive = true; spellingWaiting = false; currentStreak=0; updateStreak(false);
-        spellingBag = []; 
         spellingRound = 0; spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10; spellingCorrect = 0; spellingWrong = 0;
         document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE'; spellingNext();
     }
-    function spellingRefreshWordList() { spellingBag = []; spellingCurrentWord = spellingPickWord(); spellingUpdateUI(); }
+    function spellingRefreshWordList() { spellingCurrentWord = spellingPickWord(); spellingUpdateUI(); }
 
     function spellingMarkCorrect() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingCorrect++;
         document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(true); playDing(); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(true); playDing(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
     function spellingMarkIncorrect() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
         document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
     function spellingReveal() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
         document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
     document.getElementById('spellingStartBtn').addEventListener('click', ()=>{ if (!spellingSessionActive) spellingReset(); else { if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; } else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; } } });
-    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{ if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; } clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); });
+    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{ if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; } clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); });
     document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
     document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
     document.getElementById('spellingIncorrectBtn').addEventListener('click', spellingMarkIncorrect);
     document.getElementById('spellingRevealBtn').addEventListener('click', spellingReveal);
-    document.getElementById('spellingCategorySelect').addEventListener('change', (e)=> { spellingCategory = e.target.value; spellingRefreshWordList(); });
+    document.getElementById('spellingCategorySelect').addEventListener('change', (e)=> { spellingCategory = e.target.value; if(!spellingSessionActive) spellingRefreshWordList(); });
     document.getElementById('spellingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#spellingCategorySelect option'); if(opts.length > 1) { spellingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('spellingCategorySelect').value = spellingCategory; spellingRefreshWordList(); } });
 
     // ========== MODO MISSING LETTERS ==========
@@ -766,57 +778,40 @@
     let missingCorrect=0, missingWrong=0, missingTimerInterval=null, missingTimeLeft=15, missingTotalTime=15, missingWaiting=false, missingCategory='all';
 
     function missingGetList() { let list = getWordsByBlock(); if (missingCategory !== 'all') list = list.filter(w => w.category === missingCategory); return list; }
-    function missingPickWord() { 
-        const list = missingGetList(); 
-        if(list.length === 0) return {word: "N/A", category: "N/A", es: "N/A"};
-        if(missingBag.length === 0) missingBag = shuffleArray(list);
-        return missingBag.pop();
-    }
+    function missingPickWord() { const list = missingGetList(); return list[Math.floor(Math.random()*list.length)] || {word: "N/A", category: "N/A", es: "N/A"}; }
     
-    function generateMissingWord(word, difficulty) {
+    function generateMissingWord(word) {
         if (!word || word.length <= 2 || word === "N/A") return word;
-        const chars = word.split(''); 
-        const validIndices = [];
-        for (let i = 1; i < chars.length - 1; i++) if (chars[i] !== ' ' && chars[i] !== "'") validIndices.push(i);
-        
-        let numToHide;
-        if (difficulty === 'easy') numToHide = Math.max(1, Math.floor(validIndices.length * 0.3));
-        else if (difficulty === 'medium') numToHide = Math.max(1, Math.floor(validIndices.length * 0.5));
-        else numToHide = Math.max(1, Math.floor(validIndices.length * 0.85));
-
-        for (let i = validIndices.length - 1; i > 0; i--) { 
-            const j = Math.floor(Math.random() * (i + 1)); 
-            [validIndices[i], validIndices[j]] = [validIndices[j], validIndices[i]]; 
-        }
-        const toHide = validIndices.slice(0, numToHide);
-        return chars.map((c, i) => (i === 0 || i === chars.length - 1 || c === ' ' || c === "'") ? c : (toHide.includes(i) ? '_' : c)).join('');
+        const chars = word.split(''); const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1); const indices = [];
+        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ' && chars[i] !== "'") indices.push(i);
+        for (let i = indices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [indices[i], indices[j]] = [indices[j], indices[i]]; }
+        const toHide = indices.slice(0, Math.min(numToHide, indices.length));
+        return chars.map((c, i) => (i === 0 || c === ' ' || c === "'") ? c : (toHide.includes(i) ? '_' : c)).join('');
     }
     
     function missingUpdateUI() {
-        document.getElementById('missingHint').textContent = `🧩 Complete the word!`; 
-        const diff = document.getElementById('missingDifficulty').value;
-        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word, diff);
-        document.getElementById('missingCategory').textContent = missingCurrentWord.category.toUpperCase(); document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
+        document.getElementById('missingHint').textContent = `🇪🇸 ${missingCurrentWord.es || ''}`; document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
+        document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category); document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
         document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`; document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWrong').textContent = missingWrong;
         document.getElementById('missingAnswerReveal').innerHTML = ''; document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger');
     }
     function missingUpdateTimerBar() { document.getElementById('missingTimerBar').style.width = (missingTimeLeft / missingTotalTime) * 100 + '%'; }
+    function missingStopTimer() { if (missingTimerInterval) clearInterval(missingTimerInterval); missingTimerInterval = null; }
     
     function missingStartTimer() {
-        if(missingTimerInterval) clearInterval(missingTimerInterval);
-        missingTotalTime = parseInt(document.getElementById('missingTimer').value,10) || 15; missingTimeLeft = missingTotalTime;
+        missingStopTimer(); missingTotalTime = parseInt(document.getElementById('missingTimer').value,10) || 15; missingTimeLeft = missingTotalTime;
         document.getElementById('missingTimerDisplay').textContent = missingTimeLeft; missingUpdateTimerBar();
         missingTimerInterval = setInterval(() => {
             missingTimeLeft--; document.getElementById('missingTimerDisplay').textContent = missingTimeLeft; missingUpdateTimerBar();
             if(missingTimeLeft <= 3 && missingTimeLeft > 0) { playTick(); document.getElementById('missingTimerDisplay').classList.add('danger'); document.getElementById('missingTimerBar').classList.add('danger'); }
             if (missingTimeLeft <= 0) {
-                clearInterval(missingTimerInterval); if(missingWaiting) return; missingWaiting = true;
+                missingStopTimer(); if(missingWaiting) return; missingWaiting = true;
                 document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger');
                 document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
                 document.getElementById('missingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
                 missingWrong++; document.getElementById('missingWrong').textContent = missingWrong;
                 updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word);
-                missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
+                setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
             }
         }, 1000);
     }
@@ -826,47 +821,47 @@
         missingRound++; missingCurrentWord = missingPickWord(); missingUpdateUI(); missingStartTimer();
     }
     function missingFinish() {
-        missingSessionActive = false; missingWaiting = false; clearInterval(missingTimerInterval);
+        missingSessionActive = false; missingWaiting = false; missingStopTimer();
         document.getElementById('missingStartBtn').innerHTML = '🔄 RESTART'; document.getElementById('missingHint').textContent = '🏁 Session finished!'; document.getElementById('missingTimerBar').style.width = '0%';
         document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger'); updateStreak(false); shootConfetti(); playDing();
     }
     function missingReset() {
-        clearInterval(missingTimerInterval); initAudioAPI(); missingSessionActive = true; missingWaiting = false; currentStreak=0; updateStreak(false);
-        missingBag = []; 
+        missingStopTimer(); initAudioAPI(); missingSessionActive = true; missingWaiting = false; currentStreak=0; updateStreak(false);
         missingRound = 0; missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10; missingCorrect = 0; missingWrong = 0;
         document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE'; missingNext();
     }
-    function missingRefreshWordList() { missingBag = []; missingCurrentWord = missingPickWord(); missingUpdateUI(); }
+    function missingRefreshWordList() { missingCurrentWord = missingPickWord(); missingUpdateUI(); }
 
     function missingMarkCorrect() {
-        if (!missingSessionActive || missingWaiting) return; clearInterval(missingTimerInterval); missingWaiting = true; missingCorrect++;
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingCorrect++;
         document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `✅ Correct! <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(true); playDing(); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+        updateStreak(true); playDing(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
     }
     function missingMarkIncorrect() {
-        if (!missingSessionActive || missingWaiting) return; clearInterval(missingTimerInterval); missingWaiting = true; missingWrong++;
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
         document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
     function missingReveal() {
-        if (!missingSessionActive || missingWaiting) return; clearInterval(missingTimerInterval); missingWaiting = true; missingWrong++;
+        if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
         document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
         document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
 
-    document.getElementById('missingStartBtn').addEventListener('click', ()=>{ if (!missingSessionActive) missingReset(); else { if (missingTimerInterval) { clearInterval(missingTimerInterval); missingTimerInterval=null; document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; } else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; } } });
-    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{ if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; } clearInterval(missingTimerInterval); missingWaiting = true; missingWrong++; document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); });
+    document.getElementById('missingStartBtn').addEventListener('click', ()=>{ if (!missingSessionActive) missingReset(); else { if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; } else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; } } });
+    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{ if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; } missingStopTimer(); missingWaiting = true; missingWrong++; document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); });
     document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
     document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
     document.getElementById('missingIncorrectBtn').addEventListener('click', missingMarkIncorrect);
-    document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; missingRefreshWordList(); });
-    document.getElementById('missingDifficulty').addEventListener('change', ()=> { if(missingSessionActive && !missingWaiting) missingUpdateUI(); });
+    document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; if(!missingSessionActive) missingRefreshWordList(); });
     document.getElementById('missingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#missingCategorySelect option'); if(opts.length > 1) { missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('missingCategorySelect').value = missingCategory; missingRefreshWordList(); }});
 
-    // ========== MODO FLASHCARD ==========
+
+    // ========== MODO FLASHCARD (MOBILE STUDY) ==========
+    let fcList = [];
     let fcIndex = 0;
     let fcCategory = 'all';
     let fcCurrentWord = null;
@@ -878,57 +873,73 @@
     }
 
     function fcRefreshList() {
-        const rawList = fcGetList();
-        fcBag = shuffleArray(rawList); 
+        fcList = fcGetList();
         fcIndex = 0;
         fcUpdateUI();
     }
 
     function fcUpdateUI() {
-        if(fcBag.length === 0) return;
-        fcCurrentWord = fcBag[fcIndex];
+        if(fcList.length === 0) return;
+        fcCurrentWord = fcList[fcIndex];
         const cardInner = document.getElementById('fcInner');
         cardInner.classList.remove('flipped');
         
         setTimeout(() => {
             document.getElementById('fcFrontText').textContent = fcCurrentWord.word;
             document.getElementById('fcBackText').textContent = fcCurrentWord.es;
-            document.getElementById('fcCategory').textContent = fcCurrentWord.category.toUpperCase();
-            document.getElementById('fcWordCounter').textContent = `📋 ${fcIndex + 1} / ${fcBag.length}`;
-        }, 150);
+            document.getElementById('fcCategory').textContent = formatCategory(fcCurrentWord.category);
+            document.getElementById('fcWordCounter').textContent = `📋 ${fcIndex + 1} / ${fcList.length}`;
+        }, 150); // Timeout allows the flip animation to hide text changes
     }
 
-    function fcNext() { if(fcBag.length === 0) return; fcIndex = (fcIndex + 1) % fcBag.length; fcUpdateUI(); }
-    function fcPrev() { if(fcBag.length === 0) return; fcIndex = (fcIndex - 1 + fcBag.length) % fcBag.length; fcUpdateUI(); }
+    function fcNext() {
+        if(fcList.length === 0) return;
+        fcIndex = (fcIndex + 1) % fcList.length;
+        fcUpdateUI();
+    }
+
+    function fcPrev() {
+        if(fcList.length === 0) return;
+        fcIndex = (fcIndex - 1 + fcList.length) % fcList.length;
+        fcUpdateUI();
+    }
 
     document.getElementById('fcInner').addEventListener('click', function() {
         this.classList.toggle('flipped');
-        if(this.classList.contains('flipped')) { initAudioAPI(); playWordAudio(fcCurrentWord.word); }
+        if(this.classList.contains('flipped')) {
+            initAudioAPI();
+            playWordAudio(fcCurrentWord.word);
+        }
     });
     
     document.getElementById('fcNextBtn').addEventListener('click', fcNext);
     document.getElementById('fcPrevBtn').addEventListener('click', fcPrev);
     document.getElementById('fcAudioBtn').addEventListener('click', () => { initAudioAPI(); playWordAudio(fcCurrentWord?.word); });
+    
     document.getElementById('fcCategorySelect').addEventListener('change', (e)=> { fcCategory = e.target.value; fcRefreshList(); });
 
-    let touchstartX = 0; let touchendX = 0;
+    // Touch Swipe Logic para Flashcards en celular
+    let touchstartX = 0;
+    let touchendX = 0;
     const fcContainer = document.getElementById('fcContainer');
+    
     fcContainer.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, {passive: true});
     fcContainer.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX;
-        if (touchendX < touchstartX - 50) fcNext(); 
-        if (touchendX > touchstartX + 50) fcPrev(); 
+        if (touchendX < touchstartX - 50) fcNext(); // Swipe a la izquierda -> Siguiente
+        if (touchendX > touchstartX + 50) fcPrev(); // Swipe a la derecha -> Anterior
     }, {passive: true});
+
 
     // ========== CAMBIO DE MODO GLOBAL ==========
     function switchMode(mode) {
-        stopAllGames();
         currentMode = mode;
         document.getElementById('rapidMode').classList.toggle('hidden', mode!=='rapid');
         document.getElementById('spellingMode').classList.toggle('hidden', mode!=='spelling');
         document.getElementById('missingMode').classList.toggle('hidden', mode!=='missing');
         document.getElementById('flashcardMode').classList.toggle('hidden', mode!=='flashcard');
         
+        // Ocultar scoreboard y panel de gramática si estamos en flashcard mode (modo móvil enfocado)
         document.getElementById('teamScoreboard').classList.toggle('hidden', mode==='flashcard');
         document.getElementById('grammarPanelBox').classList.toggle('hidden', mode==='flashcard');
 
