@@ -81,6 +81,7 @@
         .btn.danger { background: var(--theme-danger); color: white; }
         .btn.audio.active { background: var(--theme-primary); border-color: var(--theme-accent); color: white; }
         .btn.fullscreen { background: #3b5998; border-color: #2d4373; }
+        .btn.emergency-stop { background: #d92027; color: white; border-color: #a8191e; box-shadow: 0 4px 0 #851216; font-weight: 800;}
         
         .team-scoreboard { display: flex; justify-content: center; gap: 25px; margin: 10px 0 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 20px; border: 1px solid var(--theme-border); flex-wrap: wrap; }
         .team { background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--theme-border); position: relative; }
@@ -93,7 +94,7 @@
 
         .speed-control, .round-selector, .timer-control { display: flex; align-items: center; gap: 8px; color: var(--theme-text); font-weight: 600; flex-wrap: wrap; justify-content: center;}
         #speedSlider { width: 120px; accent-color: var(--theme-accent); }
-        input[type="number"] { width: 70px; padding: 8px; border-radius: 40px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--theme-border); font-weight: 700; text-align: center; }
+        select.diff-select, input[type="number"] { width: auto; padding: 8px 12px; border-radius: 40px; background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--theme-border); font-weight: 700; text-align: center; }
         
         .filter-area { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
         select.category-select { padding: 12px 22px; border-radius: 60px; background: rgba(0,0,0,0.4); color: var(--theme-text); font-weight: 700; border: 1px solid var(--theme-border); max-width: 250px; }
@@ -122,7 +123,7 @@
         .answer-reveal { font-size: 3.5rem; font-weight: 800; color: var(--theme-accent); margin-top: 15px; min-height: 50px; }
         .random-btn { background: var(--theme-primary); padding: 8px 16px; border-radius: 30px; font-size: 1.2rem; }
 
-        /* MODO FLASHCARD CSS */
+        /* ================= FLASHCARD CSS ================= */
         .flashcard-container { perspective: 1000px; width: 100%; max-width: 600px; margin: 0 auto 20px; }
         .flashcard-inner { position: relative; width: 100%; min-height: 350px; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; border-radius: 40px;}
         .flashcard-inner.flipped { transform: rotateY(180deg); }
@@ -132,10 +133,10 @@
         .fc-translation { font-size: 4rem; font-weight: 700; color: var(--theme-accent); text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
         .fc-hint { font-size: 1.2rem; color: #888; margin-top: 25px; font-weight: 600; letter-spacing: 2px;}
 
-        /* Contador en blanco */
-        .counter { color: #ffffff !important; font-weight: 800; font-size: 1.1rem; }
+        /* Contador en blanco brillante */
+        .counter { color: #ffffff !important; font-weight: 800; font-size: 1.2rem; }
 
-        /* RESPONSIVE */
+        /* ================= MEDIA QUERIES ================= */
         @media (max-width: 768px) {
             .game-container { padding: 15px 12px; border-radius: 20px; }
             h1 { font-size: 1.8rem; justify-content: center; width: 100%; margin-bottom: 10px; text-align: center;}
@@ -171,6 +172,7 @@
         
         <div class="top-controls">
             <button class="btn fullscreen" id="fullscreenBtn">📺 Fullscreen</button>
+            <button class="btn emergency-stop" id="globalResetBtn">🛑 RESET / STOP</button>
             <div class="book-selector">
                 <label>📚 COURSE:</label>
                 <select id="blockSelect">
@@ -245,11 +247,11 @@
     </div>
 
     <div id="spellingMode" class="hidden">
-        <div class="subhead">🔤 SPELLING CHALLENGE · Spell the spoken word</div>
+        <div class="subhead">🔤 SPELLING CHALLENGE · Translate & spell the word</div>
         <div class="word-card-container">
             <div id="spellingStreakFire" class="streak-fire hidden">🔥 STREAK x3!</div>
             <div class="word-card" id="spellingWordCard">
-                <div class="hint-text" id="spellingHint">🎧 Listen and spell!</div>
+                <div class="hint-text" id="spellingHint">🇪🇸 Hint</div>
                 <div class="timer-display" id="timerDisplay">10</div>
                 <div class="timer-bar"><div class="timer-bar-fill" id="spellingTimerBar"></div></div>
                 <div class="category-badge" id="spellingCategory">UNIT X</div>
@@ -306,6 +308,14 @@
             <div class="timer-control">
                 <label>⏱️ TIME (s)</label>
                 <input type="number" id="missingTimer" min="5" max="60" value="15">
+            </div>
+            <div class="timer-control">
+                <label>⚙️ DIFF.</label>
+                <select id="missingDifficulty" class="diff-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
             </div>
             <div class="round-selector">
                 <label>🔁 ROUNDS</label>
@@ -366,8 +376,8 @@
 (function(){
     "use strict";
 
-    // ========== BASES DE DATOS ==========
-    const evolve1DB = [
+    // ========== BASE DE DATOS (Renombrada de Forma Única y Segura) ==========
+    const rawDB_Ev1 = [
         { word: "Brazil", category: "Unit 1", es: "Brasil" }, { word: "Spain", category: "Unit 1", es: "España" }, { word: "China", category: "Unit 1", es: "China" }, { word: "Mexico", category: "Unit 1", es: "México" }, { word: "Japan", category: "Unit 1", es: "Japón" }, { word: "Colombia", category: "Unit 1", es: "Colombia" }, { word: "Peru", category: "Unit 1", es: "Perú" }, { word: "Russia", category: "Unit 1", es: "Rusia" }, { word: "Italy", category: "Unit 1", es: "Italia" }, { word: "Germany", category: "Unit 1", es: "Alemania" }, { word: "France", category: "Unit 1", es: "Francia" }, { word: "Canada", category: "Unit 1", es: "Canadá" }, { word: "the United States", category: "Unit 1", es: "Estados Unidos" }, { word: "Brazilian", category: "Unit 1", es: "brasileño" }, { word: "Spanish", category: "Unit 1", es: "español" }, { word: "Chinese", category: "Unit 1", es: "chino" }, { word: "Mexican", category: "Unit 1", es: "mexicano" }, { word: "American", category: "Unit 1", es: "estadounidense" }, { word: "Japanese", category: "Unit 1", es: "japonés" }, { word: "Colombian", category: "Unit 1", es: "colombiano" }, { word: "Peruvian", category: "Unit 1", es: "peruano" }, { word: "Russian", category: "Unit 1", es: "ruso" }, { word: "South Korean", category: "Unit 1", es: "surcoreano" }, { word: "Italian", category: "Unit 1", es: "italiano" }, { word: "German", category: "Unit 1", es: "alemán" }, { word: "French", category: "Unit 1", es: "francés" }, { word: "Canadian", category: "Unit 1", es: "canadiense" },
         { word: "mother", category: "Unit 2", es: "madre" }, { word: "father", category: "Unit 2", es: "padre" }, { word: "brother", category: "Unit 2", es: "hermano" }, { word: "sister", category: "Unit 2", es: "hermana" }, { word: "grandmother", category: "Unit 2", es: "abuela" }, { word: "grandfather", category: "Unit 2", es: "abuelo" }, { word: "aunt", category: "Unit 2", es: "tía" }, { word: "uncle", category: "Unit 2", es: "tío" }, { word: "cousin", category: "Unit 2", es: "primo/a" }, { word: "parents", category: "Unit 2", es: "padres" }, { word: "children", category: "Unit 2", es: "hijos" }, { word: "husband", category: "Unit 2", es: "esposo" }, { word: "wife", category: "Unit 2", es: "esposa" }, { word: "son", category: "Unit 2", es: "hijo" }, { word: "daughter", category: "Unit 2", es: "hija" }, { word: "baby", category: "Unit 2", es: "bebé" }, { word: "teenager", category: "Unit 2", es: "adolescente" }, { word: "old", category: "Unit 2", es: "viejo" }, { word: "young", category: "Unit 2", es: "joven" }, { word: "short", category: "Unit 2", es: "bajo" }, { word: "tall", category: "Unit 2", es: "alto" }, { word: "boring", category: "Unit 2", es: "aburrido" }, { word: "funny", category: "Unit 2", es: "divertido" }, { word: "friendly", category: "Unit 2", es: "amigable" }, { word: "interesting", category: "Unit 2", es: "interesante" }, { word: "shy", category: "Unit 2", es: "tímido" }, { word: "smart", category: "Unit 2", es: "inteligente" }, { word: "beautiful", category: "Unit 2", es: "hermoso" }, { word: "noisy", category: "Unit 2", es: "ruidoso" }, { word: "quiet", category: "Unit 2", es: "tranquilo" }, { word: "awful", category: "Unit 2", es: "horrible" }, { word: "cute", category: "Unit 2", es: "lindo" }, { word: "happy", category: "Unit 2", es: "feliz" }, { word: "sad", category: "Unit 2", es: "triste" }, { word: "hungry", category: "Unit 2", es: "hambriento" },
         { word: "bed", category: "Unit 3", es: "cama" }, { word: "chair", category: "Unit 3", es: "silla" }, { word: "table", category: "Unit 3", es: "mesa" }, { word: "desk", category: "Unit 3", es: "escritorio" }, { word: "lamp", category: "Unit 3", es: "lámpara" }, { word: "sofa", category: "Unit 3", es: "sofá" }, { word: "bookcase", category: "Unit 3", es: "estantería" }, { word: "rug", category: "Unit 3", es: "alfombra" }, { word: "refrigerator", category: "Unit 3", es: "nevera" }, { word: "TV", category: "Unit 3", es: "televisor" }, { word: "shower", category: "Unit 3", es: "ducha" }, { word: "closet", category: "Unit 3", es: "armario" }, { word: "kitchen", category: "Unit 3", es: "cocina" }, { word: "bedroom", category: "Unit 3", es: "dormitorio" }, { word: "bathroom", category: "Unit 3", es: "baño" }, { word: "garage", category: "Unit 3", es: "garaje" }, { word: "yard", category: "Unit 3", es: "patio" },
@@ -382,7 +392,7 @@
         { word: "one", category: "Unit 12", es: "uno" }, { word: "two", category: "Unit 12", es: "dos" }, { word: "three", category: "Unit 12", es: "tres" }, { word: "ten", category: "Unit 12", es: "diez" }, { word: "twenty", category: "Unit 12", es: "veinte" }, { word: "thirty", category: "Unit 12", es: "treinta" }, { word: "fifteen", category: "Unit 12", es: "quince" }, { word: "first", category: "Unit 12", es: "primero" }, { word: "March", category: "Unit 12", es: "marzo" }, { word: "January", category: "Unit 12", es: "enero" }
     ];
 
-    const evolve2DB = [
+    const rawDB_Ev2 = [
         { word: "boss", category: "Unit 1", es: "jefe/a" }, { word: "classmate", category: "Unit 1", es: "compañero/a" }, { word: "close friend", category: "Unit 1", es: "amigo/a íntimo" }, { word: "coworker", category: "Unit 1", es: "compañero/a trabajo" }, { word: "couple", category: "Unit 1", es: "pareja" }, { word: "fiancé", category: "Unit 1", es: "prometido/a" }, { word: "girlfriend", category: "Unit 1", es: "novia" }, { word: "grandchild", category: "Unit 1", es: "nieto/a" }, { word: "neighbor", category: "Unit 1", es: "vecino/a" }, { word: "roommate", category: "Unit 1", es: "compañero/a de piso" }, { word: "candy bar", category: "Unit 1", es: "barra de chocolate" }, { word: "cash", category: "Unit 1", es: "efectivo" }, { word: "driver's license", category: "Unit 1", es: "licencia" }, { word: "hairbrush", category: "Unit 1", es: "cepillo" }, { word: "hand lotion", category: "Unit 1", es: "loción" }, { word: "keychain", category: "Unit 1", es: "llavero" }, { word: "mirror", category: "Unit 1", es: "espejo" }, { word: "pack of gum", category: "Unit 1", es: "chicles" }, { word: "receipt", category: "Unit 1", es: "recibo" }, { word: "sunglasses", category: "Unit 1", es: "gafas de sol" }, { word: "tissues", category: "Unit 1", es: "pañuelos" }, { word: "umbrella", category: "Unit 1", es: "paraguas" }, { word: "water bottle", category: "Unit 1", es: "botella de agua" },
         { word: "do housework", category: "Unit 2", es: "hacer limpieza" }, { word: "do the cooking", category: "Unit 2", es: "cocinar" }, { word: "do the dishes", category: "Unit 2", es: "lavar platos" }, { word: "do the laundry", category: "Unit 2", es: "lavar ropa" }, { word: "have free time", category: "Unit 2", es: "tener tiempo libre" }, { word: "have a party", category: "Unit 2", es: "hacer fiesta" }, { word: "have a snack", category: "Unit 2", es: "tomar un snack" }, { word: "have something to drink", category: "Unit 2", es: "tomar algo" }, { word: "make the bed", category: "Unit 2", es: "hacer la cama" }, { word: "make a plan", category: "Unit 2", es: "hacer plan" }, { word: "make a mess", category: "Unit 2", es: "hacer desastre" }, { word: "calendar", category: "Unit 2", es: "calendario" }, { word: "document", category: "Unit 2", es: "documento" }, { word: "electrical outlet", category: "Unit 2", es: "enchufe" }, { word: "files", category: "Unit 2", es: "archivos" }, { word: "headphones", category: "Unit 2", es: "audífonos" }, { word: "keyboard", category: "Unit 2", es: "teclado" }, { word: "laptop screen", category: "Unit 2", es: "pantalla laptop" }, { word: "mouse", category: "Unit 2", es: "ratón" }, { word: "notes", category: "Unit 2", es: "notas" }, { word: "page", category: "Unit 2", es: "página" }, { word: "power cord", category: "Unit 2", es: "cable de corriente" }, { word: "textbook", category: "Unit 2", es: "libro de texto" }, { word: "Wi-Fi", category: "Unit 2", es: "wifi" },
         { word: "athlete", category: "Unit 3", es: "atleta" }, { word: "coach", category: "Unit 3", es: "entrenador/a" }, { word: "court", category: "Unit 3", es: "cancha" }, { word: "fans", category: "Unit 3", es: "fans" }, { word: "field", category: "Unit 3", es: "campo" }, { word: "game", category: "Unit 3", es: "juego" }, { word: "players", category: "Unit 3", es: "jugadores" }, { word: "pool", category: "Unit 3", es: "alberca" }, { word: "race", category: "Unit 3", es: "carrera" }, { word: "score", category: "Unit 3", es: "puntaje" }, { word: "stadium", category: "Unit 3", es: "estadio" }, { word: "team", category: "Unit 3", es: "equipo" }, { word: "tennis court", category: "Unit 3", es: "cancha tenis" }, { word: "win", category: "Unit 3", es: "ganar" }, { word: "lose", category: "Unit 3", es: "perder" }, { word: "climb", category: "Unit 3", es: "escalar" }, { word: "jump", category: "Unit 3", es: "saltar" }, { word: "lie down", category: "Unit 3", es: "acostarse" }, { word: "lift weights", category: "Unit 3", es: "levantar pesas" }, { word: "push", category: "Unit 3", es: "empujar" }, { word: "sit down", category: "Unit 3", es: "sentarse" }, { word: "stand up", category: "Unit 3", es: "ponerse de pie" }, { word: "stretch", category: "Unit 3", es: "estirarse" }, { word: "throw", category: "Unit 3", es: "lanzar" }, { word: "turn around", category: "Unit 3", es: "darse la vuelta" },
@@ -397,7 +407,7 @@
         { word: "blizzard", category: "Unit 12", es: "tormenta de nieve" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "cloudy", category: "Unit 12", es: "nublado" }, { word: "drought", category: "Unit 12", es: "sequía" }, { word: "flood", category: "Unit 12", es: "inundación" }, { word: "foggy", category: "Unit 12", es: "con niebla" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "humid", category: "Unit 12", es: "húmedo" }, { word: "hurricane", category: "Unit 12", es: "huracán" }, { word: "rainy", category: "Unit 12", es: "lluvioso" }, { word: "snowstorm", category: "Unit 12", es: "tormenta de nieve" }, { word: "snowy", category: "Unit 12", es: "nevado" }, { word: "sunny", category: "Unit 12", es: "soleado" }, { word: "thunder and lightning", category: "Unit 12", es: "truenos y rayos" }, { word: "windy", category: "Unit 12", es: "ventoso" }, { word: "cave", category: "Unit 12", es: "cueva" }, { word: "cliff", category: "Unit 12", es: "acantilado" }, { word: "coast", category: "Unit 12", es: "costa" }, { word: "fountain", category: "Unit 12", es: "fuente" }, { word: "glacier", category: "Unit 12", es: "glaciar" }, { word: "hill", category: "Unit 12", es: "colina" }, { word: "rainforest", category: "Unit 12", es: "selva" }, { word: "rocks", category: "Unit 12", es: "rocas" }, { word: "skyscraper", category: "Unit 12", es: "rascacielos" }, { word: "statue", category: "Unit 12", es: "estatua" }, { word: "tower", category: "Unit 12", es: "torre" }, { word: "valley", category: "Unit 12", es: "valle" }, { word: "waterfall", category: "Unit 12", es: "cascada" }, { word: "woods", category: "Unit 12", es: "bosque" }
     ];
 
-    const evolve3DB = [
+    const rawDB_Ev3 = [
         { word: "brave", category: "Unit 1", es: "valiente" }, { word: "cheerful", category: "Unit 1", es: "alegre" }, { word: "easygoing", category: "Unit 1", es: "relajado" }, { word: "generous", category: "Unit 1", es: "generoso" }, { word: "helpful", category: "Unit 1", es: "servicial" }, { word: "honest", category: "Unit 1", es: "honesto" }, { word: "intelligent", category: "Unit 1", es: "inteligente" }, { word: "nervous", category: "Unit 1", es: "nervioso" }, { word: "reliable", category: "Unit 1", es: "confiable" }, { word: "selfish", category: "Unit 1", es: "egoísta" }, { word: "serious", category: "Unit 1", es: "serio" }, { word: "sociable", category: "Unit 1", es: "sociable" }, { word: "be born", category: "Unit 1", es: "nacer" }, { word: "be into", category: "Unit 1", es: "interesarle mucho" }, { word: "be married", category: "Unit 1", es: "estar casado" }, { word: "be raised", category: "Unit 1", es: "ser criado" }, { word: "be single", category: "Unit 1", es: "estar soltero" }, { word: "celebrate", category: "Unit 1", es: "celebrar" }, { word: "live alone", category: "Unit 1", es: "vivir solo" }, { word: "live with my family", category: "Unit 1", es: "vivir con familia" }, { word: "retire", category: "Unit 1", es: "jubilarse" },
         { word: "brand new", category: "Unit 2", es: "nuevo" }, { word: "common", category: "Unit 2", es: "común" }, { word: "damaged", category: "Unit 2", es: "dañado" }, { word: "fancy", category: "Unit 2", es: "elegante" }, { word: "in good condition", category: "Unit 2", es: "en buen estado" }, { word: "modern", category: "Unit 2", es: "moderno" }, { word: "plain", category: "Unit 2", es: "simple" }, { word: "outdated", category: "Unit 2", es: "anticuado" }, { word: "special", category: "Unit 2", es: "especial" }, { word: "used", category: "Unit 2", es: "usado" }, { word: "useful", category: "Unit 2", es: "útil" }, { word: "useless", category: "Unit 2", es: "inútil" }, { word: "delete", category: "Unit 2", es: "borrar" }, { word: "device", category: "Unit 2", es: "dispositivo" }, { word: "folder", category: "Unit 2", es: "carpeta" }, { word: "home screen", category: "Unit 2", es: "pantalla inicio" }, { word: "model", category: "Unit 2", es: "modelo" }, { word: "set up", category: "Unit 2", es: "configurar" }, { word: "storage", category: "Unit 2", es: "almacenamiento" }, { word: "sync", category: "Unit 2", es: "sincronizar" }, { word: "try out", category: "Unit 2", es: "probar" }, { word: "work", category: "Unit 2", es: "funcionar" },
         { word: "bridge", category: "Unit 3", es: "puente" }, { word: "clinic", category: "Unit 3", es: "clínica" }, { word: "embassy", category: "Unit 3", es: "embajada" }, { word: "ferry", category: "Unit 3", es: "ferry" }, { word: "fire station", category: "Unit 3", es: "estación bomberos" }, { word: "highway", category: "Unit 3", es: "autopista" }, { word: "hostel", category: "Unit 3", es: "hostal" }, { word: "monument", category: "Unit 3", es: "monumento" }, { word: "parking lot", category: "Unit 3", es: "estacionamiento" }, { word: "sculpture", category: "Unit 3", es: "escultura" }, { word: "sidewalk", category: "Unit 3", es: "acera" }, { word: "tunnel", category: "Unit 3", es: "túnel" }, { word: "arrival", category: "Unit 3", es: "llegada" }, { word: "book", category: "Unit 3", es: "reservar" }, { word: "departure", category: "Unit 3", es: "salida" }, { word: "direct", category: "Unit 3", es: "directo" }, { word: "fare", category: "Unit 3", es: "tarifa" }, { word: "line", category: "Unit 3", es: "línea" }, { word: "reservation", category: "Unit 3", es: "reservación" }, { word: "route", category: "Unit 3", es: "ruta" }, { word: "schedule", category: "Unit 3", es: "horario" }, { word: "terminal", category: "Unit 3", es: "terminal" },
@@ -412,7 +422,6 @@
         { word: "be mad at", category: "Unit 12", es: "estar enojado con" }, { word: "blame", category: "Unit 12", es: "culpar" }, { word: "damage", category: "Unit 12", es: "daño" }, { word: "destroy", category: "Unit 12", es: "destruir" }, { word: "fall out", category: "Unit 12", es: "caerse" }, { word: "feel bad", category: "Unit 12", es: "sentirse mal" }, { word: "knock off", category: "Unit 12", es: "tirar" }, { word: "leave on", category: "Unit 12", es: "dejar prendido" }, { word: "leave open", category: "Unit 12", es: "dejar abierto" }, { word: "pick up", category: "Unit 12", es: "recoger" }, { word: "pull out", category: "Unit 12", es: "sacar" }, { word: "shake", category: "Unit 12", es: "agitar" }, { word: "slip", category: "Unit 12", es: "resbalar" }, { word: "spill", category: "Unit 12", es: "derramar" }, { word: "boiling", category: "Unit 12", es: "hirviendo" }, { word: "enormous", category: "Unit 12", es: "enorme" }, { word: "exhausted", category: "Unit 12", es: "exhausto" }, { word: "freezing", category: "Unit 12", es: "helado" }, { word: "huge", category: "Unit 12", es: "enorme" }, { word: "magnificent", category: "Unit 12", es: "magnífico" }, { word: "miserable", category: "Unit 12", es: "miserable" }, { word: "starving", category: "Unit 12", es: "muerto de hambre" }, { word: "terrific", category: "Unit 12", es: "estupendo" }, { word: "thrilled", category: "Unit 12", es: "emocionado" }, { word: "tiny", category: "Unit 12", es: "diminuto" }
     ];
 
-    // Asignar bloques dinámicamente
     function assignBlocks(wordsArray, bookId) {
         return wordsArray.map(w => {
             let unitMatch = w.category.match(/Unit (\d+)/i);
@@ -426,8 +435,8 @@
 
     const fullDB = [
         ...assignBlocks(evolve1DB, 1), 
-        ...assignBlocks(evolve2DB, 2), 
-        ...assignBlocks(evolve3DB, 3)
+        ...assignBlocks(rawDB_Ev2, 2), 
+        ...assignBlocks(rawDB_Ev3, 3)
     ];
 
     // ========== SHUFFLE BAG ENGINE (Sin Repeticiones) ==========
@@ -451,6 +460,9 @@
     let audioCtx;
     let currentStreak = 0;
     const STREAK_THRESHOLD = 3;
+    
+    // Controladores de tiempo globales para evitar fantasmas (ghosting)
+    let rapidTimeout, spellingTimeout, missingTimeout;
 
     function initAudioAPI() {
         if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -479,8 +491,9 @@
     
     function playWordAudio(word) {
         if (!audioEnabled || !word || word === "Welcome" || word === "N/A") return;
-        audioPlayer.src = AUDIO_BASE_PATH + getAudioFilename(word);
-        audioPlayer.play().catch(e => console.warn("Audio no encontrado:", getAudioFilename(word)));
+        const audioPath = AUDIO_BASE_PATH + getAudioFilename(word);
+        const tempAudio = new Audio(audioPath); // Instancia limpia por cada audio
+        tempAudio.play().catch(e => console.warn("Audio no encontrado:", audioPath));
     }
 
     window.toggleAudio = function() {
@@ -559,8 +572,46 @@
         });
     });
     document.getElementById('resetTeamsBtn').addEventListener('click', () => { teamScores = { red: 0, blue: 0, green: 0 }; updateTeamUI(); });
+    
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
-        if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+        if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } 
+        else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+    });
+
+    // ========== CONTROL MAESTRO (ANTI-GHOSTING) ==========
+    function stopAllGames() {
+        // Pausar variables
+        rapidSessionActive = false; rapidIsPlaying = false;
+        spellingSessionActive = false; spellingWaiting = false;
+        missingSessionActive = false; missingWaiting = false;
+        
+        // Limpiar intervalos activos
+        clearInterval(rapidInterval);
+        clearInterval(spellingTimerInterval);
+        clearInterval(missingTimerInterval);
+        
+        // Limpiar timeouts de evaluaciones
+        clearTimeout(rapidTimeout);
+        clearTimeout(spellingTimeout);
+        clearTimeout(missingTimeout);
+        
+        // Restaurar botones de Start
+        document.getElementById('playPauseBtn').innerHTML = '▶️ START';
+        document.getElementById('spellingStartBtn').innerHTML = '▶️ START';
+        document.getElementById('missingStartBtn').innerHTML = '▶️ START';
+        
+        // Quitar estilos de peligro
+        document.querySelectorAll('.danger').forEach(el => el.classList.remove('danger'));
+    }
+
+    document.getElementById('globalResetBtn').addEventListener('click', () => {
+        stopAllGames();
+        currentStreak = 0; updateStreak(false);
+        // Refrescar el modo actual para resetear visuales
+        if (currentMode==='rapid') rapidRefreshWordList(); 
+        else if (currentMode==='spelling') spellingRefreshWordList(); 
+        else if (currentMode==='missing') missingRefreshWordList();
+        else if (currentMode==='flashcard') fcRefreshList();
     });
 
     // ========== LOGICA DE LIBROS Y CATEGORIAS ==========
@@ -586,32 +637,36 @@
         document.querySelectorAll('.category-select').forEach(select => { select.innerHTML = optionsHtml; });
         
         rapidCategory = 'all'; spellingCategory = 'all'; missingCategory = 'all'; fcCategory = 'all';
-        rapidBag = []; spellingBag = []; missingBag = []; fcBag = []; // Reinicia las bolsas al cambiar de libro
+        rapidBag = []; spellingBag = []; missingBag = []; fcBag = []; 
     }
 
+    // ========== GRAMMAR PANEL ENRIQUECIDO ==========
     function updateGrammarPanel() {
         const grid = document.getElementById('grammarGrid');
         const sel = document.getElementById('blockSelect');
         document.getElementById('grammarCourseLabel').textContent = sel.options[sel.selectedIndex].text;
         let html = '';
         switch(currentBlockId) {
-            case "1_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Possessives</h4><ul><li><code>I am from Brazil.</code></li><li><code>Are you American?</code></li><li><code>my, your, his, her, its, our, their</code></li><li><code>Whose book is it? It's mine.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple Present (Routines)</h4><ul><li><code>I like coffee.</code></li><li><code>He works every day.</code></li><li><code>Do you play games?</code></li><li><code>This / that one</code> & <code>These / those ones</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Present Continuous</h4><ul><li><code>I am reading right now.</code></li><li><code>She isn't eating.</code></li><li><strong>VS Simple Present:</strong> Routine vs Now.</li></ul></div>`; break;
-            case "1_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Future Plans</h4><ul><li>Present continuous for future:</li><li><code>I'm going to the mall tomorrow.</code></li><li><strong>Object pronouns:</strong> <code>me, you, him, her, it, us, them</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Simple Past</h4><ul><li><code>I worked late.</code> (Regular)</li><li><code>She didn't play.</code> (Negative)</li><li><code>Did they go?</code> (Question)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: 'be going to' & Determiners</h4><ul><li><code>We are going to travel.</code></li><li><strong>Determiners:</strong> <code>all, most, many, some, no, none</code> (with 'of' + pronoun)</li></ul></div>`; break;
-            case "1_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Quantifiers & Verb Patterns</h4><ul><li><code>a lot of, some, a few, too much</code></li><li><code>verb + to + verb</code> (want to try)</li><li><code>verb + -ing</code> (can't stand waiting)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: 'if' & 'when'</h4><ul><li><code>If I have time, I'll go.</code></li><li><strong>Giving reasons:</strong> <code>to + verb</code> (to learn) / <code>for + noun</code> (for school)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Comparatives & Superlatives</h4><ul><li><code>taller than</code> / <code>more beautiful</code></li><li><code>the tallest</code> / <code>the best</code></li></ul></div>`; break;
-            case "1_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: 'have to' & Predictions</h4><ul><li><strong>Obligation:</strong> <code>I have to work.</code></li><li><strong>Predictions:</strong> <code>will, might, may, won't</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Experience: <code>I have been there.</code></li><li><strong>VS Simple Past:</strong> (Specific past time)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: 'be like' & Relative Pronouns</h4><ul><li><code>What's the weather like?</code></li><li><strong>Relative:</strong> <code>who, which, that</code></li></ul></div>`; break;
-            case "2_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Possessives</h4><ul><li>Review: affirmative, negative, questions</li><li>Possessive adjectives & pronouns</li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li><li><code>Do/Does</code> in questions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Demonstratives</h4><ul><li><code>This / that one</code></li><li><code>These / those ones</code></li></ul></div>`; break;
-            case "2_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Present continuous</h4><ul><li>Simple present vs. present continuous</li><li>Action vs State verbs</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Future plans</h4><ul><li>Present continuous for future arrangements</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Simple past</h4><ul><li>Affirmative, negative and questions</li><li>Irregular verbs</li></ul></div>`; break;
-            case "2_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: 'be going to'</h4><ul><li>Intentions and plans</li><li><code>all, most, many, some, none</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Verb patterns</h4><ul><li><code>verb + to + verb</code></li><li><code>verb + -ing</code></li></ul></div>`; break;
-            case "2_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Modals</h4><ul><li><strong>Advice:</strong> <code>should</code></li><li><strong>Obligation:</strong> <code>have to, must</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect vs simple past</li><li>Experiences in life</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Relative Pronouns</h4><ul><li><code>who</code> (people), <code>which</code> (things), <code>that</code></li></ul></div>`; break;
-            case "3_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: Information Questions</h4><ul><li><code>What, Which, Whose, How...</code></li><li><strong>Indirect:</strong> <code>Do you know where…?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Present Perfect</h4><ul><li>with <code>ever, never, for, since</code></li><li>with <code>already, yet</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Articles & Modals</h4><ul><li><code>a, an, the, (no article)</code></li><li><strong>Advice:</strong> <code>should, could, I'd</code></li></ul></div>`; break;
+            case "1_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Prepositions</h4><ul><li><code>I am, you are, is/are</code></li><li><code>is not / are not</code></li><li><code>What's...? It's...</code></li><li>Prepositions of place</li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Adjectives & Questions</h4><ul><li>Adjectives to describe people</li><li>Modifiers: <code>really / very</code></li><li>Questions with <code>who / what</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Possessives</h4><ul><li>Possessive adjectives (my, your)</li><li>Possessive <code>'s</code></li><li><code>it is / it's</code></li></ul></div>`; break;
+            case "1_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Simple Present (1)</h4><ul><li>Statements (I work, he plays)</li><li>Yes/No questions</li><li>Short answers</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Simple Present (2)</h4><ul><li>Wh- questions</li><li>Frequency adverbs (always, usually...)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: There is/are & Nouns</h4><ul><li><code>There's / There are</code></li><li><code>a lot of, some, no</code></li><li>Count & Non-count nouns</li></ul></div>`; break;
+            case "1_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Present Continuous</h4><ul><li>Statements and questions</li><li><code>Can / can't</code> for ability</li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Modal verbs</h4><ul><li><code>Can / can't</code> for possibility</li><li><code>like to, want to, need to, have to</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: 'be going to'</h4><ul><li>Future plans: <code>be going to</code></li><li>Information questions</li></ul></div>`; break;
+            case "1_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Simple Past (1)</h4><ul><li>Affirmative & negative statements</li><li>Regular and irregular verbs</li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Simple Past (2)</h4><ul><li>Yes/No and Wh- questions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Comparisons</h4><ul><li>Comparative adjectives</li><li>Superlative adjectives</li></ul></div>`; break;
+            
+            case "2_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: 'be' & Possessives</h4><ul><li><code>be</code> (affirmative, negative, questions)</li><li>Possessive adjectives & pronouns</li><li>Possession: <code>Whose...?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Simple present</h4><ul><li>Habits and routines</li><li><code>This / that one</code>; <code>these / those ones</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Present continuous</h4><ul><li>Present continuous</li><li>Simple present vs. present continuous</li></ul></div>`; break;
+            case "2_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Future plans</h4><ul><li>Present continuous for future plans</li><li>Object pronouns (me, you, him, us)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Simple past</h4><ul><li>Simple past (affirmative)</li><li>Simple past (negative and questions)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: 'be going to'</h4><ul><li><code>be going to</code></li><li>Determiners: <code>all, most, many, some, none</code></li></ul></div>`; break;
+            case "2_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: Quantifiers</h4><ul><li><code>a lot of, some, a few, not many...</code></li><li>Verb patterns: <code>verb + to + verb / verb-ing</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: 'if' and 'when'</h4><ul><li><code>if</code> and <code>when</code></li><li>Giving reasons using <code>to</code> and <code>for</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Comparisons</h4><ul><li>Comparative adjectives</li><li>Superlative adjectives</li></ul></div>`; break;
+            case "2_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: 'have to'</h4><ul><li>Obligation: <code>have to</code></li><li>Making predictions: <code>will, might, may</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Present Perfect</h4><ul><li>Present perfect for experience</li><li>Present perfect vs. simple past</li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: 'be like'</h4><ul><li>Questions with <code>be like</code></li><li>Relative pronouns: <code>who, which, that</code></li></ul></div>`; break;
+            
+            case "3_1": html = `<div class="grammar-card"><h4>🔹 Unit 1: Info questions</h4><ul><li><code>What, Which, Whose, How...</code></li><li><strong>Indirect:</strong> <code>Do you know where…?</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 2: Present Perfect</h4><ul><li>with <code>ever, never, for, since</code></li><li>with <code>already, yet</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 3: Articles & Modals</h4><ul><li><code>a, an, the, (no article)</code></li><li><strong>Advice:</strong> <code>should, could, I'd</code></li></ul></div>`; break;
             case "3_2": html = `<div class="grammar-card"><h4>🔹 Unit 4: Future Forms</h4><ul><li><code>be going to</code> vs <code>will</code></li><li><code>will</code> for sudden decisions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 5: Past Tenses</h4><ul><li><strong>Past Continuous:</strong> <code>I was walking</code></li><li><strong>VS Simple Past:</strong> Interrupted actions</li></ul></div><div class="grammar-card"><h4>🔹 Unit 6: Quantifiers & Conditionals</h4><ul><li><code>almost all, several, very few</code></li><li><strong>Real Conditionals:</strong> If + Pres, Will</li></ul></div>`; break;
             case "3_3": html = `<div class="grammar-card"><h4>🔹 Unit 7: 'used to' & Comparisons</h4><ul><li><code>I used to play.</code></li><li>Comparisons: <code>(not) as… as</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 8: Pres. Perfect Continuous</h4><ul><li><code>I have been studying.</code></li><li><strong>VS Present Perfect:</strong> (Duration vs Result)</li></ul></div><div class="grammar-card"><h4>🔹 Unit 9: Modals</h4><ul><li><strong>Necessity:</strong> <code>have to, need to, must</code></li><li><strong>Prohibition:</strong> <code>can't, must not</code></li></ul></div>`; break;
-            case "3_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Passive Voice</h4><ul><li>Simple present & past passive</li><li><code>The car was washed.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Phrasal Verbs & Conditionals</h4><ul><li>Separable vs Inseparable</li><li><strong>Unreal:</strong> <code>If I had…, I would…</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li><strong>Indefinite pronouns:</strong> everyone, nothing</li><li><code>He said that he was late.</code></li></ul></div>`; break;
+            case "3_4": html = `<div class="grammar-card"><h4>🔹 Unit 10: Passive Voice</h4><ul><li>Simple present & past passive</li><li><code>The car was washed.</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 11: Phrasal Verbs</h4><ul><li>Separable vs Inseparable</li><li><strong>Unreal Conditionals:</strong> <code>If I had…, I would…</code></li></ul></div><div class="grammar-card"><h4>🔹 Unit 12: Reported Speech</h4><ul><li><strong>Indefinite pronouns:</strong> everyone, nothing</li><li><code>He said that he was late.</code></li></ul></div>`; break;
         }
         grid.innerHTML = html;
     }
 
     document.getElementById('blockSelect').addEventListener('change', (e) => {
+        stopAllGames();
         currentBlockId = e.target.value; 
         updateThemeAndCategories(); 
         updateGrammarPanel(); 
@@ -676,7 +731,7 @@
     function rapidReset() {
         rapidRoundCounter = 0; rapidSessionActive = true; rapidRoundLimit = parseInt(document.getElementById('roundCount').value,10)||10;
         rapidBaseSpeed = parseFloat(document.getElementById('speedSlider').value); rapidDynamicSpeed = rapidBaseSpeed;
-        rapidBag = []; // Reinicia bolsa
+        rapidBag = []; 
         initAudioAPI(); rapidUpdateDisplay(rapidPickWord());
     }
     function rapidTogglePlay() {
@@ -685,7 +740,7 @@
         else { if (rapidIsPlaying) { clearInterval(rapidInterval); document.getElementById('playPauseBtn').innerHTML = '▶️ START'; rapidIsPlaying = false; } else { rapidStartInterval(); document.getElementById('playPauseBtn').innerHTML = '⏸️ PAUSE'; rapidIsPlaying = true; } }
     }
     function rapidRefreshWordList() {
-        rapidBag = []; // Limpia bolsa si cambia categoría
+        rapidBag = []; 
         rapidCurrentWord = rapidPickWord();
         if (!rapidSessionActive) { document.getElementById('currentWord').textContent = rapidCurrentWord.word; document.getElementById('categoryTag').textContent = formatCategory(rapidCurrentWord.category); document.getElementById('wordCounter').textContent = `📋 ${rapidGetFilteredList().length} words`; } 
         else { rapidUpdateDisplay(rapidCurrentWord); }
@@ -710,8 +765,8 @@
     }
     
     function spellingUpdateUI() {
-        // Traducción oculta. Solo aparece "Listen and spell"
-        document.getElementById('spellingHint').textContent = `🎧 Listen and spell!`; 
+        // Español Activado aquí
+        document.getElementById('spellingHint').textContent = `🇪🇸 ${spellingCurrentWord.es || ''}`; 
         document.getElementById('spellingCategory').textContent = formatCategory(spellingCurrentWord.category);
         document.getElementById('spellingWordCounter').textContent = `📋 ${spellingGetList().length} words`; document.getElementById('spellingRoundsInfo').textContent = `🎯 ${spellingRound} / ${spellingRoundLimit}`;
         document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('wrongCount').textContent = spellingWrong;
@@ -738,7 +793,7 @@
                 document.getElementById('spellingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${spellingCurrentWord.word}</strong>`;
                 spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong;
                 updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word);
-                setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
+                spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 2000);
             }
         }, 1000);
     }
@@ -749,7 +804,7 @@
     }
     function spellingReset() {
         clearInterval(spellingTimerInterval); initAudioAPI(); spellingSessionActive = true; spellingWaiting = false; currentStreak=0; updateStreak(false);
-        spellingBag = []; // Reinicia bolsa
+        spellingBag = []; 
         spellingRound = 0; spellingRoundLimit = parseInt(document.getElementById('spellingRounds').value,10)||10; spellingCorrect = 0; spellingWrong = 0;
         document.getElementById('spellingStartBtn').innerHTML = '⏸️ PAUSE'; spellingNext();
     }
@@ -758,21 +813,21 @@
     function spellingMarkCorrect() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingCorrect++;
         document.getElementById('correctCount').textContent = spellingCorrect; document.getElementById('spellingAnswerReveal').innerHTML = `✅ Correct! <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(true); playDing(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(true); playDing(); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
     function spellingMarkIncorrect() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
         document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
     function spellingReveal() {
         if (!spellingSessionActive || spellingWaiting) return; clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++;
         document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `🔎 Answer: <strong>${spellingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
+        updateStreak(false); playBuzzer(); playWordAudio(spellingCurrentWord.word); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1500);
     }
 
     document.getElementById('spellingStartBtn').addEventListener('click', ()=>{ if (!spellingSessionActive) spellingReset(); else { if (spellingTimerInterval) { clearInterval(spellingTimerInterval); spellingTimerInterval=null; document.getElementById('spellingStartBtn').innerHTML='▶️ RESUME'; } else { spellingStartTimer(); document.getElementById('spellingStartBtn').innerHTML='⏸️ PAUSE'; } } });
-    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{ if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; } clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); });
+    document.getElementById('spellingNextBtn').addEventListener('click', ()=>{ if (!spellingSessionActive || spellingWaiting) { if(!spellingSessionActive) spellingReset(); return; } clearInterval(spellingTimerInterval); spellingWaiting = true; spellingWrong++; document.getElementById('wrongCount').textContent = spellingWrong; document.getElementById('spellingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${spellingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); spellingTimeout = setTimeout(() => { if (spellingSessionActive) spellingNext(); }, 1000); });
     document.getElementById('spellingAudioBtn').addEventListener('click', ()=> playWordAudio(spellingCurrentWord.word));
     document.getElementById('spellingCorrectBtn').addEventListener('click', spellingMarkCorrect);
     document.getElementById('spellingIncorrectBtn').addEventListener('click', spellingMarkIncorrect);
@@ -792,19 +847,29 @@
         return missingBag.pop();
     }
     
-    function generateMissingWord(word) {
+    function generateMissingWord(word, difficulty) {
         if (!word || word.length <= 2 || word === "N/A") return word;
-        const chars = word.split(''); const numToHide = Math.max(1, Math.floor(Math.random() * (chars.length * 0.5)) + 1); const indices = [];
-        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ' && chars[i] !== "'") indices.push(i);
-        for (let i = indices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [indices[i], indices[j]] = [indices[j], indices[i]]; }
-        const toHide = indices.slice(0, Math.min(numToHide, indices.length));
+        const chars = word.split(''); 
+        const validIndices = [];
+        for (let i = 1; i < chars.length; i++) if (chars[i] !== ' ' && chars[i] !== "'") validIndices.push(i);
+        
+        let numToHide;
+        if (difficulty === 'easy') numToHide = Math.max(1, Math.floor(validIndices.length * 0.3));
+        else if (difficulty === 'medium') numToHide = Math.max(1, Math.floor(validIndices.length * 0.5));
+        else numToHide = Math.max(1, Math.floor(validIndices.length * 0.85)); // Hard
+
+        for (let i = validIndices.length - 1; i > 0; i--) { 
+            const j = Math.floor(Math.random() * (i + 1)); 
+            [validIndices[i], validIndices[j]] = [validIndices[j], validIndices[i]]; 
+        }
+        const toHide = validIndices.slice(0, numToHide);
         return chars.map((c, i) => (i === 0 || c === ' ' || c === "'") ? c : (toHide.includes(i) ? '_' : c)).join('');
     }
     
     function missingUpdateUI() {
-        // Traducción Oculta. Solo instrucción.
         document.getElementById('missingHint').textContent = `🧩 Complete the word!`; 
-        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word);
+        const diff = document.getElementById('missingDifficulty').value;
+        document.getElementById('missingWordDisplay').textContent = generateMissingWord(missingCurrentWord.word, diff);
         document.getElementById('missingCategory').textContent = formatCategory(missingCurrentWord.category); document.getElementById('missingWordCounter').textContent = `📋 ${missingGetList().length} words`;
         document.getElementById('missingRoundsInfo').textContent = `🎯 ${missingRound} / ${missingRoundLimit}`; document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWrong').textContent = missingWrong;
         document.getElementById('missingAnswerReveal').innerHTML = ''; document.getElementById('missingTimerDisplay').classList.remove('danger'); document.getElementById('missingTimerBar').classList.remove('danger');
@@ -825,7 +890,7 @@
                 document.getElementById('missingAnswerReveal').innerHTML = `⏳ Time's up! Answer: <strong>${missingCurrentWord.word}</strong>`;
                 missingWrong++; document.getElementById('missingWrong').textContent = missingWrong;
                 updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word);
-                setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
+                missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2500);
             }
         }, 1000);
     }
@@ -841,7 +906,7 @@
     }
     function missingReset() {
         missingStopTimer(); initAudioAPI(); missingSessionActive = true; missingWaiting = false; currentStreak=0; updateStreak(false);
-        missingBag = []; // Reinicia bolsa
+        missingBag = []; 
         missingRound = 0; missingRoundLimit = parseInt(document.getElementById('missingRounds').value,10)||10; missingCorrect = 0; missingWrong = 0;
         document.getElementById('missingStartBtn').innerHTML = '⏸️ PAUSE'; missingNext();
     }
@@ -851,30 +916,31 @@
         if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingCorrect++;
         document.getElementById('missingCorrect').textContent = missingCorrect; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `✅ Correct! <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(true); playDing(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
+        updateStreak(true); playDing(); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 1500);
     }
     function missingMarkIncorrect() {
         if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
         document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word;
         document.getElementById('missingAnswerReveal').innerHTML = `❌ Incorrect: <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
     function missingReveal() {
         if (!missingSessionActive || missingWaiting) return; missingStopTimer(); missingWaiting = true; missingWrong++;
         document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; 
         document.getElementById('missingAnswerReveal').innerHTML = `🔎 Answer: <strong>${missingCurrentWord.word}</strong>`;
-        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
+        updateStreak(false); playBuzzer(); playWordAudio(missingCurrentWord.word); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 2000);
     }
 
     document.getElementById('missingStartBtn').addEventListener('click', ()=>{ if (!missingSessionActive) missingReset(); else { if (missingTimerInterval) { missingStopTimer(); document.getElementById('missingStartBtn').innerHTML='▶️ RESUME'; } else { missingStartTimer(); document.getElementById('missingStartBtn').innerHTML='⏸️ PAUSE'; } } });
-    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{ if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; } missingStopTimer(); missingWaiting = true; missingWrong++; document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); });
+    document.getElementById('missingSkipBtn').addEventListener('click', ()=>{ if (!missingSessionActive || missingWaiting) { if(!missingSessionActive) missingReset(); return; } missingStopTimer(); missingWaiting = true; missingWrong++; document.getElementById('missingWrong').textContent = missingWrong; document.getElementById('missingWordDisplay').textContent = missingCurrentWord.word; document.getElementById('missingAnswerReveal').innerHTML = `⏭️ Skipped: <strong>${missingCurrentWord.word}</strong>`; updateStreak(false); playBuzzer(); missingTimeout = setTimeout(() => { if (missingSessionActive) missingNext(); }, 1000); });
     document.getElementById('missingRevealBtn').addEventListener('click', missingReveal);
     document.getElementById('missingCorrectBtn').addEventListener('click', missingMarkCorrect);
     document.getElementById('missingIncorrectBtn').addEventListener('click', missingMarkIncorrect);
     document.getElementById('missingCategorySelect').addEventListener('change', (e)=> { missingCategory = e.target.value; missingRefreshWordList(); });
+    document.getElementById('missingDifficulty').addEventListener('change', ()=> { if(missingSessionActive) missingUpdateUI(); });
     document.getElementById('missingRandomCat').addEventListener('click', ()=>{ const opts = document.querySelectorAll('#missingCategorySelect option'); if(opts.length > 1) { missingCategory = opts[Math.floor(Math.random() * (opts.length-1)) + 1].value; document.getElementById('missingCategorySelect').value = missingCategory; missingRefreshWordList(); }});
 
-    // ========== MODO FLASHCARD (ESPAÑOL VISIBLE AQUI) ==========
+    // ========== MODO FLASHCARD ==========
     let fcIndex = 0;
     let fcCategory = 'all';
     let fcCurrentWord = null;
@@ -887,7 +953,7 @@
 
     function fcRefreshList() {
         const rawList = fcGetList();
-        fcBag = shuffleArray(rawList); // Mezcla la lista para la sesión
+        fcBag = shuffleArray(rawList); 
         fcIndex = 0;
         fcUpdateUI();
     }
@@ -906,36 +972,21 @@
         }, 150);
     }
 
-    function fcNext() {
-        if(fcBag.length === 0) return;
-        fcIndex = (fcIndex + 1) % fcBag.length;
-        fcUpdateUI();
-    }
-
-    function fcPrev() {
-        if(fcBag.length === 0) return;
-        fcIndex = (fcIndex - 1 + fcBag.length) % fcBag.length;
-        fcUpdateUI();
-    }
+    function fcNext() { if(fcBag.length === 0) return; fcIndex = (fcIndex + 1) % fcBag.length; fcUpdateUI(); }
+    function fcPrev() { if(fcBag.length === 0) return; fcIndex = (fcIndex - 1 + fcBag.length) % fcBag.length; fcUpdateUI(); }
 
     document.getElementById('fcInner').addEventListener('click', function() {
         this.classList.toggle('flipped');
-        if(this.classList.contains('flipped')) {
-            initAudioAPI();
-            playWordAudio(fcCurrentWord.word);
-        }
+        if(this.classList.contains('flipped')) { initAudioAPI(); playWordAudio(fcCurrentWord.word); }
     });
     
     document.getElementById('fcNextBtn').addEventListener('click', fcNext);
     document.getElementById('fcPrevBtn').addEventListener('click', fcPrev);
     document.getElementById('fcAudioBtn').addEventListener('click', () => { initAudioAPI(); playWordAudio(fcCurrentWord?.word); });
-    
     document.getElementById('fcCategorySelect').addEventListener('change', (e)=> { fcCategory = e.target.value; fcRefreshList(); });
 
-    let touchstartX = 0;
-    let touchendX = 0;
+    let touchstartX = 0; let touchendX = 0;
     const fcContainer = document.getElementById('fcContainer');
-    
     fcContainer.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, {passive: true});
     fcContainer.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX;
@@ -945,6 +996,7 @@
 
     // ========== CAMBIO DE MODO GLOBAL ==========
     function switchMode(mode) {
+        stopAllGames(); // Detiene juegos anteriores para evitar bugs fantasma
         currentMode = mode;
         document.getElementById('rapidMode').classList.toggle('hidden', mode!=='rapid');
         document.getElementById('spellingMode').classList.toggle('hidden', mode!=='spelling');
